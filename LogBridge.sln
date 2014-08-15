@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge", "Source\LogBridge\LogBridge.csproj", "{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Tests.Unit", "Source\LogBridge.Tests.Unit\LogBridge.Tests.Unit.csproj", "{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj", "{DF241F73-E055-4A9B-A6B5-E2061259C4CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Log4Net", "Source\LogBridge.Log4Net\LogBridge.Log4Net.csproj", "{693D542D-4C49-4A6C-A6E3-5B580788F1BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Log4Net.Tests.Unit", "Source\LogBridge.Log4Net.Tests.Unit\LogBridge.Log4Net.Tests.Unit.csproj", "{9A15AA77-77B5-462B-B42A-AA0DED733658}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Tests.Shared", "Source\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj", "{B71464A5-9968-420F-9E26-A55A49B42E3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Tests.Performance", "Source\LogBridge.Tests.Performance\LogBridge.Tests.Performance.csproj", "{FC9FFC28-85D6-4830-85BA-E4297A1E7CEA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7822DAFC-C66A-4778-B9C1-496BE50CF874}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.EnterpriseLibrary", "Source\LogBridge.EnterpriseLibrary\LogBridge.EnterpriseLibrary.csproj", "{6834C5CF-8FE4-44BC-91FC-FE32F5FDAC6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.EnterpriseLibrary.Tests.Unit", "Source\LogBridge.EnterpriseLibrary.Tests.Unit\LogBridge.EnterpriseLibrary.Tests.Unit.csproj", "{7B1D1732-05E8-487A-83CC-37A99C04D552}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF241F73-E055-4A9B-A6B5-E2061259C4CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF241F73-E055-4A9B-A6B5-E2061259C4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF241F73-E055-4A9B-A6B5-E2061259C4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF241F73-E055-4A9B-A6B5-E2061259C4CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{693D542D-4C49-4A6C-A6E3-5B580788F1BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{693D542D-4C49-4A6C-A6E3-5B580788F1BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{693D542D-4C49-4A6C-A6E3-5B580788F1BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{693D542D-4C49-4A6C-A6E3-5B580788F1BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A15AA77-77B5-462B-B42A-AA0DED733658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A15AA77-77B5-462B-B42A-AA0DED733658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A15AA77-77B5-462B-B42A-AA0DED733658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A15AA77-77B5-462B-B42A-AA0DED733658}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B71464A5-9968-420F-9E26-A55A49B42E3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B71464A5-9968-420F-9E26-A55A49B42E3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B71464A5-9968-420F-9E26-A55A49B42E3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B71464A5-9968-420F-9E26-A55A49B42E3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC9FFC28-85D6-4830-85BA-E4297A1E7CEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC9FFC28-85D6-4830-85BA-E4297A1E7CEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC9FFC28-85D6-4830-85BA-E4297A1E7CEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC9FFC28-85D6-4830-85BA-E4297A1E7CEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6834C5CF-8FE4-44BC-91FC-FE32F5FDAC6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6834C5CF-8FE4-44BC-91FC-FE32F5FDAC6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6834C5CF-8FE4-44BC-91FC-FE32F5FDAC6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6834C5CF-8FE4-44BC-91FC-FE32F5FDAC6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B1D1732-05E8-487A-83CC-37A99C04D552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B1D1732-05E8-487A-83CC-37A99C04D552}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B1D1732-05E8-487A-83CC-37A99C04D552}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B1D1732-05E8-487A-83CC-37A99C04D552}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
+	EndGlobalSection
+EndGlobal

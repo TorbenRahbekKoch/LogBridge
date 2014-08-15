@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SoftwarePassion.LogBridge.Tests.Unit</RootNamespace>
+    <AssemblyName>SoftwarePassion.LogBridge.Tests.Unit</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LogBridgeBase.cs" />
+    <Compile Include="LogDataVerifier.cs" />
+    <Compile Include="LogTests\When_logging_warning_messages_with_null_parameters.cs" />
+    <Compile Include="LogTests\When_logging_warning_messages.cs" />
+    <Compile Include="LogTests\When_logging_fatal_messages_with_null_parameters.cs" />
+    <Compile Include="LogTests\When_logging_fatal_messages.cs" />
+    <Compile Include="LogTests\When_logging_information_messages_with_null_parameters.cs" />
+    <Compile Include="LogTests\When_logging_information_messages.cs" />
+    <Compile Include="LogTests\When_logging_error_messages.cs" />
+    <Compile Include="LogTests\When_logging_debug_messages.cs" />
+    <Compile Include="LogTests\When_logging_error_messages_with_null_parameters.cs" />
+    <Compile Include="LogTests\When_logging_debug_messages_with_null_parameters.cs" />
+    <Compile Include="TestLogWrapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj">
+      <Project>{DF241F73-E055-4A9B-A6B5-E2061259C4CE}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Projects\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj">
+      <Project>{B71464A5-9968-420F-9E26-A55A49B42E3D}</Project>
+      <Name>LogBridge.Tests.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogBridge\LogBridge.csproj">
+      <Project>{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}</Project>
+      <Name>LogBridge</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

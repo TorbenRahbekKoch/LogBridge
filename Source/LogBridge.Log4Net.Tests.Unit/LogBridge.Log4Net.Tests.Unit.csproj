@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9A15AA77-77B5-462B-B42A-AA0DED733658}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LogBridge.Log4Net.Tests.Unit</RootNamespace>
+    <AssemblyName>LogBridge.Log4Net.Tests.Unit</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Build\Tests\Log4Net\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Log4NetWrapperTests\When_logging_debug_messages_with_null_parameters.cs" />
+    <Compile Include="Log4NetWrapperTests\When_logging_error_messages.cs" />
+    <Compile Include="Log4NetWrapperTests\When_logging_error_messages_with_null_parameters.cs" />
+    <Compile Include="Log4NetWrapperTests\When_logging_fatal_messages.cs" />
+    <Compile Include="Log4NetWrapperTests\When_logging_fatal_messages_with_null_parameters.cs" />
+    <Compile Include="Log4NetWrapperTests\When_logging_information_messages.cs" />
+    <Compile Include="Log4NetWrapperTests\When_logging_information_messages_with_null_parameters.cs" />
+    <Compile Include="Log4NetWrapperTests\When_logging_warning_messages.cs" />
+    <Compile Include="Log4NetWrapperTests\When_logging_warning_messages_with_null_parameters.cs" />
+    <Compile Include="LogDataVerifier.cs" />
+    <Compile Include="Log4NetWrapperTests\When_logging_debug_messages.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Projects\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj">
+      <Project>{b71464a5-9968-420f-9e26-a55a49b42e3d}</Project>
+      <Name>LogBridge.Tests.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogBridge.Log4Net\LogBridge.Log4Net.csproj">
+      <Project>{693d542d-4c49-4a6c-a6e3-5b580788f1bc}</Project>
+      <Name>LogBridge.Log4Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogBridge\LogBridge.csproj">
+      <Project>{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}</Project>
+      <Name>LogBridge</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
