@@ -6,13 +6,13 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using NUnit.Framework;
+using SoftwarePassion.Common.Core;
 using SoftwarePassion.Common.Core.TimeProviding;
 
 namespace SoftwarePassion.LogBridge.Tests.Shared
 {
     public class LogTestBase
     {
-
         public LogTestBase(Level logLevel, ILogDataVerifier verifier)
         {
             this.verifier = verifier;
@@ -40,65 +40,154 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
 
         protected LogData CreateExpectedLogData(Guid eventId, string message)
         {
+            var process = Process.GetCurrentProcess();
             return new LogData(
                 Time.DateTime,
                 eventId,
-                null,
+                Option.None<Guid>(),
                 LogLevel,
-                message,
-                CreateLogLocation(),
+                message,                
                 GetUserName(),
                 Environment.MachineName,
-                Process.GetCurrentProcess().ProcessName,
+                process.Id,
+                process.ProcessName,
                 GetAppDomainName(),
+                null,
+                CreateLogLocation(),
                 new Dictionary<string, object>());
         }
 
+        protected LogData CreateExpectedLogData(Guid eventId, Exception exception, string message)
+        {
+            var process = Process.GetCurrentProcess();
+            return new LogData(
+                Time.DateTime,
+                eventId,
+                Option.None<Guid>(),
+                LogLevel,
+                message,
+                GetUserName(),
+                Environment.MachineName,
+                process.Id,
+                process.ProcessName,
+                GetAppDomainName(),
+                exception,
+                CreateLogLocation(),
+                new Dictionary<string, object>());
+        }
+
+
         protected LogData CreateExpectedLogData(Guid eventId, Guid correlationId, string message)
         {
+            var process = Process.GetCurrentProcess();
             return new LogData(
                 Time.DateTime,
                 eventId,
                 correlationId,
                 LogLevel,
-                message,
-                CreateLogLocation(),
+                message,                
                 GetUserName(),
                 Environment.MachineName,
-                Process.GetCurrentProcess().ProcessName,
+                process.Id,
+                process.ProcessName,
                 GetAppDomainName(),
+                null,
+                CreateLogLocation(),
+                new Dictionary<string, object>());
+        }
+
+        protected LogData CreateExpectedLogData(Guid eventId, Guid correlationId, Exception exception,string message)
+        {
+            var process = Process.GetCurrentProcess();
+            return new LogData(
+                Time.DateTime,
+                eventId,
+                correlationId,
+                LogLevel,
+                message,                
+                GetUserName(),
+                Environment.MachineName,
+                process.Id,
+                process.ProcessName,
+                GetAppDomainName(),
+                exception,
+                CreateLogLocation(),
                 new Dictionary<string, object>());
         }
 
         protected LogData CreateExpectedLogData(Guid eventId, string message, Dictionary<string, object> properties)
         {
+            var process = Process.GetCurrentProcess();
             return new LogData(
                 Time.DateTime,
                 eventId,
-                null,
+                Option.None<Guid>(),
                 LogLevel,
                 message,
-                CreateLogLocation(),
                 GetUserName(),
                 Environment.MachineName,
-                Process.GetCurrentProcess().ProcessName,
+                process.Id,
+                process.ProcessName,
                 GetAppDomainName(),
+                null,
+                CreateLogLocation(),
+                properties);
+        }
+
+        protected LogData CreateExpectedLogData(Guid eventId, Exception exception, string message, Dictionary<string, object> properties)
+        {
+            var process = Process.GetCurrentProcess();
+            return new LogData(
+                Time.DateTime,
+                eventId,
+                Option.None<Guid>(),
+                LogLevel,
+                message,
+                GetUserName(),
+                Environment.MachineName,
+                process.Id,
+                process.ProcessName,
+                GetAppDomainName(),
+                exception,
+                CreateLogLocation(),
                 properties);
         }
 
         protected LogData CreateExpectedLogData(Guid eventId, Guid correlationId, string message, Dictionary<string, object> properties)
         {
+            var process = Process.GetCurrentProcess();
             return new LogData(
                 Time.DateTime,
                 eventId,
                 correlationId,
                 LogLevel,
                 message,
-                CreateLogLocation(),
                 GetUserName(),
                 Environment.MachineName,
-                Process.GetCurrentProcess().ProcessName,
+                process.Id,
+                process.ProcessName,
                 GetAppDomainName(),
+                null,
+                CreateLogLocation(),
+                properties);
+        }
+
+        protected LogData CreateExpectedLogData(Guid eventId, Guid correlationId, Exception exception, string message, Dictionary<string, object> properties)
+        {
+            var process = Process.GetCurrentProcess();
+            return new LogData(
+                Time.DateTime,
+                eventId,
+                correlationId,
+                LogLevel,
+                message,
+                GetUserName(),
+                Environment.MachineName,
+                process.Id,
+                process.ProcessName,
+                GetAppDomainName(),
+                exception,
+                CreateLogLocation(),
                 properties);
         }
 

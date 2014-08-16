@@ -7,6 +7,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Threading;
 using System.Transactions;
+using SoftwarePassion.Common.Core;
 using SoftwarePassion.Common.Core.TimeProviding;
 
 namespace SoftwarePassion.LogBridge
@@ -16,56 +17,85 @@ namespace SoftwarePassion.LogBridge
         protected LogWrapper(bool diagnosticsEnabled)
         {
             DiagnosticsEnabled = diagnosticsEnabled;
+            currentProcess = Process.GetCurrentProcess();
+            correlationIdKeyNameUpper = LogConstants.CorrelationIdKey.ToUpperInvariant();
         }
 
         /// <summary>
         /// A Thread specific CorrelationId. May be null.
         /// </summary>
-        public Guid? ThreadCorrelationId
+        public Option<Guid> ThreadCorrelationId
         {
             get
             {
                 if (DefaultThreadCorrelationId.IsValueCreated)
                 {
-                    return DefaultThreadCorrelationId.Value;
+                    Option<Guid> value = DefaultThreadCorrelationId.Value;
+                    return value;
                 }
 
-                return null;
+                return Option.None<Guid>();
             }
 
+            
             set { DefaultThreadCorrelationId.Value = value; }
+        }
+
+        public Option<Guid> ProcessCorrelationId
+        {
+            get { return processCorrelationId; }
+            set { processCorrelationId = value; }
+        }
+
+        public Option<Guid> AppDomainCorrelationId
+        {
+            get
+            {
+                var dataValue = AppDomain.CurrentDomain.GetData(LogConstants.CorrelationIdKey);
+                if (dataValue != null)
+                    return Option.Some((Guid) dataValue);
+                return Option.None<Guid>();
+            }
+
+            set
+            {
+                if (value.IsSome)
+                    AppDomain.CurrentDomain.SetData(LogConstants.CorrelationIdKey, value.Value);    
+            }
         }
 
         /// <summary>
         /// Returns a so specific as possible correlation id. That is, if there
         /// is a ThreadCorrelationId assigned that is the one that is returned.
-        /// Otherwise 
+        /// Otherwise if there is a ProcessCorrelationId assigned that one is
+        /// returned.
+        /// Then it is checked whether an AppDomainCorrelation is assigned, and
+        /// then that one is returned.
+        /// Otherwise None&lt;Guid&gt; is returned.
         /// </summary>
-        public Guid CorrelationId
+        public Option<Guid> CorrelationId
         {
             get
             {
                 var threadDataValue = ThreadCorrelationId;
-                if (threadDataValue != null)
+                if (threadDataValue.IsSome)
                 {
                     return threadDataValue.Value;
                 }
 
-                if (defaultCorrelationId == null)
+                var appDomainDataValue = AppDomainCorrelationId;
+                if (appDomainDataValue.IsSome)
                 {
-                    var dataValue = AppDomain.CurrentDomain.GetData(LogConstants.CorrelationIdKey);
-                    if (dataValue != null)
-                    {
-                        defaultCorrelationId = (Guid)dataValue;
-                    }
-                    else
-                    {
-                        defaultCorrelationId = Guid.NewGuid();
-                        AppDomain.CurrentDomain.SetData(LogConstants.CorrelationIdKey, defaultCorrelationId);
-                    }
+                    return appDomainDataValue.Value;
                 }
 
-                return defaultCorrelationId.Value;
+                var processDataValue = ProcessCorrelationId;
+                if (processDataValue.IsSome)
+                {
+                    return processDataValue.Value;
+                }
+
+                return defaultCorrelationId;
             }
         }
 
@@ -153,16 +183,19 @@ namespace SoftwarePassion.LogBridge
         protected abstract Guid PerformLogEntry(Guid? correlationId, Exception exception, Level level,
             object extendedProperties, string message, params object[] parameters);
 
-        private static readonly ThreadLocal<Guid?> DefaultThreadCorrelationId = new ThreadLocal<Guid?>();
-        private static Guid? defaultCorrelationId = null;
+        protected readonly Process currentProcess;
+        private static Option<Guid> processCorrelationId = Option.None<Guid>();
+        private static readonly ThreadLocal<Option<Guid>> DefaultThreadCorrelationId = new ThreadLocal<Option<Guid>>();
+        private static Option<Guid> defaultCorrelationId = Option.None<Guid>();
+        private string correlationIdKeyNameUpper;
     }
 
 	public abstract class LogWrapper<TLoggerImplementation> : LogWrapper
         where TLoggerImplementation : class
 	{
-        protected LogWrapper(bool diagnosticsEnabled) 
-            : base(diagnosticsEnabled)
-        {}
+	    protected LogWrapper(bool diagnosticsEnabled)
+	        : base(diagnosticsEnabled)
+	    {}
 
 		/// <summary>
 		/// Logs the given exception, message and extendedProperties.
@@ -226,7 +259,8 @@ namespace SoftwarePassion.LogBridge
 			return LogEntry(activeLogger, locationInformation, correlationId, exception, level, extendedProperties, message, parameters);
 		}
 
-	    private Guid LogEntry(TLoggerImplementation activeLogger, LogLocation logLocation, Guid? correlationId, Exception exception, 
+	    private Guid LogEntry(TLoggerImplementation activeLogger, LogLocation logLocation, 
+                              Guid? explicitCorrelationId, Exception exception, 
                               Level level, object extendedProperties, string message, params object[] parameters)
 	    {
             try
@@ -235,25 +269,29 @@ namespace SoftwarePassion.LogBridge
                 var eventId = Guid.NewGuid();
                 var calculatedException = CalculateExceptionObject(exception);
                 var appDomainName = GetAppDomainName();
-                var properties = CalculateProperties(
-                    eventId, 
-                    correlationId, 
-                    extendedProperties, 
-                    calculatedException,
-                    logLocation);
+                Option<Guid> extendedCorrelationId;
+                var extendedPropertyValues = CalculateExtendedProperties(extendedProperties, out extendedCorrelationId);
+
+                var properties = CalculateProperties(extendedPropertyValues);
                 var username = ThreadPrincipal.Resolve(DiagnosticsEnabled);
+
+                var actualCorrelationId = CalculateCorrelationId(
+                    explicitCorrelationId, 
+                    extendedCorrelationId);
 
                 var logData = new LogData(
                     TimeProvider.UtcNow,
-                    eventId,
-                    correlationId,
+                    eventId,                    
+                    actualCorrelationId,
                     level,
                     formattedMessage,
-                    logLocation,
                     username,
                     Environment.MachineName,
-                    Process.GetCurrentProcess().ProcessName,
+                    currentProcess.Id,
+                    currentProcess.ProcessName,
                     appDomainName,
+                    exception,
+                    logLocation,
                     properties);
 
                 PerformLogEntry(activeLogger, logData);
@@ -322,24 +360,15 @@ namespace SoftwarePassion.LogBridge
             return exception;
         }
 
-        private Dictionary<string, object> CalculateProperties(
-            Guid eventId,
-            Guid? correlationId,
-            object extendedProperties,
-            Exception exception,
-            LogLocation locationInformation)
+        private Dictionary<string, object> CalculateProperties(            
+            Dictionary<string, object> extendedPropertyValues)
         {
-            var properties = new Dictionary<string, object>();
-            properties[LogConstants.EventIdKey] = eventId;
-            AddExtendedProperties(extendedProperties, properties);
+            var properties = CreateDictionary();
+            foreach (var extendedPropertyValue in extendedPropertyValues)
+            {
+                properties[extendedPropertyValue.Key] = extendedPropertyValue.Value;
+            }
 
-            // Add correlation data after extended, since a specific 
-            // correlationid given must override any correlationids
-            // present in extended properties.
-            AddCorrelationDataToProperties(correlationId, properties);
-
-            AddExceptionProperties(exception, properties);
-            AddMiscellaneousInformation(properties, locationInformation);
             return properties;
         }
 
@@ -348,17 +377,30 @@ namespace SoftwarePassion.LogBridge
             return AppDomain.CurrentDomain.FriendlyName;
         }
 
-        private void AddCorrelationDataToProperties(Guid? correlationId, Dictionary<string, object> properties)
+        private Option<Guid> CalculateCorrelationId(
+            Guid? explicitCorrelationId, 
+            Option<Guid> extendedCorrelationId)
         {
-            if (correlationId.HasValue)
-            {
-                properties[LogConstants.CorrelationIdKey] = correlationId.Value;
-            }
-            else if (CorrelationId != Guid.Empty)
-            {
-                properties[LogConstants.CorrelationIdKey] = CorrelationId;
-            }
+            if (explicitCorrelationId.HasValue)
+                return explicitCorrelationId;
+
+            if (extendedCorrelationId.IsSome)
+                return extendedCorrelationId;
+
+            return CorrelationId;
         }
+
+        //private void AddCorrelationDataToProperties(Guid? correlationId, Dictionary<string, object> properties)
+        //{
+        //    if (correlationId.HasValue)
+        //    {
+        //        properties[LogConstants.CorrelationIdKey] = correlationId.Value;
+        //    }
+        //    else if (CorrelationId.IsSome != Guid.Empty)
+        //    {
+        //        properties[LogConstants.CorrelationIdKey] = CorrelationId;
+        //    }
+        //}
 
         private void AddMiscellaneousInformation(Dictionary<string, object> properties, LogLocation logLocation)
         {
@@ -369,16 +411,33 @@ namespace SoftwarePassion.LogBridge
         }
 
 
-        private static void AddExtendedProperties(object extendedProperties, Dictionary<string, object> properties)
+        private static Dictionary<string, object> CalculateExtendedProperties(object extendedProperties, out Option<Guid> correlationId)
         {
+            var propertyValues = CreateDictionary();
+            correlationId = Option.None<Guid>();
             if (extendedProperties != null)
             {
                 // TypeDescriptor.GetProperties(Type...) is cached (by TypeDescriptor itself)
                 foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(extendedProperties.GetType()))
                 {
-                    properties[property.Name] = property.GetValue(extendedProperties);
+                    if (string.Compare(
+                        property.Name,
+                        LogConstants.CorrelationIdKey,
+                        StringComparison.OrdinalIgnoreCase)
+                        == 0)
+                    {
+                        var propertyValue = property.GetValue(extendedProperties);
+                        if (propertyValue is Guid)
+                            correlationId = (Guid) propertyValue;
+                    }
+                    else
+                    {
+                        propertyValues[property.Name] = property.GetValue(extendedProperties);
+                    }
                 }
             }
+
+            return propertyValues;
         }
 
         private void AddExceptionProperties(Exception exception, Dictionary<string,object> properties)
@@ -411,6 +470,15 @@ namespace SoftwarePassion.LogBridge
 			return new LogLocation();
 		}
 
+        /// <summary>
+        /// Creates a dictionary which is case-insensitive by using
+        /// StringComparer.OrdinalIgnoreCase
+        /// </summary>
+        /// <returns></returns>
+	    static protected Dictionary<string, object> CreateDictionary()
+	    {
+	        return new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+	    }
     }
 }
 

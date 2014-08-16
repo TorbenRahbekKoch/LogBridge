@@ -7,7 +7,7 @@
     <ProjectGuid>{693D542D-4C49-4A6C-A6E3-5B580788F1BC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LogBridge.Log4Net</RootNamespace>
+    <RootNamespace>SoftwarePassion.LogBridge.Log4Net</RootNamespace>
     <AssemblyName>LogBridge.Log4Net</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\Build\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,10 +24,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Build\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Build\Release\LogBridge.Log4Net.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -50,6 +51,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj">
+      <Project>{DF241F73-E055-4A9B-A6B5-E2061259C4CE}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogBridge\LogBridge.csproj">
       <Project>{591204e7-dea6-47bd-8e89-7aaafe660d8f}</Project>
       <Name>LogBridge</Name>

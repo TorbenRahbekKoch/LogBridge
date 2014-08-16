@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Linq;
 using log4net;
 using log4net.Core;
 using log4net.Repository.Hierarchy;
 using log4net.Util;
-using SoftwarePassion.LogBridge;
-using Level = SoftwarePassion.LogBridge.Level;
 
-namespace LogBridge.Log4Net
+namespace SoftwarePassion.LogBridge.Log4Net
 {
     public class Log4NetWrapper : LogWrapper<ILogger>
     {
@@ -84,8 +80,15 @@ namespace LogBridge.Log4Net
                 log4NetProperties[property.Key] = property.Value;
             }
 
+            if (logData.CorrelationId.IsSome)
+                log4NetProperties[LogConstants.CorrelationIdKey] = logData.CorrelationId.Value;
+            else
+                log4NetProperties[LogConstants.CorrelationIdKey] = null;
+
+            log4NetProperties[LogConstants.EventIdKey] = logData.EventId;
             log4NetProperties[LogConstants.MachineNameKey] = logData.MachineName;
             log4NetProperties[LogConstants.ProcessNameKey] = logData.ProcessName;
+            log4NetProperties[LogConstants.ExceptionKey] = logData.Exception;
             return log4NetProperties;
         }
 
@@ -99,7 +102,7 @@ namespace LogBridge.Log4Net
         }
 
         private log4net.Core.Level ToLog4NetLevel(Level level)
-        {
+        {            
             switch (level)
             {
                 case Level.Debug:

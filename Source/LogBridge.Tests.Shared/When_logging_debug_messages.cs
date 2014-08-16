@@ -304,7 +304,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(exception);
-                expected = CreateExpectedLogData(eventId, exception.Message);
+                expected = CreateExpectedLogData(eventId, exception, exception.Message);
             }
 
             VerifyLogData(expected);
@@ -322,7 +322,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(exception, extended);
-                expected = CreateExpectedLogData(eventId, exception.Message, extended.AsProperties);
+                expected = CreateExpectedLogData(eventId, exception, exception.Message, extended.AsProperties);
             }
 
             VerifyLogData(expected);
@@ -340,7 +340,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(exception, message);
-                expected = CreateExpectedLogData(eventId, message);
+                expected = CreateExpectedLogData(eventId, exception, message);
             }
 
             VerifyLogData(expected);
@@ -359,7 +359,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(exception, message, null, null);
-                expected = CreateExpectedLogData(eventId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -378,7 +378,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(exception, message, 42, 87);
-                expected = CreateExpectedLogData(eventId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -397,7 +397,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(exception, message, "42", "87");
-                expected = CreateExpectedLogData(eventId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -416,7 +416,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(exception, message, "42");
-                expected = CreateExpectedLogData(eventId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -435,7 +435,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(exception, message, "42", 87, 119);
-                expected = CreateExpectedLogData(eventId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -454,7 +454,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(correlationId, exception, message);
-                expected = CreateExpectedLogData(eventId, correlationId, message);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, message);
             }
 
             VerifyLogData(expected);
@@ -474,7 +474,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(correlationId, exception, message, 42, 87);
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -494,7 +494,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(correlationId, exception, message, "42", "87");
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -514,7 +514,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(correlationId, exception, message, 42);
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -534,7 +534,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(correlationId, exception, message, 42, 87, 117);
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -554,7 +554,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {
                 var eventId = Log.Debug(correlationId, exception, message, null, null);
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage);
             }
 
             VerifyLogData(expected);
@@ -594,7 +594,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {                
                 var eventId = Log.Debug(correlationId, exception);
-                expected = CreateExpectedLogData(eventId, correlationId, exception.Message);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, exception.Message);
             }
 
             VerifyLogData(expected);
@@ -613,7 +613,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {                
                 var eventId = Log.Debug(correlationId, exception, extended);
-                expected = CreateExpectedLogData(eventId, correlationId, exception.Message, extended.AsProperties);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, exception.Message, extended.AsProperties);
             }
 
             VerifyLogData(expected);
@@ -633,7 +633,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {                
                 var eventId = Log.Debug(correlationId, exception, extended, message);
-                expected = CreateExpectedLogData(eventId, correlationId, message, extended.AsProperties);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, message, extended.AsProperties);
             }
 
             VerifyLogData(expected);
@@ -654,7 +654,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {                
                 var eventId = Log.Debug(correlationId, exception, extended, message, 42);
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage, extended.AsProperties);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }
 
             VerifyLogData(expected);
@@ -675,7 +675,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {                
                 var eventId = Log.Debug(correlationId, exception, extended, message, "17", 42, "87");
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage, extended.AsProperties);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }
 
             VerifyLogData(expected);
@@ -696,7 +696,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {                
                 var eventId = Log.Debug(correlationId, exception, extended, message, 42, 87);
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage, extended.AsProperties);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }
 
             VerifyLogData(expected);
@@ -717,7 +717,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {                
                 var eventId = Log.Debug(correlationId, exception, extended, message, "42", "87");
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage, extended.AsProperties);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }
 
             VerifyLogData(expected);
@@ -738,7 +738,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             catch (Exception exception)
             {                
                 var eventId = Log.Debug(correlationId, exception, extended, message, null, null);
-                expected = CreateExpectedLogData(eventId, correlationId, formattedMessage, extended.AsProperties);
+                expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }
 
             VerifyLogData(expected);

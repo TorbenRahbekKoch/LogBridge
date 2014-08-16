@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using Microsoft.Practices.EnterpriseLibrary.Logging;
 using SoftwarePassion.Common.Core.Extensions;
-using SoftwarePassion.LogBridge;
 
-namespace LogBridge.EnterpriseLibrary
+namespace SoftwarePassion.LogBridge.EnterpriseLibrary
 {
     /// <summary>
     /// Class EnterpriseLibraryWrapper. A <see cref="LogWrapper" /> implementation
@@ -40,7 +37,8 @@ namespace LogBridge.EnterpriseLibrary
                 TimeStamp = logData.TimeStamp,
                 Title = logData.Message.Substring(0, Math.Min(32, logData.Message.Length)),                
                 MachineName = logData.MachineName,
-                ProcessName = logData.ProcessName,
+                ProcessId = logData.ProcessId.ToString(CultureInfo.InvariantCulture),
+                ProcessName = logData.ProcessName,                
                 Priority = 0
             };
 
@@ -56,8 +54,19 @@ namespace LogBridge.EnterpriseLibrary
                 etlProperties[property.Key] = property.Value;
             }
 
-            //log4NetProperties[LogConstants.MachineNameKey] = logData.MachineName;
-            //log4NetProperties[LogConstants.ProcessNameKey] = logData.ProcessName;
+            if (logData.CorrelationId.IsSome)
+                etlProperties[LogConstants.CorrelationIdKey] = logData.CorrelationId.Value;
+            else
+                etlProperties[LogConstants.CorrelationIdKey] = null;
+            etlProperties[LogConstants.EventIdKey] = logData.EventId;
+            etlProperties[LogConstants.MachineNameKey] = logData.MachineName;
+            etlProperties[LogConstants.ProcessNameKey] = logData.ProcessName;
+            etlProperties[LogConstants.FilenameKey] = logData.LogLocation.FileName;
+            etlProperties[LogConstants.LineNumberKey] = logData.LogLocation.LineNumber;
+            etlProperties[LogConstants.ClassNameKey] = logData.LogLocation.LoggingClassType;
+            etlProperties[LogConstants.MethodNameKey] = logData.LogLocation.MethodName;
+            etlProperties[LogConstants.UsernameKey] = logData.Username;
+            etlProperties[LogConstants.ExceptionKey] = logData.Exception;
             return etlProperties;
         }
 

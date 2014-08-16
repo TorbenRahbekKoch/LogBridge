@@ -24,10 +24,27 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         public static Guid ThreadCorrelationId
         {
-            get { return Logger.ThreadCorrelationId.HasValue ? Logger.ThreadCorrelationId.Value : Guid.Empty; }
+            get { return Logger.ThreadCorrelationId.IsSome ? Logger.ThreadCorrelationId.Value : Guid.Empty; }
             set { Logger.ThreadCorrelationId = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the process wide correlation id.
+        /// </summary>
+        public static Guid ProcessCorrelationId
+        {
+            get { return Logger.ProcessCorrelationId.IsSome ? Logger.ProcessCorrelationId.Value : Guid.Empty; }
+            set { Logger.ProcessCorrelationId = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the process wide correlation id.
+        /// </summary>
+        public static Guid AppDomainCorrelationId
+        {
+            get { return Logger.AppDomainCorrelationId.IsSome ? Logger.AppDomainCorrelationId.Value : Guid.Empty; }
+            set { Logger.AppDomainCorrelationId = value; }
+        }
 
         #region Debug
         /// <summary>

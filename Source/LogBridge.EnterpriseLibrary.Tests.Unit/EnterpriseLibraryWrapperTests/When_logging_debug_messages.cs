@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace LogBridge.EnterpriseLibrary.Tests.Unit.EnterpriseLibraryWrapperTests
+namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Unit.EnterpriseLibraryWrapperTests
 {
     [TestFixture]
     public class When_logging_debug_messages 

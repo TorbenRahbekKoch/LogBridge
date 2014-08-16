@@ -7,7 +7,7 @@
     <ProjectGuid>{7B1D1732-05E8-487A-83CC-37A99C04D552}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LogBridge.EnterpriseLibrary.Tests.Unit</RootNamespace>
+    <RootNamespace>SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Unit</RootNamespace>
     <AssemblyName>LogBridge.EnterpriseLibrary.Tests.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\Build\Tests\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Build\Tests\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -40,6 +40,7 @@
       <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,16 +49,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnterpriseLibraryWrapperTests\When_logging_debug_messages_with_null_parameters.cs" />
+    <Compile Include="EnterpriseLibraryWrapperTests\When_logging_error_messages.cs" />
+    <Compile Include="EnterpriseLibraryWrapperTests\When_logging_error_messages_with_null_parameters.cs" />
+    <Compile Include="EnterpriseLibraryWrapperTests\When_logging_fatal_messages.cs" />
+    <Compile Include="EnterpriseLibraryWrapperTests\When_logging_fatal_messages_with_null_parameters.cs" />
+    <Compile Include="EnterpriseLibraryWrapperTests\When_logging_information_messages.cs" />
+    <Compile Include="EnterpriseLibraryWrapperTests\When_logging_information_messages_with_null_parameters.cs" />
+    <Compile Include="EnterpriseLibraryWrapperTests\When_logging_warning_messages.cs" />
+    <Compile Include="EnterpriseLibraryWrapperTests\When_logging_warning_messages_with_null_parameters.cs" />
     <Compile Include="MemoryTraceListener.cs" />
     <Compile Include="EnterpriseLibraryWrapperTests\When_logging_debug_messages.cs" />
     <Compile Include="LogDataVerifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Projects\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj">
+    <ProjectReference Include="..\..\..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj">
+      <Project>{DF241F73-E055-4A9B-A6B5-E2061259C4CE}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj">
       <Project>{b71464a5-9968-420f-9e26-a55a49b42e3d}</Project>
       <Name>LogBridge.Tests.Shared</Name>
     </ProjectReference>

@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Build\Tests\Log4Net\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -60,7 +60,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Projects\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj">
+    <ProjectReference Include="..\..\..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj">
+      <Project>{DF241F73-E055-4A9B-A6B5-E2061259C4CE}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj">
       <Project>{b71464a5-9968-420f-9e26-a55a49b42e3d}</Project>
       <Name>LogBridge.Tests.Shared</Name>
     </ProjectReference>
