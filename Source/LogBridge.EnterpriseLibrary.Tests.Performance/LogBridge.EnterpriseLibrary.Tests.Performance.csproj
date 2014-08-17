@@ -55,9 +55,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj">
+      <Project>{DF241F73-E055-4A9B-A6B5-E2061259C4CE}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogBridge.EnterpriseLibrary.Tests.Unit\LogBridge.EnterpriseLibrary.Tests.Unit.csproj">
       <Project>{7B1D1732-05E8-487A-83CC-37A99C04D552}</Project>
       <Name>LogBridge.EnterpriseLibrary.Tests.Unit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogBridge.EnterpriseLibrary\LogBridge.EnterpriseLibrary.csproj">
+      <Project>{6834c5cf-8fe4-44bc-91fc-fe32f5fdac6a}</Project>
+      <Name>LogBridge.EnterpriseLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj">
       <Project>{B71464A5-9968-420F-9E26-A55A49B42E3D}</Project>

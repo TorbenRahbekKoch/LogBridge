@@ -49,6 +49,6 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Unit
 
         public static MemoryTraceListener Instance { get; private set; }
 
-        private readonly List<LogEntry> loggedEvents = new List<LogEntry>();
+        private static readonly List<LogEntry> loggedEvents = new List<LogEntry>();
     }
 }

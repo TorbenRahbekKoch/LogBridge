@@ -1,1 +1,10 @@
+Debug
 /Build
+
+*.user
+
+/*.suo
+
+obj
+
+bin
