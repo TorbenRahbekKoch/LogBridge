@@ -290,7 +290,7 @@ namespace SoftwarePassion.LogBridge
                     currentProcess.Id,
                     currentProcess.ProcessName,
                     appDomainName,
-                    exception,
+                    calculatedException,
                     logLocation,
                     properties);
 
@@ -389,27 +389,6 @@ namespace SoftwarePassion.LogBridge
 
             return CorrelationId;
         }
-
-        //private void AddCorrelationDataToProperties(Guid? correlationId, Dictionary<string, object> properties)
-        //{
-        //    if (correlationId.HasValue)
-        //    {
-        //        properties[LogConstants.CorrelationIdKey] = correlationId.Value;
-        //    }
-        //    else if (CorrelationId.IsSome != Guid.Empty)
-        //    {
-        //        properties[LogConstants.CorrelationIdKey] = CorrelationId;
-        //    }
-        //}
-
-        private void AddMiscellaneousInformation(Dictionary<string, object> properties, LogLocation logLocation)
-        {
-            //properties[LogConstants.MachineNameKey] = Environment.MachineName;
-            //properties[LogConstants.NamespaceKey] = logLocation.LoggingClassType.Namespace;
-            //properties[LogConstants.ClassnameKey] = logLocation.LoggingClassType.Name;
-            //properties[LogConstants.LineNumberKey] = logLocation.LineNumber;
-        }
-
 
         private static Dictionary<string, object> CalculateExtendedProperties(object extendedProperties, out Option<Guid> correlationId)
         {

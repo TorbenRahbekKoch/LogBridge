@@ -18,15 +18,17 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Log4Net.Tests.Performance", "Source\LogBridge.Log4Net.Tests.Performance\LogBridge.Log4Net.Tests.Performance.csproj", "{FC9FFC28-85D6-4830-85BA-E4297A1E7CEA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7822DAFC-C66A-4778-B9C1-496BE50CF874}"
-	ProjectSection(SolutionItems) = preProject
-		Performance1.psess = Performance1.psess
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.EnterpriseLibrary", "Source\LogBridge.EnterpriseLibrary\LogBridge.EnterpriseLibrary.csproj", "{6834C5CF-8FE4-44BC-91FC-FE32F5FDAC6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.EnterpriseLibrary.Tests.Unit", "Source\LogBridge.EnterpriseLibrary.Tests.Unit\LogBridge.EnterpriseLibrary.Tests.Unit.csproj", "{7B1D1732-05E8-487A-83CC-37A99C04D552}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.EnterpriseLibrary.Tests.Performance", "Source\LogBridge.EnterpriseLibrary.Tests.Performance\LogBridge.EnterpriseLibrary.Tests.Performance.csproj", "{AB9D1CC5-F00F-45F8-8121-E793FCAE6533}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{E983FEFD-8870-42D8-9B8D-DC69AC3F9D06}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E983FEFD-8870-42D8-9B8D-DC69AC3F9D06} = {7822DAFC-C66A-4778-B9C1-496BE50CF874}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
