@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using SoftwarePassion.Common.Core;
 
 namespace SoftwarePassion.LogBridge
@@ -32,6 +33,7 @@ namespace SoftwarePassion.LogBridge
             Username = username;
             MachineName = machineName;
             ProcessId = processId;
+            ProcessIdString = processId.ToString(CultureInfo.InvariantCulture);
             ProcessName = processName;
             AppDomainName = appDomainName;
             Exception = exception;
@@ -46,6 +48,7 @@ namespace SoftwarePassion.LogBridge
         public string Username { get; private set; }
         public string MachineName { get; private set; }
         public int ProcessId { get; private set; }
+        public string ProcessIdString { get; private set; }
         public string ProcessName { get; set; }
         public string AppDomainName { get; private set; }
 

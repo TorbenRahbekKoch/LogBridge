@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CallingMember.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="LogConstants.cs" />
     <Compile Include="LogData.cs" />
     <Compile Include="LogLocation.cs" />

@@ -2,11 +2,13 @@ LogBridge
 ---------
 
 Aiming to give a consistent and versatile interface to various logging
-frameworks, starting with Log4Net and Enterprise Library.
+frameworks, starting with Log4Net, and Enterprise Library.
 
 LogBridge is a no-nonsense logging wrapper, trying as hard as possible never to
 throw exceptions in any logging method. Instead it will continue but may 
 instead log an incomplete message.
+
+Please see the Configuration section below for details about this.
 
 Usage
 =====
@@ -47,6 +49,8 @@ You can easily log an exception:
 There are some overloads which have a parameter called ´firstMessageParameter´. 
 This parameter is only there to help with overload resolution and should, 
 usage-wise, be considered the same method as the one without this parameter.
+
+
 
 Extended Properties
 ===================
@@ -94,4 +98,81 @@ they are:
 If none of these are assigned, no CorrelationId will be added to the properties
 of the log message.
 
+Configuration
+=============
+Currently the configuration is very easy. In theory (and even, at  times, in 
+practice) LogBridge should be able to automatically find an implementation of 
+LogWrapper<> and load that. This presupposes that the assembly has been loaded 
+into the application. Simply having the assembly in the application directory 
+does not suffice, you also have to call code in the assembly to make .NET
+load the assembly.
+
+To get over this problem you simply have to state in which 
+assembly the log-wrapper is located. This is done using an *appSetting* called
+*SoftwarePassion.LogBridge.LogWrapperAssembly*. Out of the box only the two 
+values are supported:
+
+- LogBridge.Log4Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+- LogBridge.EnterpriseLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+
+The meaning of these should be self-evident. What this value does internally is 
+to have LogBridge manually load the Assembly and thereby making it available 
+for searching for implementations of LogWrapper<>.
+
+### Exceptions
+
+Since LogBridge aims at, by default, to not throw exceptions you may be in a 
+situation where it is difficult to figure out why logging does not occur.
+
+To figure out whether LogBridge is at fault, you can do two things:
+
+### 1. Enable internal logging
+
+- Set appSettings key *SoftwarePassion.LogBridge.InternalDiagnosticsEnabled* to *true*.
+- Enable tracing to a file:
+
+´´´´
+  <system.diagnostics>
+    <trace autoflush="true">
+      <listeners>
+        <add
+            name="textWriterTraceListener"
+            type="System.Diagnostics.TextWriterTraceListener"
+            initializeData="c:\log\logbridge.txt" />
+        <remove name="Default" />
+      </listeners>
+    </trace>
+  </system.diagnostics>
+´´´´
+
+If, for some reason, LogBrige cannot find a log-wrapper, this will now be stated
+in the Debug View and the above *logbridge.txt* file.
+
+In general, setting the appSettings key 
+*SoftwarePassion.LogBridge.InternalDiagnosticsEnabled* to *true*, will make 
+LogBridge log internal exceptions using [´Trace.WriteLine(...)´](http://msdn.microsoft.com/en-us/library/system.diagnostics.trace.writeline%28v=vs.110%29.aspx)
+which, among other configurable places, can be seen in the Visual Studio 
+Debugging Output View.
+
+### 2. Enable exception on resolver fail
+
+You can, also, urge LogBridge to throw an exception when it cannot find a 
+log wrapper. This is done by setting the appSettings key *SoftwarePassion.LogBridge.ThrowOnResolverFail*
+to *true*.
+
+This can be helpful, if you early in the application make a simple log message
+stating that the application has started. You can wrap this in a try-catch:
+
+´´´´
+    try
+    {
+        Log.Information("Application started.");
+    }
+    catch (TypeInitializationException)
+    {                
+        // Handle problem...
+    }
+´´´´
+
+This is the only place that LogBridge will ever throw an exception.
 

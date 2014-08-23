@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using Microsoft.Practices.EnterpriseLibrary.Logging;
 using SoftwarePassion.Common.Core.Extensions;
 
@@ -18,7 +17,21 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
         /// </summary>
         /// <param name="diagnosticsEnabled">If set to <c>true</c> internal diagnostics will be enabled.</param>
         public EnterpriseLibraryWrapper(bool diagnosticsEnabled) : base(diagnosticsEnabled)
-        {}
+        {
+            try
+            {
+                logWriter = new LogWriterFactory().Create();
+            }
+            catch (Exception ex)
+            {
+                if (DiagnosticsEnabled)
+                {
+                    Trace.WriteLine("Could not instantiate a '{0}'. Possible Enterprise Library Configuration error. {1}.".FormatInvariant(this.GetType().FullName, ex.ToString()));
+                }
+
+                throw;
+            }
+        }
 
         /// <summary>
         /// Performs the log entry.
@@ -37,7 +50,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
                 TimeStamp = logData.TimeStamp,
                 Title = logData.Message.Substring(0, Math.Min(32, logData.Message.Length)),                
                 MachineName = logData.MachineName,
-                ProcessId = logData.ProcessId.ToString(CultureInfo.InvariantCulture),
+                ProcessId = logData.ProcessIdString,
                 ProcessName = logData.ProcessName,                
                 Priority = 0
             };
@@ -48,11 +61,11 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
 
         private IDictionary<string, object> ToETLExtendedProperties(LogData logData)
         {
-            var etlProperties = new Dictionary<string, object>();
-            foreach (var property in logData.Properties)
-            {
-                etlProperties[property.Key] = property.Value;
-            }
+            var etlProperties = logData.Properties;//new Dictionary<string, object>();
+            //foreach (var property in logData.Properties)
+            //{
+            //    etlProperties[property.Key] = property.Value;
+            //}
 
             if (logData.CorrelationId.IsSome)
                 etlProperties[LogConstants.CorrelationIdKey] = logData.CorrelationId.Value;
@@ -98,8 +111,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
         {
             try
             {
-                var logWriterFactory = new LogWriterFactory();
-                return logWriterFactory.Create();
+                return logWriter;
             }
             catch (Exception ex)
             {
@@ -122,5 +134,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
         {            
             return activeLogger.IsLoggingEnabled();
         }
+
+        private readonly LogWriter logWriter;
     }
 }

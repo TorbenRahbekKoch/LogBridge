@@ -16,8 +16,7 @@ namespace SoftwarePassion.LogBridge
     /// </remarks>
     public static class Log
     {
-        public const string NullExceptionMessage = "[null exception]";
-        public const string InternalDiagnosticsAppSettingsKey = "SoftwarePassion.LogBridge.InternalDiagnosticsEnabled";
+        public const string NullExceptionMessage = "[null exception]";        
 
         /// <summary>
         /// Gets or sets the thread correlation id.
@@ -1145,9 +1144,7 @@ namespace SoftwarePassion.LogBridge
         {
             get
             {
-                var value = ConfigurationManager.AppSettings[InternalDiagnosticsAppSettingsKey];
-                var enabled = (value != null) && value.ToUpperInvariant() == "TRUE";
-                return enabled;
+                return Configuration.InternalDiagnosticsEnabled;
             }
         }
 

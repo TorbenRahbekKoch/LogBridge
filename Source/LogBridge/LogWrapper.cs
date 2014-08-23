@@ -18,7 +18,7 @@ namespace SoftwarePassion.LogBridge
         {
             DiagnosticsEnabled = diagnosticsEnabled;
             currentProcess = Process.GetCurrentProcess();
-            correlationIdKeyNameUpper = LogConstants.CorrelationIdKey.ToUpperInvariant();
+            currentAppDomainName = AppDomain.CurrentDomain.FriendlyName;
         }
 
         /// <summary>
@@ -175,19 +175,44 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
+        protected LogLocation GetLocationInfo()
+        {
+            var callingMemberInformation = CallingMember.Find(3);
+            if (callingMemberInformation != null)
+            {
+                var callingMember = callingMemberInformation.GetMethod();
+                if (callingMember != null && callingMember.DeclaringType != null)
+                {
+                    return new LogLocation
+                    {
+                        LoggingClassType = callingMember.DeclaringType,
+                        FileName = callingMemberInformation.GetFileName(),
+                        LineNumber = callingMemberInformation.GetFileLineNumber().ToString(CultureInfo.InvariantCulture),
+                        MethodName = callingMember.Name,
+                        StackFrame = callingMemberInformation
+                    };
+                }
+            }
+
+            return new LogLocation();
+        }
+
+
         protected bool DiagnosticsEnabled { get; private set; }
 
         protected abstract Guid PerformLogEntry(Guid? correlationId, Exception exception, Level level,
-            object extendedProperties, string message, string firstStringParam, params object[] parameters);
+            object extendedProperties, string message, string firstStringParam, object[] parameters);
 
         protected abstract Guid PerformLogEntry(Guid? correlationId, Exception exception, Level level,
-            object extendedProperties, string message, params object[] parameters);
+            object extendedProperties, string message, object[] parameters);
 
+
+        protected static readonly string MachineName = Environment.MachineName;
         protected readonly Process currentProcess;
+        protected readonly string currentAppDomainName;
         private static Option<Guid> processCorrelationId = Option.None<Guid>();
         private static readonly ThreadLocal<Option<Guid>> DefaultThreadCorrelationId = new ThreadLocal<Option<Guid>>();
         private static Option<Guid> defaultCorrelationId = Option.None<Guid>();
-        private string correlationIdKeyNameUpper;
     }
 
 	public abstract class LogWrapper<TLoggerImplementation> : LogWrapper
@@ -195,7 +220,8 @@ namespace SoftwarePassion.LogBridge
 	{
 	    protected LogWrapper(bool diagnosticsEnabled)
 	        : base(diagnosticsEnabled)
-	    {}
+	    {	        
+	    }
 
 		/// <summary>
 		/// Logs the given exception, message and extendedProperties.
@@ -210,7 +236,7 @@ namespace SoftwarePassion.LogBridge
 		/// <returns>A unique messageid. May be Guid.Empty if an error occurs, or logging is not enabled for the given level.</returns>
 		/// <exception cref="ArgumentNullException">If either level of message is null.</exception>
 		protected override Guid PerformLogEntry(Guid? correlationId, Exception exception, Level level,
-			object extendedProperties, string message, string firstStringParam, params object[] parameters)
+			object extendedProperties, string message, string firstStringParam, object[] parameters)
 		{
 			var locationInformation = GetLocationInfo();
 			var activeLogger = PerformGetLogger(locationInformation);
@@ -249,7 +275,7 @@ namespace SoftwarePassion.LogBridge
 		/// <returns>A unique messageid. May be Guid.Empty if an error occurs, or logging is not enabled for the given level.</returns>
 		/// <exception cref="ArgumentNullException">If either level of message is null.</exception>
 		protected override Guid PerformLogEntry(Guid? correlationId, Exception exception, Level level,
-			object extendedProperties, string message, params object[] parameters)
+			object extendedProperties, string message, object[] parameters)
 		{
 			var locationInformation = GetLocationInfo();
 			var activeLogger = PerformGetLogger(locationInformation);
@@ -261,14 +287,13 @@ namespace SoftwarePassion.LogBridge
 
 	    private Guid LogEntry(TLoggerImplementation activeLogger, LogLocation logLocation, 
                               Guid? explicitCorrelationId, Exception exception, 
-                              Level level, object extendedProperties, string message, params object[] parameters)
+                              Level level, object extendedProperties, string message, object[] parameters)
 	    {
             try
             {
                 string formattedMessage = FormatMessage(message, parameters);
                 var eventId = Guid.NewGuid();
                 var calculatedException = CalculateExceptionObject(exception);
-                var appDomainName = GetAppDomainName();
                 Option<Guid> extendedCorrelationId;
                 var extendedPropertyValues = CalculateExtendedProperties(extendedProperties, out extendedCorrelationId);
 
@@ -286,10 +311,10 @@ namespace SoftwarePassion.LogBridge
                     level,
                     formattedMessage,
                     username,
-                    Environment.MachineName,
+                    MachineName,
                     currentProcess.Id,
                     currentProcess.ProcessName,
-                    appDomainName,
+                    currentAppDomainName,
                     calculatedException,
                     logLocation,
                     properties);
@@ -297,9 +322,11 @@ namespace SoftwarePassion.LogBridge
                 PerformLogEntry(activeLogger, logData);
                 return eventId;
             }
-            catch (Exception) 
+            catch (Exception ex) 
             {
-                // Nothing much we can do here...
+                if (DiagnosticsEnabled)
+                    Trace.WriteLine(ex.ToString());
+                
                 return Guid.Empty;
             }
 	    }
@@ -325,7 +352,30 @@ namespace SoftwarePassion.LogBridge
             try
             {                
                 var nullFormattedParameters = parameters.Select(p => p ?? "[null]").ToArray();
-                formattedMessage = string.Format(CultureInfo.InvariantCulture, message, nullFormattedParameters);
+                switch (nullFormattedParameters.Length)
+                {
+                    case 1:
+                        formattedMessage = string.Format(CultureInfo.InvariantCulture, message, nullFormattedParameters[0]);
+                        break;
+                    case 2:
+                        formattedMessage = string.Format(
+                            CultureInfo.InvariantCulture, 
+                            message, 
+                            nullFormattedParameters[0],
+                            nullFormattedParameters[1]);
+                        break;
+                    case 3:
+                        formattedMessage = string.Format(
+                            CultureInfo.InvariantCulture,
+                            message,
+                            nullFormattedParameters[0],
+                            nullFormattedParameters[1],
+                            nullFormattedParameters[2]);
+                        break;
+                    default:
+                        formattedMessage = string.Format(CultureInfo.InvariantCulture, message, nullFormattedParameters);
+                        break;
+                }                                
             }
             catch (FormatException)
             {
@@ -372,11 +422,6 @@ namespace SoftwarePassion.LogBridge
             return properties;
         }
 
-        private string GetAppDomainName()
-        {
-            return AppDomain.CurrentDomain.FriendlyName;
-        }
-
         private Option<Guid> CalculateCorrelationId(
             Guid? explicitCorrelationId, 
             Option<Guid> extendedCorrelationId)
@@ -419,36 +464,6 @@ namespace SoftwarePassion.LogBridge
             return propertyValues;
         }
 
-        private void AddExceptionProperties(Exception exception, Dictionary<string,object> properties)
-        {
-            if (exception != null)
-            {
-                properties[LogConstants.ExceptionKey] = exception;
-            }
-        }
-
-		private LogLocation GetLocationInfo()
-		{
-			var callingMemberInformation = CallingMember.Find(3);
-			if (callingMemberInformation != null)
-			{
-				var callingMember = callingMemberInformation.GetMethod();
-				if (callingMember != null && callingMember.DeclaringType != null)
-				{
-					return new LogLocation
-					{
-						LoggingClassType = callingMember.DeclaringType,
-						FileName = callingMemberInformation.GetFileName(),
-						LineNumber = callingMemberInformation.GetFileLineNumber().ToString(CultureInfo.InvariantCulture),
-						MethodName = callingMember.Name,
-						StackFrame = callingMemberInformation
-					};
-				}
-			}
-
-			return new LogLocation();
-		}
-
         /// <summary>
         /// Creates a dictionary which is case-insensitive by using
         /// StringComparer.OrdinalIgnoreCase
@@ -458,6 +473,6 @@ namespace SoftwarePassion.LogBridge
 	    {
 	        return new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 	    }
-    }
+	}
 }
 

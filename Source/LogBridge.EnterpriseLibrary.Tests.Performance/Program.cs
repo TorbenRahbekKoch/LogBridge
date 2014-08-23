@@ -16,6 +16,8 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Performance
         {
             var logWriterFactory = new LogWriterFactory();
             var logger = logWriterFactory.Create();
+
+            Log.Information("Application started.");
             
             var now = DateTime.UtcNow;
 
@@ -39,7 +41,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Performance
                 null,
                 new LogLocation(),
                 new Dictionary<string, object>());
-
+            
             // Log formatted message directly through Enterprise Library
             Time("Enterprise Library formatted message: {0}",
                 () =>
@@ -54,16 +56,17 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Performance
                         TimeStamp = logData.TimeStamp,
                         Title = logData.Message.Substring(0, Math.Min(32, logData.Message.Length)),                
                         MachineName = logData.MachineName,
-                        ProcessId = logData.ProcessId.ToString(CultureInfo.InvariantCulture),
+                        ProcessId = logData.ProcessIdString,
                         ProcessName = logData.ProcessName,                
                         Priority = 0
                     };
 
-                    logger.Write(logEntry);
+                    if (logger.ShouldLog(logEntry))
+                        logger.Write(logEntry);
                 });
 
             Console.WriteLine("Press ENTER to exit.");
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         static void Time(string description, Action action)

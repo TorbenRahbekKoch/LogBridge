@@ -1,38 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.Reflection;
-using SoftwarePassion.Common.Core;
 using SoftwarePassion.Common.Core.PluginManagement;
 
 namespace SoftwarePassion.LogBridge
 {
     public static class LogWrapperResolver
     {
-        public const string LogWrapperTypeAppSettingsKeyName = "SoftwarePassion.LogBridge.LogWrapper";
-        public const string LogWrapperAssemblyAppSettingsKeyName = "SoftwarePassion.LogBridge.LogWrapperAssembly";
-
         public static LogWrapper Resolve(bool diagnosticsEnabled)
         {
             try
             {
-                var explicitWrapperType = ConfigurationManager.AppSettings[LogWrapperTypeAppSettingsKeyName];
-                var explicitWrapperTypeOption = explicitWrapperType == null
-                    ? Option.None<string>()
-                    : Option.Some(explicitWrapperType);
+                var explicitWrapperType = Configuration.LogWrapperType;
 
-                var explicitWrapperAssembly = ConfigurationManager.AppSettings[LogWrapperAssemblyAppSettingsKeyName];
-                var explicitWrapperAssemblies = explicitWrapperAssembly == null
-                    ? new List<AssemblyName>()
-                    : new List<AssemblyName>() {new AssemblyName(explicitWrapperAssembly)};
+                var explicitWrapperAssembly = Configuration.LogWrapperAssembly;
+                var explicitWrapperAssemblies = explicitWrapperAssembly.IsSome
+                    ? new List<AssemblyName>() { new AssemblyName(explicitWrapperAssembly.Value) }
+                    : new List<AssemblyName>();
 
                 var configuration = new PluginFinderConfiguration(
                     ExcludeSystemAssemblies.Yes,
                     new List<Type>() {typeof (NullLogWrapper)},
                     new List<AssemblyName>(),
                     explicitWrapperAssemblies,
-                    explicitWrapperTypeOption);
+                    explicitWrapperType);
 
                 return PluginFinder.FindAndActivate<LogWrapper>(
                     configuration,
@@ -42,6 +34,9 @@ namespace SoftwarePassion.LogBridge
             {
                 if (diagnosticsEnabled)
                     Trace.WriteLine("Failed to resolve a LogWrapper due to an exception: " + exception.ToString());
+
+                if (Configuration.ThrowOnResolverFail)
+                    throw;
                 return new NullLogWrapper(diagnosticsEnabled);
             } 
         }
