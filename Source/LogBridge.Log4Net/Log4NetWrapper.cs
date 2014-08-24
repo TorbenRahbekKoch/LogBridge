@@ -9,7 +9,7 @@ namespace SoftwarePassion.LogBridge.Log4Net
 {
     public class Log4NetWrapper : LogWrapper<ILogger>
     {
-        public Log4NetWrapper(bool diagnosticsEnabled) : base(diagnosticsEnabled)
+        public Log4NetWrapper(bool diagnosticsEnabled) : base(diagnosticsEnabled, 0)
         {
             Hierarchy h = (Hierarchy)LogManager.GetRepository();
             defaultLogger = h.Root;

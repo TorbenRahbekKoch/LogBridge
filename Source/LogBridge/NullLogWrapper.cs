@@ -6,7 +6,7 @@ namespace SoftwarePassion.LogBridge
     public class NullLogWrapper : LogWrapper<NullLogWrapper>
     {
         public NullLogWrapper(bool diagnosticsEnabled)
-            : base(true)
+            : base(diagnosticsEnabled, 0)
         {
             Trace.WriteLine("{0} instantiated. Possible configuration error?".FormatInvariant(typeof(NullLogWrapper).FullName));
         }

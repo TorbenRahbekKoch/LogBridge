@@ -14,8 +14,6 @@ namespace SoftwarePassion.LogBridge.Log4Net.Tests.Performance
         {
             XmlConfigurator.Configure();
 
-            var logger = LogManager.GetLogger("RootLogger");
-
             appender = LogManager.GetRepository()
                 .GetAppenders()
                 .OfType<MemoryAppender>()
@@ -28,6 +26,8 @@ namespace SoftwarePassion.LogBridge.Log4Net.Tests.Performance
 
             // Log formatted message through LogBridge
             Time("LogBridge formatted message: {0}", () => Log.Warning("Message {0} {1} {2} {3}", 42, "87", now, 87.42));
+
+            var logger = LogManager.GetLogger("RootLogger");
 
             // Log message directly through log4net
             Time("Log4Net simple message: {0}", () => logger.WarnFormat("Message"));

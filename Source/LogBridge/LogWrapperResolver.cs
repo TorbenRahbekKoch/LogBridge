@@ -8,6 +8,11 @@ namespace SoftwarePassion.LogBridge
 {
     public static class LogWrapperResolver
     {
+        /// <summary>
+        /// Resolves the LogWrapper to use.
+        /// </summary>
+        /// <param name="diagnosticsEnabled">If set to <c>true</c> diagnostics is enabled.</param>
+        /// <returns>LogWrapper.</returns>
         public static LogWrapper Resolve(bool diagnosticsEnabled)
         {
             try
@@ -37,6 +42,7 @@ namespace SoftwarePassion.LogBridge
 
                 if (Configuration.ThrowOnResolverFail)
                     throw;
+
                 return new NullLogWrapper(diagnosticsEnabled);
             } 
         }

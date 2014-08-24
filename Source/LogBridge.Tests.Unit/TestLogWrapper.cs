@@ -5,7 +5,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit
     public class TestLogWrapper : LogWrapper<TestLogWrapper>
     {
         public TestLogWrapper(bool diagnosticsEnabled)
-            : base(true)
+            : base(true, 0)
         {}
 
         public static IList<LogData> LogEntries

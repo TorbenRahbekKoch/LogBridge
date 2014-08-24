@@ -215,15 +215,26 @@ namespace SoftwarePassion.LogBridge
         private static Option<Guid> defaultCorrelationId = Option.None<Guid>();
     }
 
+    /// <summary>
+    /// A specialization of LogWrapper, where the provider-specific class for
+    /// doing the actual logging is specified.
+    /// </summary>
+    /// <typeparam name="TLoggerImplementation"></typeparam>
 	public abstract class LogWrapper<TLoggerImplementation> : LogWrapper
         where TLoggerImplementation : class
 	{
-	    protected LogWrapper(bool diagnosticsEnabled)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogWrapper{TLoggerImplementation}" /> class.
+        /// </summary>
+        /// <param name="diagnosticsEnabled">if set to <c>true</c> [diagnostics enabled].</param>
+        /// <param name="defaultPropertySize">Default size of the property dictionary.</param>
+	    protected LogWrapper(bool diagnosticsEnabled, int defaultPropertySize)
 	        : base(diagnosticsEnabled)
-	    {	        
-	    }
+        {
+            this.defaultPropertySize = defaultPropertySize;
+        }
 
-		/// <summary>
+        /// <summary>
 		/// Logs the given exception, message and extendedProperties.
 		/// </summary>
 		/// <param name="correlationId">The correlationId. May be null.</param>
@@ -297,7 +308,6 @@ namespace SoftwarePassion.LogBridge
                 Option<Guid> extendedCorrelationId;
                 var extendedPropertyValues = CalculateExtendedProperties(extendedProperties, out extendedCorrelationId);
 
-                var properties = CalculateProperties(extendedPropertyValues);
                 var username = ThreadPrincipal.Resolve(DiagnosticsEnabled);
 
                 var actualCorrelationId = CalculateCorrelationId(
@@ -317,7 +327,7 @@ namespace SoftwarePassion.LogBridge
                     currentAppDomainName,
                     calculatedException,
                     logLocation,
-                    properties);
+                    extendedPropertyValues);
 
                 PerformLogEntry(activeLogger, logData);
                 return eventId;
@@ -351,7 +361,7 @@ namespace SoftwarePassion.LogBridge
             string formattedMessage;
             try
             {                
-                var nullFormattedParameters = parameters.Select(p => p ?? "[null]").ToArray();
+                var nullFormattedParameters = parameters.Select(p => p == null ? "[null]" : p.ToString()).ToArray();
                 switch (nullFormattedParameters.Length)
                 {
                     case 1:
@@ -372,6 +382,16 @@ namespace SoftwarePassion.LogBridge
                             nullFormattedParameters[1],
                             nullFormattedParameters[2]);
                         break;
+                    case 4:
+                        formattedMessage = string.Format(
+                            CultureInfo.InvariantCulture,
+                            message,
+                            nullFormattedParameters[0],
+                            nullFormattedParameters[1],
+                            nullFormattedParameters[2],
+                            nullFormattedParameters[3]
+                            );
+                        break;
                     default:
                         formattedMessage = string.Format(CultureInfo.InvariantCulture, message, nullFormattedParameters);
                         break;
@@ -385,6 +405,12 @@ namespace SoftwarePassion.LogBridge
 	        return formattedMessage;
 	    }
 
+        /// <summary>
+        /// Calculates the exception object, taking into consideration various 
+        /// special types of exceptions, like e.g. FaultException.
+        /// </summary>
+        /// <param name="exception">The exception to examine.</param>
+        /// <returns>The calculated exception, null if the given exception is null.</returns>
         protected virtual Exception CalculateExceptionObject(Exception exception)
         {
             if (exception == null)
@@ -410,18 +436,6 @@ namespace SoftwarePassion.LogBridge
             return exception;
         }
 
-        private Dictionary<string, object> CalculateProperties(            
-            Dictionary<string, object> extendedPropertyValues)
-        {
-            var properties = CreateDictionary();
-            foreach (var extendedPropertyValue in extendedPropertyValues)
-            {
-                properties[extendedPropertyValue.Key] = extendedPropertyValue.Value;
-            }
-
-            return properties;
-        }
-
         private Option<Guid> CalculateCorrelationId(
             Guid? explicitCorrelationId, 
             Option<Guid> extendedCorrelationId)
@@ -435,32 +449,32 @@ namespace SoftwarePassion.LogBridge
             return CorrelationId;
         }
 
-        private static Dictionary<string, object> CalculateExtendedProperties(object extendedProperties, out Option<Guid> correlationId)
+        private Dictionary<string, object> CalculateExtendedProperties(object extendedProperties, out Option<Guid> correlationId)
         {
-            var propertyValues = CreateDictionary();
             correlationId = Option.None<Guid>();
-            if (extendedProperties != null)
+            if (extendedProperties == null)
+                return CreateDictionary(true, defaultPropertySize);
+            
+            // TypeDescriptor.GetProperties(Type...) is cached (by TypeDescriptor itself)
+            var properties = TypeDescriptor.GetProperties(extendedProperties.GetType()).OfType<PropertyDescriptor>().ToList();
+            var propertyValues = CreateDictionary(true, defaultPropertySize + properties.Count());
+            foreach (PropertyDescriptor property in properties)
             {
-                // TypeDescriptor.GetProperties(Type...) is cached (by TypeDescriptor itself)
-                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(extendedProperties.GetType()))
-                {
-                    if (string.Compare(
+                var propertyValue = property.GetValue(extendedProperties);
+                if (propertyValue is Guid && string.Compare(
                         property.Name,
                         LogConstants.CorrelationIdKey,
                         StringComparison.OrdinalIgnoreCase)
-                        == 0)
-                    {
-                        var propertyValue = property.GetValue(extendedProperties);
-                        if (propertyValue is Guid)
-                            correlationId = (Guid) propertyValue;
-                    }
-                    else
-                    {
-                        propertyValues[property.Name] = property.GetValue(extendedProperties);
-                    }
+                    == 0)
+                {                    
+                    correlationId = (Guid) propertyValue;
+                }
+                else
+                {
+                    propertyValues[property.Name] = propertyValue;
                 }
             }
-
+            
             return propertyValues;
         }
 
@@ -468,11 +482,17 @@ namespace SoftwarePassion.LogBridge
         /// Creates a dictionary which is case-insensitive by using
         /// StringComparer.OrdinalIgnoreCase
         /// </summary>
-        /// <returns></returns>
-	    static protected Dictionary<string, object> CreateDictionary()
+        /// <param name="overrideDefaultPropertySize">If set to <c>true</c> override default property size.</param>
+        /// <param name="actualPropertySize">Actual size of the dictionary, when overrideDefaultPropertySize is true.</param>
+        /// <returns>Dictionary{System.StringSystem.Object}.</returns>
+	    protected Dictionary<string, object> CreateDictionary(bool overrideDefaultPropertySize, int actualPropertySize)
 	    {
-	        return new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+	        return new Dictionary<string, object>(
+                overrideDefaultPropertySize ? actualPropertySize : defaultPropertySize, 
+                StringComparer.OrdinalIgnoreCase);
 	    }
-	}
+
+        private readonly int defaultPropertySize;
+    }
 }
 

@@ -16,7 +16,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
         /// Initializes a new instance of the <see cref="EnterpriseLibraryWrapper"/> class.
         /// </summary>
         /// <param name="diagnosticsEnabled">If set to <c>true</c> internal diagnostics will be enabled.</param>
-        public EnterpriseLibraryWrapper(bool diagnosticsEnabled) : base(diagnosticsEnabled)
+        public EnterpriseLibraryWrapper(bool diagnosticsEnabled) : base(diagnosticsEnabled, 10) // 10 comes from ToETLExtendedProperties()
         {
             try
             {
@@ -61,11 +61,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
 
         private IDictionary<string, object> ToETLExtendedProperties(LogData logData)
         {
-            var etlProperties = logData.Properties;//new Dictionary<string, object>();
-            //foreach (var property in logData.Properties)
-            //{
-            //    etlProperties[property.Key] = property.Value;
-            //}
+            var etlProperties = logData.Properties;
 
             if (logData.CorrelationId.IsSome)
                 etlProperties[LogConstants.CorrelationIdKey] = logData.CorrelationId.Value;
