@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\..\packages\FluentAssertions.3.1.229\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\..\packages\FluentAssertions.3.1.229\lib\net45\FluentAssertions.Core.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -42,7 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LogBridgeBase.cs" />
+    <Compile Include="DescribeTests\Class1.cs" />
+    <Compile Include="DescribeTests\Class2.cs" />
+    <Compile Include="DescribeTests\Class3.cs" />
+    <Compile Include="DescribeTests\Enums.cs" />
+    <Compile Include="DescribeTests\Methods.cs" />
+    <Compile Include="DescribeTests\When_Describing_Methods.cs" />
     <Compile Include="LogDataVerifier.cs" />
     <Compile Include="LogTests\When_logging_warning_messages_with_null_parameters.cs" />
     <Compile Include="LogTests\When_logging_warning_messages.cs" />
