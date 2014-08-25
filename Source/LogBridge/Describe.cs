@@ -24,7 +24,7 @@ namespace SoftwarePassion.LogBridge
     /// higher in the call stack than you might expect. Not very likely to happen with complex
     /// methods, though.
     /// </remarks>
-    public class Describe
+    public static class Describe
     {
         /// <summary>
         /// Describes the calling method with the specified parameter values.

@@ -176,3 +176,11 @@ stating that the application has started. You can wrap this in a try-catch:
 
 This is the only place that LogBridge will ever throw an exception.
 
+Describe.Parameters
+===================
+
+Logging the value of the parameters to a method can be very useful when 
+catching exceptions. To aid with that there is a static class *Describe*, which
+has a method *Parameters*. Calling this method with the parameters to the 
+method in the exact same order will give back a string which contains a
+rather comprehensive description of the parameters.
