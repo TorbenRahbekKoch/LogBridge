@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge", "Source\LogBridge\LogBridge.csproj", "{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Tests.Unit", "Source\LogBridge.Tests.Unit\LogBridge.Tests.Unit.csproj", "{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj", "{DF241F73-E055-4A9B-A6B5-E2061259C4CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Log4Net", "Source\LogBridge.Log4Net\LogBridge.Log4Net.csproj", "{693D542D-4C49-4A6C-A6E3-5B580788F1BC}"
 EndProject
@@ -30,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{472872F5-77E1-4555-9DF7-380F0BD9ABD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,10 +44,6 @@ Global
 		{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF241F73-E055-4A9B-A6B5-E2061259C4CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF241F73-E055-4A9B-A6B5-E2061259C4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF241F73-E055-4A9B-A6B5-E2061259C4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF241F73-E055-4A9B-A6B5-E2061259C4CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{693D542D-4C49-4A6C-A6E3-5B580788F1BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{693D542D-4C49-4A6C-A6E3-5B580788F1BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{693D542D-4C49-4A6C-A6E3-5B580788F1BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -82,6 +78,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E983FEFD-8870-42D8-9B8D-DC69AC3F9D06} = {7822DAFC-C66A-4778-B9C1-496BE50CF874}
+		{472872F5-77E1-4555-9DF7-380F0BD9ABD6} = {7822DAFC-C66A-4778-B9C1-496BE50CF874}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45

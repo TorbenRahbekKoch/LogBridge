@@ -54,10 +54,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj">
-      <Project>{df241f73-e055-4a9b-a6b5-e2061259c4ce}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LogBridge.Log4Net\LogBridge.Log4Net.csproj">
       <Project>{693d542d-4c49-4a6c-a6e3-5b580788f1bc}</Project>
       <Name>LogBridge.Log4Net</Name>

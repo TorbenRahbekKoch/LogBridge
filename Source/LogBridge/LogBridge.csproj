@@ -31,9 +31,14 @@
     <DocumentationFile>..\..\Build\Release\LogBridge.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SoftwarePassion.Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\SoftwarePassion.Common.Core.1.0.0\lib\net45\SoftwarePassion.Common.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
@@ -59,10 +64,7 @@
     <Compile Include="ThreadPrincipal.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj">
-      <Project>{DF241F73-E055-4A9B-A6B5-E2061259C4CE}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

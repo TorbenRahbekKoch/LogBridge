@@ -34,8 +34,13 @@
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="SoftwarePassion.Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\SoftwarePassion.Common.Core.1.0.0\lib\net45\SoftwarePassion.Common.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,10 +56,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SoftwarePassion.Common\Source\Projects\Core\Core.csproj">
-      <Project>{DF241F73-E055-4A9B-A6B5-E2061259C4CE}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LogBridge\LogBridge.csproj">
       <Project>{591204e7-dea6-47bd-8e89-7aaafe660d8f}</Project>
       <Name>LogBridge</Name>
