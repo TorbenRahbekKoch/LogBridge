@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+		<id>SoftwarePassion.LogBridge</id>
+		<version>$version$</version>
+		<authors>Torben Rahbek Koch</authors>
+		<owners>Torben Rahbek Koch</owners>
+		<licenseUrl>https://github.com/TorbenRahbekKoch/LogBridge/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/TorbenRahbekKoch/LogBridge</projectUrl>
+		<iconUrl>https://github.com/TorbenRahbekKoch/LogBridge/blob/master/nuget/SoftwarePassion.LogBridge.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>Base library for log bridges.</summary>
+		<description>$description$</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright 2014</copyright>
+		<tags>Utility Logging</tags>
+    <dependencies>
+      <dependency id="SoftwarePassion.Common.Core" version="1.0.0"/>
+      <dependency id="SoftwarePassion.LogBridge" version="1.0.0"/>
+      <dependency id="Microsoft.Practices.EnterpriseLibrary.Logging" version="6.0.0"/>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
+    </frameworkAssemblies>
+  </metadata>
+	<files>
+		<file src="..\Build\Release\LogBridge.EnterpriseLibrary.dll" target="lib\net45\" />
+		<file src="..\Build\Release\LogBridge.EnterpriseLibrary.pdb" target="lib\net45\" />
+		<file src="..\Build\Release\LogBridge.EnterpriseLibrary.xml" target="lib\net45\" />
+	</files>
+</package>

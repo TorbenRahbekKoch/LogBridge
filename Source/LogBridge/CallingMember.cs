@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Reflection;
 
 namespace SoftwarePassion.LogBridge
@@ -8,6 +9,8 @@ namespace SoftwarePassion.LogBridge
     {
         public static StackFrame Find(int startingStackFrameOffset)
         {
+            Contract.Requires(startingStackFrameOffset >= 0);
+
             try
             {
                 var thisAssembly = typeof (CallingMember).Assembly.FullName;

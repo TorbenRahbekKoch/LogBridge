@@ -29,6 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{472872F5-77E1-4555-9DF7-380F0BD9ABD6}"
+	ProjectSection(SolutionItems) = preProject
+		nuget\SoftwarePassion.LogBridge.EnterpriseLibrary.nuspec = nuget\SoftwarePassion.LogBridge.EnterpriseLibrary.nuspec
+		nuget\SoftwarePassion.LogBridge.Log4Net.nuspec = nuget\SoftwarePassion.LogBridge.Log4Net.nuspec
+		nuget\SoftwarePassion.LogBridge.nuspec = nuget\SoftwarePassion.LogBridge.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
