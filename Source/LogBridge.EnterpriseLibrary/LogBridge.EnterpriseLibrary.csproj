@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LogBridge.EnterpriseLibrary.nuspec" />
+    <None Include="nuget\app.config.uninstall.xdt" />
     <None Include="nuget\app.config.install.xdt" />
     <None Include="packages.config" />
   </ItemGroup>

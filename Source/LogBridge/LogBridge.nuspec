@@ -31,5 +31,6 @@
 		<file src="..\..\Build\Release\LogBridge.pdb" target="lib\net45\" />
 		<file src="..\..\Build\Release\LogBridge.xml" target="lib\net45\" />
     <file src="nuget\app.config.install.xdt" target="content"/>
+    <file src="nuget\app.config.uninstall.xdt" target="content"/>
 	</files>
 </package>
