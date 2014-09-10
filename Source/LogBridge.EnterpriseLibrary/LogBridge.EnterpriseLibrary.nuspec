@@ -17,7 +17,7 @@
     <dependencies>
       <dependency id="SoftwarePassion.Common.Core" version="1.0.0"/>
       <dependency id="SoftwarePassion.LogBridge" version="1.0.0"/>
-      <dependency id="Microsoft.Practices.EnterpriseLibrary.Logging" version="6.0.0"/>
+      <dependency id="EnterpriseLibrary.Logging" version="6.0.0"/>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="net45" />
