@@ -28,6 +28,6 @@
 		<file src="..\..\Build\Release\LogBridge.EnterpriseLibrary.dll" target="lib\net45\" />
 		<file src="..\..\Build\Release\LogBridge.EnterpriseLibrary.pdb" target="lib\net45\" />
 		<file src="..\..\Build\Release\LogBridge.EnterpriseLibrary.xml" target="lib\net45\" />
-    <file src="nuget\app.config.install.xdt" target="content\app.config.transform"/>
+    <file src="nuget\app.config.install.xdt" target="content"/>
 	</files>
 </package>
