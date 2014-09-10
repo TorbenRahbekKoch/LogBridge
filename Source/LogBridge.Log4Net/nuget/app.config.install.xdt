@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-    <appSettings xdt:Transform="InsertIfMissing">
+    <appSettings>
 		  <add key="SoftwarePassion.LogBridge.InternalDiagnosticsEnabled" value="false" xdt:Transform="InsertIfMissing"/>
 		  <add key="SoftwarePassion.LogBridge.ThrowOnResolverFail" value="true" xdt:Transform="InsertIfMissing"/>
 		  <add key="SoftwarePassion.LogBridge.LogWrapperAssembly" value="LogBridge.Log4Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" xdt:Transform="InsertIfMissing"/>
