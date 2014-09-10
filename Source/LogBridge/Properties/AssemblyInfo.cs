@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LogBridge")]
+[assembly: AssemblyTitle("SoftwarePassion.LogBridge")]
 [assembly: AssemblyDescription("A common interface for various logging frameworks.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Software Passion")]
 [assembly: AssemblyProduct("LogBridge")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCopyright("Copyright © Torben Rahbek Koch 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
