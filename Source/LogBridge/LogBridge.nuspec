@@ -30,5 +30,6 @@
 		<file src="..\..\Build\Release\LogBridge.dll" target="lib\net45\" />
 		<file src="..\..\Build\Release\LogBridge.pdb" target="lib\net45\" />
 		<file src="..\..\Build\Release\LogBridge.xml" target="lib\net45\" />
+    <file src="nuget\app.config.transform" target="content\app.config.transform"/>
 	</files>
 </package>
