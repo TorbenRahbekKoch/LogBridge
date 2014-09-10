@@ -27,8 +27,8 @@
     </frameworkAssemblies>
   </metadata>
 	<files>
-		<file src="..\Build\Release\LogBridge.dll" target="lib\net45\" />
-		<file src="..\Build\Release\LogBridge.pdb" target="lib\net45\" />
-		<file src="..\Build\Release\LogBridge.xml" target="lib\net45\" />
+		<file src="..\..\Build\Release\LogBridge.Log4Net.dll" target="lib\net45\" />
+		<file src="..\..\Build\Release\LogBridge.Log4Net.pdb" target="lib\net45\" />
+		<file src="..\..\Build\Release\LogBridge.Log4Net.xml" target="lib\net45\" />
 	</files>
 </package>
