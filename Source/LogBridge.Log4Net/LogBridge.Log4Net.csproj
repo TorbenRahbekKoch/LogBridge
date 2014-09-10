@@ -53,7 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="nuget\app.config.transform" />
+    <None Include="nuget\app.config.install.xdt" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
