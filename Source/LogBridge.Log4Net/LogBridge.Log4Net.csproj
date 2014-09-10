@@ -55,6 +55,7 @@
   <ItemGroup>
     <None Include="LogBridge.Log4Net.nuspec" />
     <None Include="nuget\app.config.install.xdt" />
+    <None Include="nuget\app.config.transformation" />
     <None Include="nuget\app.config.uninstall.xdt" />
     <None Include="packages.config" />
   </ItemGroup>
