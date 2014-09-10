@@ -9,10 +9,10 @@
     <projectUrl>https://github.com/TorbenRahbekKoch/LogBridge</projectUrl>
 		<iconUrl>https://github.com/TorbenRahbekKoch/LogBridge/blob/master/nuget/SoftwarePassion.LogBridge.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<summary>$description$.</summary>
+		<summary>$description$</summary>
 		<description>$description$</description>
 		<releaseNotes></releaseNotes>
-		<copyright>Copyright 2014</copyright>
+		<copyright>$copyright$</copyright>
 		<tags>Utility Logging</tags>
     <dependencies>
       <dependency id="SoftwarePassion.Common.Core" version="1.0.0"/>
