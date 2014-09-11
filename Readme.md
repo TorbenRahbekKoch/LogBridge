@@ -13,6 +13,11 @@ Please see the Configuration section below for details about this.
 Usage
 =====
 
+Install with Nuget:
+
+  [EnterpriseLibrary](https://www.nuget.org/packages/SoftwarePassion.LogBridge.EnterpriseLibrary/)
+  [Log4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.Log4Net/)
+
 There are five logging levels available:
 
 - Information
