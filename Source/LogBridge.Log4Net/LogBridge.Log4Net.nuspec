@@ -16,6 +16,7 @@
 		<tags>Utility Logging</tags>
     <dependencies>
       <dependency id="SoftwarePassion.Common.Core" version="1.0.0"/>
+      <dependency id="SoftwarePassion.LogBridge" version="1.0.0"/>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net45" />
