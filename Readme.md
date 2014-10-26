@@ -105,7 +105,7 @@ of the log message.
 
 Configuration
 =============
-Currently the configuration is very easy. In theory (and even, at  times, in 
+Currently the configuration is very simple. In theory (and even, at  times, in 
 practice) LogBridge should be able to automatically find an implementation of 
 LogWrapper<> and load that. This presupposes that the assembly has been loaded 
 into the application. Simply having the assembly in the application directory 
@@ -117,7 +117,7 @@ assembly the log-wrapper is located. This is done using an *appSetting* called
 *SoftwarePassion.LogBridge.LogWrapperAssembly*. Out of the box only the two 
 values are supported:
 
-- LogBridge.Log4Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+- LogBridge.Log4Net, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null
 - LogBridge.EnterpriseLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 
 The meaning of these should be self-evident. What this value does internally is 
@@ -180,6 +180,34 @@ stating that the application has started. You can wrap this in a try-catch:
 ´´´´
 
 This is the only place that LogBridge will ever throw an exception.
+
+### Log4Net specifics
+
+#### Initialization.
+
+It may be necessary to call `log4net.Config.XmlConfigurator.Configure();` to initialize 
+Log4Net. You can also, as usual with Log4Net use the XmlConfigurator attribute. 
+[The Log4Net documentation has details about this](http://logging.apache.org/log4net/release/manual/configuration.html).
+
+#### Logger discovery
+
+Log4Net offers the nice feature to have a logger per e.g. class or namespace. 
+Unfortunately you normally have to instantiate those loggers yourself, in code.
+[See Log4Net documentation for details about how this is done](http://logging.apache.org/log4net/release/faq.html).
+
+LogBridge removes that necessity. You should configure the loggers in the 
+applications configuration file as you normally should, but LogBridge automatically
+finds the most specific logger, by looking at where the Log.XXX method is called.
+
+That is, it first looks at the fully qualified name of the class, if not logger
+is found in then removes the class name and looks at the namespace. If continues 
+to remove the right-most parts of the namespace until it runs out or a logger 
+is found.
+
+If no specific logger is found, `Log4NetWrapper` uses the root logger, which 
+always should be configured in Log4Net.
+
+If you want to see how it is done, you can look in the `Log4Net.PerformGetLogger` method.
 
 Describe.Parameters
 ===================
