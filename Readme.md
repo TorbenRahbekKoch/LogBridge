@@ -209,6 +209,16 @@ always should be configured in Log4Net.
 
 If you want to see how it is done, you can look in the `Log4Net.PerformGetLogger` method.
 
+#### Properties
+
+LogBridge.Log4Net adds the following properties to the Log4Net Properties Dictionary:
+
+- correlationId
+- eventId
+- machineName
+- processName
+- exception
+
 Describe.Parameters
 ===================
 
