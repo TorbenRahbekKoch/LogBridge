@@ -87,6 +87,7 @@ namespace SoftwarePassion.LogBridge.Log4Net
 
             log4NetProperties[LogConstants.EventIdKey] = logData.EventId;
             log4NetProperties[LogConstants.MachineNameKey] = logData.MachineName;
+            log4NetProperties[LogConstants.ApplicationNameKey] = logData.ApplicationName;
             log4NetProperties[LogConstants.ProcessNameKey] = logData.ProcessName;
             log4NetProperties[LogConstants.ExceptionKey] = logData.Exception;
             return log4NetProperties;

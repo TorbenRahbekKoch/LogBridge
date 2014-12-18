@@ -51,7 +51,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
                 Title = logData.Message.Substring(0, Math.Min(32, logData.Message.Length)),                
                 MachineName = logData.MachineName,
                 ProcessId = logData.ProcessIdString,
-                ProcessName = logData.ProcessName,                
+                ProcessName = logData.ProcessName,                          
                 Priority = 0
             };
 
@@ -69,6 +69,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
                 etlProperties[LogConstants.CorrelationIdKey] = null;
             etlProperties[LogConstants.EventIdKey] = logData.EventId;
             etlProperties[LogConstants.MachineNameKey] = logData.MachineName;
+            etlProperties[LogConstants.ApplicationNameKey] = logData.ApplicationName;
             etlProperties[LogConstants.ProcessNameKey] = logData.ProcessName;
             etlProperties[LogConstants.FilenameKey] = logData.LogLocation.FileName;
             etlProperties[LogConstants.LineNumberKey] = logData.LogLocation.LineNumber;
