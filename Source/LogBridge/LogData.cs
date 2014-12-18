@@ -15,6 +15,7 @@ namespace SoftwarePassion.LogBridge
             string message, 
             string username, 
             string machineName,
+            string applicationName,
             int processId,
             string processName,
             string appDomainName,
@@ -32,6 +33,7 @@ namespace SoftwarePassion.LogBridge
             LogLocation = logLocation;
             Username = username;
             MachineName = machineName;
+            ApplicationName = applicationName;
             ProcessId = processId;
             ProcessIdString = processId.ToString(CultureInfo.InvariantCulture);
             ProcessName = processName;
@@ -47,6 +49,7 @@ namespace SoftwarePassion.LogBridge
         public string Message { get; private set; }
         public string Username { get; private set; }
         public string MachineName { get; private set; }
+        public string ApplicationName { get; private set; }
         public int ProcessId { get; private set; }
         public string ProcessIdString { get; private set; }
         public string ProcessName { get; set; }

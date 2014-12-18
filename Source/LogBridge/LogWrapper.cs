@@ -305,8 +305,9 @@ namespace SoftwarePassion.LogBridge
                 string formattedMessage = FormatMessage(message, parameters);
                 var eventId = Guid.NewGuid();
                 var calculatedException = CalculateExceptionObject(exception);
+                string applicationName;
                 Option<Guid> extendedCorrelationId;
-                var extendedPropertyValues = CalculateExtendedProperties(extendedProperties, out extendedCorrelationId);
+                var extendedPropertyValues = CalculateExtendedProperties(extendedProperties, out extendedCorrelationId, out applicationName);
 
                 var username = ThreadPrincipal.Resolve(DiagnosticsEnabled);
 
@@ -322,6 +323,7 @@ namespace SoftwarePassion.LogBridge
                     formattedMessage,
                     username,
                     MachineName,
+                    applicationName,
                     currentProcess.Id,
                     currentProcess.ProcessName,
                     currentAppDomainName,
@@ -355,7 +357,9 @@ namespace SoftwarePassion.LogBridge
 
 	    protected virtual string FormatMessage(string message, params object[] parameters)
 	    {
-	        if (parameters.Length == 0)
+	        if (message == null)
+	            return string.Empty;
+	        if (parameters == null || parameters.Length == 0)
 	            return message;
 
             string formattedMessage;
@@ -449,9 +453,10 @@ namespace SoftwarePassion.LogBridge
             return CorrelationId;
         }
 
-        private Dictionary<string, object> CalculateExtendedProperties(object extendedProperties, out Option<Guid> correlationId)
+        private Dictionary<string, object> CalculateExtendedProperties(object extendedProperties, out Option<Guid> correlationId, out string applicationName)
         {
             correlationId = Option.None<Guid>();
+            applicationName = string.Empty;
             if (extendedProperties == null)
                 return CreateDictionary(true, defaultPropertySize);
             
@@ -468,6 +473,14 @@ namespace SoftwarePassion.LogBridge
                     == 0)
                 {                    
                     correlationId = (Guid) propertyValue;
+                }
+                else if (propertyValue is string && string.Compare(
+                        property.Name,
+                        LogConstants.ApplicationNameKey,
+                        StringComparison.OrdinalIgnoreCase)
+                    == 0)
+                {
+                    applicationName = (string) propertyValue;
                 }
                 else
                 {

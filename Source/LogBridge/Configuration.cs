@@ -9,7 +9,7 @@ namespace SoftwarePassion.LogBridge
     /// </summary>
     public static class Configuration
     {
-        private const string LogWrapperTypeAppSettingsKeyName = "SoftwarePassion.LogBridge.LogWrapper";
+        private const string LogWrapperTypeAppSettingsKeyName = "SoftwarePassion.LogBridge.LogWrapperType";
         private const string LogWrapperAssemblyAppSettingsKeyName = "SoftwarePassion.LogBridge.LogWrapperAssembly";
         private const string ThrowOnResolverFailAppSettingsKeyName = "SoftwarePassion.LogBridge.ThrowOnResolverFail";
         private const string InternalDiagnosticsAppSettingsKey = "SoftwarePassion.LogBridge.InternalDiagnosticsEnabled";

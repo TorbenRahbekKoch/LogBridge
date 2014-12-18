@@ -50,6 +50,12 @@ namespace LogBridge.Log4Net.Tests.Unit
             CompareProperties(expected.Properties, actual.Properties);
         }
 
+        public void VerifyOneEventLogged()
+        {
+            var appender = GetAppender();
+            Assert.AreEqual(1, appender.GetEvents().Count(), "Not exactly one event were logged, but: " + appender.GetEvents().Count());
+        }
+
         public void ClearLogData()
         {
             GetAppender().Clear();

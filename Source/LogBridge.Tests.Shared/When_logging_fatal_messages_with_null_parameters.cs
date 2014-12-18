@@ -14,6 +14,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal((string)null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -21,6 +22,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal(Guid.NewGuid(), (string)null, (object)null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -28,6 +30,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal(Guid.NewGuid(), (string)null, (string)null, null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -35,6 +38,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal((string)null, null, null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -42,6 +46,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal((Exception) null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -49,6 +54,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal((object) null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -56,6 +62,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal((object) null, (string)null, null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -63,6 +70,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal(Guid.NewGuid(), (object) null, (string)null, null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -70,6 +78,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal(Guid.NewGuid(), (object) null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -77,6 +86,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             TestDelegate action = () => Log.Fatal(Guid.NewGuid(), (Exception) null);
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -85,6 +95,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             TestDelegate action = () => Log.Fatal((Exception)null, (object)null);
 
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -93,6 +104,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             TestDelegate action = () => Log.Fatal((Exception)null, (string)null);
 
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -101,6 +113,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             TestDelegate action = () => Log.Fatal((Exception)null, (string)null, (string)null);
 
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -109,6 +122,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             TestDelegate action = () => Log.Fatal(Guid.NewGuid(), (Exception)null, (string)null, (string)null);
 
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -117,6 +131,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             TestDelegate action = () => Log.Fatal(Guid.NewGuid(), (Exception)null, (string)null);
 
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -125,6 +140,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             TestDelegate action = () => Log.Fatal(Guid.NewGuid(), (Exception)null, (object)null);
 
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -133,6 +149,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             TestDelegate action = () => Log.Fatal((Exception)null, (object)null, (string)null, (string)null);
 
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
 
         [Test]
@@ -141,6 +158,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             TestDelegate action = () => Log.Fatal(Guid.NewGuid(), null, (object)null, (string)null, null);
 
             Assert.DoesNotThrow(action);
+            VerifyOneEventLogged();
         }
     }
 }

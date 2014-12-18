@@ -33,6 +33,12 @@ namespace SoftwarePassion.LogBridge
         public const string MachineNameKey = "machineName";
 
         /// <summary>
+        /// The key used when storing an application name in the
+        /// Properties property of a <see cref="LogData"/>.
+        /// </summary>
+        public const string ApplicationNameKey = "applicationName";
+        
+        /// <summary>
         /// The key used when storing a namespace name in the
         /// Properties property of a <see cref="LogData"/>.
         /// </summary>
