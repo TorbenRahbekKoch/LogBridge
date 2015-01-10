@@ -38,6 +38,11 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             verifier.VerifyLogData(expected);
         }
 
+        protected void VerifyOneEventLogged()
+        {
+            verifier.VerifyOneEventLogged();            
+        }
+
         protected LogData CreateExpectedLogData(Guid eventId, string message)
         {
             var process = Process.GetCurrentProcess();
@@ -49,6 +54,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 message,                
                 GetUserName(),
                 Environment.MachineName,
+                "A shared application",
                 process.Id,
                 process.ProcessName,
                 GetAppDomainName(),
@@ -68,6 +74,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 message,
                 GetUserName(),
                 Environment.MachineName,
+                "A shared application",
                 process.Id,
                 process.ProcessName,
                 GetAppDomainName(),
@@ -88,6 +95,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 message,                
                 GetUserName(),
                 Environment.MachineName,
+                "A shared application", 
                 process.Id,
                 process.ProcessName,
                 GetAppDomainName(),
@@ -107,6 +115,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 message,                
                 GetUserName(),
                 Environment.MachineName,
+                "A shared application", 
                 process.Id,
                 process.ProcessName,
                 GetAppDomainName(),
@@ -126,6 +135,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 message,
                 GetUserName(),
                 Environment.MachineName,
+                "A shared application",
                 process.Id,
                 process.ProcessName,
                 GetAppDomainName(),
@@ -145,6 +155,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 message,
                 GetUserName(),
                 Environment.MachineName,
+                "A shared application",
                 process.Id,
                 process.ProcessName,
                 GetAppDomainName(),
@@ -164,6 +175,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 message,
                 GetUserName(),
                 Environment.MachineName,
+                "A shared application",
                 process.Id,
                 process.ProcessName,
                 GetAppDomainName(),
@@ -183,6 +195,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 message,
                 GetUserName(),
                 Environment.MachineName,
+                "A shared application",
                 process.Id,
                 process.ProcessName,
                 GetAppDomainName(),

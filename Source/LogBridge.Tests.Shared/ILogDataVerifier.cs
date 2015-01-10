@@ -4,5 +4,6 @@
     {
         void VerifyLogData(LogData expected);
         void ClearLogData();
+        void VerifyOneEventLogged();
     }
 }

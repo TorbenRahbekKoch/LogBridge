@@ -33,6 +33,12 @@ namespace SoftwarePassion.LogBridge.Tests.Unit
             CompareProperties(expected.Properties, actual.Properties);
         }
 
+        public void VerifyOneEventLogged()
+        {
+            var count = TestLogWrapper.LogEntries.Count();
+            Assert.AreEqual(1, count, "Not exactly one event were logged, but: " + count);
+        }
+
         private void CompareProperties(Dictionary<string, object> expected, Dictionary<string, object> actual)
         {
             // It is okay for the actual to have more, but it must have all from expected.

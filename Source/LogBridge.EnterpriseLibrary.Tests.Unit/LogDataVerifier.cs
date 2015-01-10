@@ -51,6 +51,12 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Unit
                 listener.ClearEvents();
         }
 
+        public void VerifyOneEventLogged()
+        {
+            var traceListener = GetTraceListener();
+            Assert.AreEqual(1, traceListener.Events.Count(), "Not exactly one event were logged, but: " + traceListener.Events.Count());
+        }
+
         internal MemoryTraceListener GetTraceListener()
         {
             return MemoryTraceListener.Instance;

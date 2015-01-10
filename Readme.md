@@ -35,12 +35,12 @@ Logging in your application is done by simply calling any of the 5*18
 
 E.g.
 
-´Log.Information("This is a informational message only.");´
+`Log.Information("This is a informational message only.");`
 
 Each level has the exact same overloads available. You can also use formatting
 parameters like this:
 
-´Log.Information("This is a {0} formatted message.", "neatly");´
+`Log.Information("This is a {0} formatted message.", "neatly");`
 
 It works in the same way as 
 [string.Format()](http://msdn.microsoft.com/en-us/library/system.string.format%28v=vs.110%29.aspx) 
@@ -50,12 +50,12 @@ as the formatting provider.
 
 You can easily log an exception:
 
-´Log.Exception(exception);´
+`Log.Exception(exception);`
 
-There are some overloads which have a parameter called ´firstMessageParameter´. 
+There are some overloads which have a parameter called `firstMessageParameter`. 
 This parameter is only there to help with overload resolution and should, 
-usage-wise, be considered the same method as the one without this parameter.
-
+usage-wise, be considered the same method as the one without this parameter. 
+Perhaps C# will render this unnecessary.
 
 
 Extended Properties
@@ -72,7 +72,7 @@ dependent.
 
 Only on type of property gets a special treatment: 
 
-´public Guid CorrelationId {get;}´
+`public Guid CorrelationId {get;}`
 
 If an extendedProperties object has one of these (case-insensitive) this may be
 used as the CorrelationId for the log message. If more properties with a 
@@ -126,6 +126,9 @@ The meaning of these should be self-evident. What this value does internally is
 to have LogBridge manually load the Assembly and thereby making it available 
 for searching for implementations of LogWrapper<>.
 
+You can also be more specific and set the *appSetting* **SoftwarePassion.LogBridge.LogWrapperType**
+to the *full name* of the type.
+
 ### Exceptions
 
 Since LogBridge aims at, by default, to not throw exceptions you may be in a 
@@ -138,7 +141,7 @@ To figure out whether LogBridge is at fault, you can do two things:
 - Set appSettings key *SoftwarePassion.LogBridge.InternalDiagnosticsEnabled* to *true*.
 - Enable tracing to a file:
 
-´´´´
+```
   <system.diagnostics>
     <trace autoflush="true">
       <listeners>
@@ -150,14 +153,14 @@ To figure out whether LogBridge is at fault, you can do two things:
       </listeners>
     </trace>
   </system.diagnostics>
-´´´´
+```
 
 If, for some reason, LogBrige cannot find a log-wrapper, this will now be stated
 in the Debug View and the above *logbridge.txt* file.
 
 In general, setting the appSettings key 
 *SoftwarePassion.LogBridge.InternalDiagnosticsEnabled* to *true*, will make 
-LogBridge log internal exceptions using [´Trace.WriteLine(...)´](http://msdn.microsoft.com/en-us/library/system.diagnostics.trace.writeline%28v=vs.110%29.aspx)
+LogBridge log internal exceptions using [`Trace.WriteLine(...)`](http://msdn.microsoft.com/en-us/library/system.diagnostics.trace.writeline%28v=vs.110%29.aspx)
 which, among other configurable places, can be seen in the Visual Studio 
 Debugging Output View.
 
@@ -170,7 +173,7 @@ to *true*.
 This can be helpful, if you early in the application make a simple log message
 stating that the application has started. You can wrap this in a try-catch:
 
-´´´´
+```
     try
     {
         Log.Information("Application started.");
@@ -179,7 +182,7 @@ stating that the application has started. You can wrap this in a try-catch:
     {                
         // Handle problem...
     }
-´´´´
+```
 
 This is the only place that LogBridge will ever throw an exception.
 
@@ -218,6 +221,7 @@ LogBridge.Log4Net adds the following properties to the Log4Net Properties Dictio
 - correlationId
 - eventId
 - machineName
+- applicationName
 - processName
 - exception
 
@@ -229,3 +233,11 @@ catching exceptions. To aid with that there is a static class *Describe*, which
 has a method *Parameters*. Calling this method with the parameters to the 
 method in the exact same order will give back a string which contains a
 rather comprehensive description of the parameters.
+
+### Running Unit Tests
+
+Since LogBridge depends a lot on being able to load the correct LogWrapper it tends
+to fail the unit tests when they are all run in one AppDomain. So if you're using
+e.g. Resharper to run the unit tests - you need to enable the option to run each
+assembly in a separate AppDomain.
+ 
