@@ -16,7 +16,18 @@ namespace SoftwarePassion.LogBridge
     /// </remarks>
     public static class Log
     {
-        public const string NullExceptionMessage = "[null exception]";        
+        public const string NullExceptionMessage = "[null exception]";
+
+        ///// <summary>
+        ///// Creates a specific instance of a LogWrapper, which then can differ 
+        ///// from the default LogWrapper.
+        ///// </summary>
+        ///// <param name="settings">The settings.</param>
+        ///// <returns>LogInstance.</returns>
+        //public static LogInstance WithSettings(LogSettings settings)
+        //{
+        //    return new LogInstance(settings);
+        //}
 
         /// <summary>
         /// Gets or sets the thread correlation id.

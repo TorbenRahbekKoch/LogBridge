@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge", "Source\LogBridge\LogBridge.csproj", "{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}"
 EndProject
@@ -32,6 +32,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{472872F5
 	ProjectSection(SolutionItems) = preProject
 		nuget\SoftwarePassion.LogBridge.png = nuget\SoftwarePassion.LogBridge.png
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.UmbracoLog4Net", "Source\LogBridge.UmbracoLog4Net\LogBridge.UmbracoLog4Net.csproj", "{158FA192-07AB-4424-9904-1BEFB6FEF06E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.UmbracoLog4Net.Tests.Unit", "Source\LogBridge.UmbracoLog4Net.Tests.Unit\LogBridge.UmbracoLog4Net.Tests.Unit.csproj", "{A268C13B-8C23-4637-8F0E-4D1C0FE57793}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.UmbracoLog4Net.Tests.Performance", "Source\LogBridge.UmbracoLog4Net.Tests.Performance\LogBridge.UmbracoLog4Net.Tests.Performance.csproj", "{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +81,18 @@ Global
 		{AB9D1CC5-F00F-45F8-8121-E793FCAE6533}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB9D1CC5-F00F-45F8-8121-E793FCAE6533}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB9D1CC5-F00F-45F8-8121-E793FCAE6533}.Release|Any CPU.Build.0 = Release|Any CPU
+		{158FA192-07AB-4424-9904-1BEFB6FEF06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{158FA192-07AB-4424-9904-1BEFB6FEF06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{158FA192-07AB-4424-9904-1BEFB6FEF06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{158FA192-07AB-4424-9904-1BEFB6FEF06E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A268C13B-8C23-4637-8F0E-4D1C0FE57793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A268C13B-8C23-4637-8F0E-4D1C0FE57793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A268C13B-8C23-4637-8F0E-4D1C0FE57793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A268C13B-8C23-4637-8F0E-4D1C0FE57793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,8 +15,9 @@ Usage
 
 Install with Nuget:
 
-  [EnterpriseLibrary](https://www.nuget.org/packages/SoftwarePassion.LogBridge.EnterpriseLibrary/)
-  [Log4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.Log4Net/)
+-  [EnterpriseLibrary](https://www.nuget.org/packages/SoftwarePassion.LogBridge.EnterpriseLibrary/)
+-  [Log4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.Log4Net/)
+-  [UmbracoLog4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.UmbracoLog4Net/)
 
 There are five logging levels available:
 
@@ -114,11 +115,12 @@ load the assembly.
 
 To get over this problem you simply have to state in which 
 assembly the log-wrapper is located. This is done using an *appSetting* called
-*SoftwarePassion.LogBridge.LogWrapperAssembly*. Out of the box only the two 
+*SoftwarePassion.LogBridge.LogWrapperAssembly*. Out of the box only the three 
 values are supported:
 
-- LogBridge.Log4Net, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null
-- LogBridge.EnterpriseLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+- LogBridge.Log4Net, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null
+- LogBridge.UmbracoLog4Net, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null
+- LogBridge.EnterpriseLibrary, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null
 
 The meaning of these should be self-evident. What this value does internally is 
 to have LogBridge manually load the Assembly and thereby making it available 

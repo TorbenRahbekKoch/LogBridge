@@ -12,6 +12,9 @@ using SoftwarePassion.Common.Core.TimeProviding;
 
 namespace SoftwarePassion.LogBridge
 {
+    /// <summary>
+    /// Base class for wrappers for log providers. Inherit this class to create a new Log Bridge.
+    /// </summary>
     public abstract class LogWrapper
     {
         protected LogWrapper(bool diagnosticsEnabled)
