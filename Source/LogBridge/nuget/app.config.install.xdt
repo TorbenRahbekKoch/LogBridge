@@ -3,6 +3,5 @@
     <appSettings xdt:Transform="InsertIfMissing">
       <add key="SoftwarePassion.LogBridge.InternalDiagnosticsEnabled" value="false" xdt:Transform="InsertIfMissing"  xdt:Locator="Match(key)"/>
       <add key="SoftwarePassion.LogBridge.ThrowOnResolverFail" value="true" xdt:Transform="InsertIfMissing"  xdt:Locator="Match(key)"/>
-      <!--<add key="SoftwarePassion.LogBridge.LogWrapperAssembly" value="LogBridge.EnterpriseLibrary, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null"/> -->
     </appSettings>
 </configuration>
