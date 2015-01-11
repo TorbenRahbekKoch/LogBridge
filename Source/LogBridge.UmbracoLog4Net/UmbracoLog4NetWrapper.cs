@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using log4net;
 using log4net.Core;
 using log4net.Repository.Hierarchy;
 using log4net.Util;
-using SoftwarePassion.LogBridge;
-using Level = SoftwarePassion.LogBridge.Level;
 
-namespace LogBridge.UmbracoLog4Net
+namespace SoftwarePassion.LogBridge.UmbracoLog4Net
 {
+    /// <summary>
+    /// LogWrapper implementing a Log Bridge for Umbraco Log4Net.
+    /// </summary>
     public class UmbracoLog4NetWrapper: LogWrapper<ILogger>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogWrapper" /> class.
+        /// </summary>
+        /// <param name="diagnosticsEnabled">If set to <c>true</c> internal diagnostics is enabled.</param>
         public UmbracoLog4NetWrapper(bool diagnosticsEnabled)
             : base(diagnosticsEnabled, 0)
         {
@@ -22,6 +23,11 @@ namespace LogBridge.UmbracoLog4Net
             defaultLogger = h.Root;
         }
 
+        /// <summary>
+        /// Performs the log entry. All logging eventually ends up in this method.
+        /// </summary>
+        /// <param name="activeLogger">The active logger.</param>
+        /// <param name="logData">The log data.</param>
         protected override void PerformLogEntry(ILogger activeLogger, LogData logData)
         {
             var eventData = new LoggingEventData()
@@ -45,6 +51,11 @@ namespace LogBridge.UmbracoLog4Net
             activeLogger.Log(logEntry);
         }
 
+        /// <summary>
+        /// Gets the implementation of the individual logging framework's logger.
+        /// </summary>
+        /// <param name="logLocation">The log location.</param>
+        /// <returns>TLoggerImplementation.</returns>
         protected override ILogger PerformGetLogger(LogLocation logLocation)
         {
             var fullName = logLocation.LoggingClassType.FullName;
@@ -74,6 +85,12 @@ namespace LogBridge.UmbracoLog4Net
             return defaultLogger;
         }
 
+        /// <summary>
+        /// Checks whether logging is enabled for the given logging Level.
+        /// </summary>
+        /// <param name="activeLogger">The active logger.</param>
+        /// <param name="level">The level.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected override bool PerformIsLoggingEnabled(ILogger activeLogger, Level level)
         {
             return activeLogger.IsEnabledFor(ToLog4NetLevel(level));

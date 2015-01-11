@@ -7,14 +7,27 @@ using log4net.Util;
 
 namespace SoftwarePassion.LogBridge.Log4Net
 {
+    /// <summary>
+    /// LogWrapper implementing a Log Bridge for Log4Net.
+    /// </summary>
     public class Log4NetWrapper : LogWrapper<ILogger>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogWrapper" /> class.
+        /// </summary>
+        /// <param name="diagnosticsEnabled">If set to <c>true</c> internal diagnostics is enabled.</param>
         public Log4NetWrapper(bool diagnosticsEnabled) : base(diagnosticsEnabled, 0)
         {
             Hierarchy h = (Hierarchy)LogManager.GetRepository();
             defaultLogger = h.Root;
         }
 
+        /// <summary>
+        /// Performas the log entry. All logging for this wrapper eventually 
+        /// ends up in this method.
+        /// </summary>
+        /// <param name="activeLogger">The active logger.</param>
+        /// <param name="logData">The log data.</param>
         protected override void PerformLogEntry(ILogger activeLogger, LogData logData)
         {
             var eventData = new LoggingEventData()
@@ -38,6 +51,11 @@ namespace SoftwarePassion.LogBridge.Log4Net
             activeLogger.Log(logEntry);
         }
 
+        /// <summary>
+        /// Performs the get logger.
+        /// </summary>
+        /// <param name="logLocation">The log location.</param>
+        /// <returns>ILogger.</returns>
         protected override ILogger PerformGetLogger(LogLocation logLocation)
         {
             var fullName = logLocation.LoggingClassType.FullName;
@@ -67,6 +85,13 @@ namespace SoftwarePassion.LogBridge.Log4Net
             return defaultLogger;
         }
 
+
+        /// <summary>
+        /// Checks whether logging is enabled for the given logging Level.
+        /// </summary>
+        /// <param name="activeLogger">The active logger.</param>
+        /// <param name="level">The level.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected override bool PerformIsLoggingEnabled(ILogger activeLogger, Level level)
         {
             return activeLogger.IsEnabledFor(ToLog4NetLevel(level));

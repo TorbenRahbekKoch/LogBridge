@@ -62,8 +62,22 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         public const string ProcessNameKey = "processName";
 
+        /// <summary>
+        /// The key used when storing filename in the 
+        /// Properties property of a <see cref="LogData"/>.
+        /// </summary>
         public const string FilenameKey = "filename";
+
+        /// <summary>
+        /// The key used when storing a method name in the
+        /// Properties property of a <see cref="LogData"/>.
+        /// </summary>
         public const string MethodNameKey = "methodName";
+
+        /// <summary>
+        /// The key used when storing a username in the
+        /// Properties property of a <see cref="LogData"/>.
+        /// </summary>
         public const string UsernameKey = "usernameKey";
     }
 }

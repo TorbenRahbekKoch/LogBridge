@@ -6,6 +6,9 @@ using SoftwarePassion.Common.Core.PluginManagement;
 
 namespace SoftwarePassion.LogBridge
 {
+    /// <summary>
+    /// Resolves the LogWrapper implementation to use.
+    /// </summary>
     public static class LogWrapperResolver
     {
         /// <summary>

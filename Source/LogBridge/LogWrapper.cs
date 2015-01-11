@@ -17,6 +17,10 @@ namespace SoftwarePassion.LogBridge
     /// </summary>
     public abstract class LogWrapper
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogWrapper"/> class.
+        /// </summary>
+        /// <param name="diagnosticsEnabled">If set to <c>true</c> internal diagnostics is enabled.</param>
         protected LogWrapper(bool diagnosticsEnabled)
         {
             DiagnosticsEnabled = diagnosticsEnabled;
@@ -25,7 +29,7 @@ namespace SoftwarePassion.LogBridge
         }
 
         /// <summary>
-        /// A Thread specific CorrelationId. May be null.
+        /// A Thread specific CorrelationId. May be None.
         /// </summary>
         public Option<Guid> ThreadCorrelationId
         {
@@ -44,12 +48,18 @@ namespace SoftwarePassion.LogBridge
             set { DefaultThreadCorrelationId.Value = value; }
         }
 
+        /// <summary>
+        /// A Process specific CorrelationId. May be None.
+        /// </summary>
         public Option<Guid> ProcessCorrelationId
         {
             get { return processCorrelationId; }
             set { processCorrelationId = value; }
         }
 
+        /// <summary>
+        /// An AppDomain specific CorrelationId. May be None.
+        /// </summary>
         public Option<Guid> AppDomainCorrelationId
         {
             get
@@ -178,6 +188,10 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
+        /// <summary>
+        /// Calculates the code position of the calling Log.XXXX method.
+        /// </summary>
+        /// <returns>LogLocation.</returns>
         protected LogLocation GetLocationInfo()
         {
             var callingMemberInformation = CallingMember.Find(3);
@@ -200,7 +214,9 @@ namespace SoftwarePassion.LogBridge
             return new LogLocation();
         }
 
-
+        /// <summary>
+        /// Gets a value indicating whether diagnostics is enabled. 
+        /// </summary>
         protected bool DiagnosticsEnabled { get; private set; }
 
         protected abstract Guid PerformLogEntry(Guid? correlationId, Exception exception, Level level,
@@ -210,12 +226,24 @@ namespace SoftwarePassion.LogBridge
             object extendedProperties, string message, object[] parameters);
 
 
+        /// <summary>
+        /// The machine name on which the current process runs.
+        /// </summary>
         protected static readonly string MachineName = Environment.MachineName;
+
+        /// <summary>
+        /// The current process in which the logging occurs.
+        /// </summary>
         protected readonly Process currentProcess;
+
+        /// <summary>
+        /// The current application domain name in which the logging occurs.
+        /// </summary>
         protected readonly string currentAppDomainName;
+
         private static Option<Guid> processCorrelationId = Option.None<Guid>();
         private static readonly ThreadLocal<Option<Guid>> DefaultThreadCorrelationId = new ThreadLocal<Option<Guid>>();
-        private static Option<Guid> defaultCorrelationId = Option.None<Guid>();
+        private static readonly Option<Guid> defaultCorrelationId = Option.None<Guid>();
     }
 
     /// <summary>
@@ -347,17 +375,34 @@ namespace SoftwarePassion.LogBridge
 	    }
 
 	    /// <summary>
-        /// Performas the log entry. All logging is eventually ending up in this method.
+        /// Performs the log entry. All logging eventually ends up in this method.
         /// </summary>
         /// <param name="activeLogger">The active logger.</param>
         /// <param name="logData">The log data.</param>
         /// <exception cref="System.ArgumentNullException">logEntry</exception>
 		protected abstract void PerformLogEntry (TLoggerImplementation activeLogger, LogData logData);
 
+        /// <summary>
+        /// Gets the implementation of the individual logging framework's logger.
+        /// </summary>
+        /// <param name="logLocation">The log location.</param>
+        /// <returns>TLoggerImplementation.</returns>
 	    protected abstract TLoggerImplementation PerformGetLogger(LogLocation logLocation);
 
+        /// <summary>
+        /// Checks whether logging is enabled for the given logging Level.
+        /// </summary>
+        /// <param name="activeLogger">The active logger.</param>
+        /// <param name="level">The level.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
 	    protected abstract bool PerformIsLoggingEnabled(TLoggerImplementation activeLogger, Level level);
 
+        /// <summary>
+        /// Formats the message with the given parameters.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>System.String.</returns>
 	    protected virtual string FormatMessage(string message, params object[] parameters)
 	    {
 	        if (message == null)

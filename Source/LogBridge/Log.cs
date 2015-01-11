@@ -16,6 +16,10 @@ namespace SoftwarePassion.LogBridge
     /// </remarks>
     public static class Log
     {
+        /// <summary>
+        /// The null exception message - used when an overload with an exception 
+        /// parameter is called, but said parameter is null.
+        /// </summary>
         public const string NullExceptionMessage = "[null exception]";
 
         ///// <summary>

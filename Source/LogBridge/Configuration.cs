@@ -14,6 +14,10 @@ namespace SoftwarePassion.LogBridge
         private const string ThrowOnResolverFailAppSettingsKeyName = "SoftwarePassion.LogBridge.ThrowOnResolverFail";
         private const string InternalDiagnosticsAppSettingsKey = "SoftwarePassion.LogBridge.InternalDiagnosticsEnabled";
 
+        /// <summary>
+        /// Gets the type of the log wrapper, if set.
+        /// </summary>
+        /// <value>The type of the log wrapper.</value>
         public static Option<string> LogWrapperType
         {
             get
@@ -26,6 +30,10 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
+        /// <summary>
+        /// Gets the log wrapper assembly, if set.
+        /// </summary>
+        /// <value>The log wrapper assembly.</value>
         public static Option<string> LogWrapperAssembly
         {
             get
@@ -38,6 +46,9 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether to throw and exception when the resolver fails.
+        /// </summary>
         public static bool ThrowOnResolverFail
         {
             get
@@ -49,6 +60,9 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether internal diagnostics is enabled.
+        /// </summary>
         public static bool InternalDiagnosticsEnabled
         {
             get
@@ -59,7 +73,7 @@ namespace SoftwarePassion.LogBridge
 
         private static string ReadSetting(string key)
         {
-            var value = ConfigurationManager.AppSettings[InternalDiagnosticsAppSettingsKey];
+            var value = ConfigurationManager.AppSettings[key];
             if (value == null)
                 return string.Empty;
             return value;
