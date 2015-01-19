@@ -118,9 +118,9 @@ assembly the log-wrapper is located. This is done using an *appSetting* called
 *SoftwarePassion.LogBridge.LogWrapperAssembly*. Out of the box only the three 
 values are supported:
 
-- LogBridge.Log4Net, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null
-- LogBridge.UmbracoLog4Net, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null
-- LogBridge.EnterpriseLibrary, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null
+- LogBridge.Log4Net, Version=1.1.4.0, Culture=neutral, PublicKeyToken=null
+- LogBridge.UmbracoLog4Net, Version=1.1.4.0, Culture=neutral, PublicKeyToken=null
+- LogBridge.EnterpriseLibrary, Version=1.1.4.0, Culture=neutral, PublicKeyToken=null
 
 The meaning of these should be self-evident. What this value does internally is 
 to have LogBridge manually load the Assembly and thereby making it available 

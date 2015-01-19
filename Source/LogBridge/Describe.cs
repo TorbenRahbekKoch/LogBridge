@@ -26,12 +26,42 @@ namespace SoftwarePassion.LogBridge
     /// </remarks>
     public static class Describe
     {
+        public static DescribeDescriptor MethodAndParameters(params object[] parameterValues)
+        {
+            // Find calling method
+            const int parentFrame = 1;
+            var stackFrame = new StackFrame(parentFrame);
+            MethodBase methodBase = stackFrame.GetMethod();
+            if (methodBase == null)
+                return new DescribeDescriptor()
+                {
+                    MethodName = string.Empty,
+                    FullClassName = string.Empty,
+                    ParameterDescription = string.Empty
+                };
+
+            return MethodAndParameters(methodBase, parameterValues);
+        }
+
+        public static string Parameters(params object[] parameterValues)
+        {
+            // Find calling method
+            const int parentFrame = 1;
+            var stackFrame = new StackFrame(parentFrame);
+            MethodBase methodBase = stackFrame.GetMethod();
+            if (methodBase == null)
+                return string.Empty;
+
+            return MethodAndParameters(methodBase, parameterValues).ParameterDescription;
+        }
+
         /// <summary>
         /// Describes the calling method with the specified parameter values.
         /// </summary>
+        /// <param name="methodBase"></param>
         /// <param name="parameterValues">The parameter values.</param>
         /// <returns>A string containing the description.</returns>
-        public static string Parameters(params object[] parameterValues)
+        private static DescribeDescriptor MethodAndParameters(MethodBase methodBase, params object[] parameterValues)
         {
             try
             {
@@ -41,17 +71,9 @@ namespace SoftwarePassion.LogBridge
                     parameterValueLength = parameterValues.Length;
                 else
                     checkedParameterValues = new object[] { };
-
-                // Find calling method
-                const int parentFrame = 1;
-                var stackFrame = new StackFrame(parentFrame);
-                MethodBase methodBase = stackFrame.GetMethod();
-                if (methodBase == null)
-                    return string.Empty;
                 
                 // Now describe the parameters
-                var descriptorBuilder = new DescriptorBuilder();
-                //var parameterDescription = new StringBuilder(parameterValueLength * 32);
+                var descriptorBuilder = new DescriptorBuilder();                
                 var methodParameters = methodBase.GetParameters();
                 for (int index = 0; index < methodParameters.Length; index++)
                 {
@@ -70,12 +92,22 @@ namespace SoftwarePassion.LogBridge
                     }
                 }
 
-                string methodDescription = "{0}.{1}({2})".FormatInvariant(methodBase.DeclaringType.FullName, methodBase.Name, descriptorBuilder.ToString());
-                return methodDescription;
+                string parameterDescription = "{0}.{1}({2})".FormatInvariant(methodBase.DeclaringType.FullName, methodBase.Name, descriptorBuilder.ToString());
+                return new DescribeDescriptor()
+                {
+                    MethodName = methodBase.Name,
+                    FullClassName = methodBase.DeclaringType.FullName,
+                    ParameterDescription = parameterDescription
+                };
             }
             catch (Exception e)
             {
-                return "Exception describing method: " + e.ToString();
+                return new DescribeDescriptor()
+                {
+                    MethodName = methodBase.Name,
+                    FullClassName = methodBase.DeclaringType.FullName,
+                    ParameterDescription = "Exception describing method: " + e.ToString()
+                };
             }
         }
 
@@ -83,7 +115,15 @@ namespace SoftwarePassion.LogBridge
         {
             Contract.Requires(descriptorBuilder != null);
             Contract.Requires(methodParameter != null);
-            DescribeParameter(descriptorBuilder, methodParameter.ParameterType, parameterValue);
+
+            try
+            {
+                DescribeParameter(descriptorBuilder, methodParameter.ParameterType, parameterValue);
+            }
+            catch (Exception ex)
+            {
+                descriptorBuilder.AppendLine("Exception describing parameter '" + methodParameter.Name + "' : " + ex.ToString());
+            }
         }
 
         private static void DescribeNullParameter(DescriptorBuilder descriptorBuilder, ParameterInfo methodParameter)
@@ -91,16 +131,23 @@ namespace SoftwarePassion.LogBridge
             Contract.Requires(descriptorBuilder != null);
             Contract.Requires(methodParameter != null);
 
-            var t = methodParameter.ParameterType;
-            if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>))
+            try
             {
-                var nullableType = t.GetGenericArguments()[0];
-                descriptorBuilder.Append(nullableType.FullName);
-                descriptorBuilder.Append(": null");
+                var t = methodParameter.ParameterType;
+                if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof (Nullable<>))
+                {
+                    var nullableType = t.GetGenericArguments()[0];
+                    descriptorBuilder.Append(nullableType.FullName);
+                    descriptorBuilder.Append(": null");
+                }
+                else
+                {
+                    descriptorBuilder.Append("null");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                descriptorBuilder.Append("null");
+                descriptorBuilder.AppendLine("Exception describing parameter '" + methodParameter.Name + "' : " + ex.ToString());
             }
         }
 

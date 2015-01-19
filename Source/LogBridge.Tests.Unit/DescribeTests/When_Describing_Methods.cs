@@ -180,7 +180,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var timespan = new TimeSpan(42, 17, 13, 57, 123);
 
             var description18 = Methods.Method18(timespan);
-            description18.Should().Be(Namespace + "Method18(42.17:13:57.1230000)");
+            description18.ParameterDescription.Should().Be(Namespace + "Method18(42.17:13:57.1230000)");
         }
 
         private const string ClassNameSpace = "SoftwarePassion.LogBridge.Tests.Unit.DescribeTests.";

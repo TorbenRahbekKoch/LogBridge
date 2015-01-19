@@ -48,6 +48,7 @@
     <Compile Include="CallingMember.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Describe.cs" />
+    <Compile Include="DescribeDescriptor.cs" />
     <Compile Include="DescriptorBuilder.cs" />
     <Compile Include="LogConstants.cs" />
     <Compile Include="LogData.cs" />
