@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using SoftwarePassion.Common.Core;
 
 namespace SoftwarePassion.LogBridge
 {
@@ -22,24 +23,61 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         public const string NullExceptionMessage = "[null exception]";
 
-        ///// <summary>
-        ///// Creates a specific instance of a LogWrapper, which then can differ 
-        ///// from the default LogWrapper.
-        ///// </summary>
-        ///// <param name="settings">The settings.</param>
-        ///// <returns>LogInstance.</returns>
-        //public static LogInstance WithSettings(LogSettings settings)
-        //{
-        //    return new LogInstance(settings);
-        //}
+        /// <summary>
+        /// Gets or sets the thread log context.
+        /// </summary>
+        public static Option<LogContext> ThreadLogContext
+        {
+            get { return Logger.ThreadLogContext; }
+            set { Logger.ThreadLogContext = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the process log context.
+        /// </summary>
+        public static Option<LogContext> ProcessLogContext
+        {
+            get { return Logger.ProcessLogContext; }
+            set { Logger.ProcessLogContext = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the application domain log context.
+        /// </summary>
+        public static Option<LogContext> AppDomainLogContext
+        {
+            get { return Logger.AppDomainLogContext; }
+            set { Logger.AppDomainLogContext = value; }
+        }
 
         /// <summary>
         /// Gets or sets the thread correlation id.
         /// </summary>
         public static Guid ThreadCorrelationId
         {
-            get { return Logger.ThreadCorrelationId.IsSome ? Logger.ThreadCorrelationId.Value : Guid.Empty; }
-            set { Logger.ThreadCorrelationId = value; }
+            get
+            {
+                var logContext = Logger.ThreadLogContext;
+                if (logContext.IsSome)
+                {
+                    var id = logContext.Value.CorrelationIdValue;
+                    return id.IsSome ? id.Value : Guid.Empty;
+                }
+
+                return Guid.Empty;
+            }
+
+            set
+            {
+                var logContext = Logger.ThreadLogContext;
+                if (logContext.IsNone)
+                {
+                    logContext = Option.Some(new LogContext());
+                    Logger.ThreadLogContext = logContext;
+                }
+
+                logContext.Value.CorrelationIdValue = Option.Some(value);
+            }
         }
 
         /// <summary>
@@ -47,8 +85,30 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         public static Guid ProcessCorrelationId
         {
-            get { return Logger.ProcessCorrelationId.IsSome ? Logger.ProcessCorrelationId.Value : Guid.Empty; }
-            set { Logger.ProcessCorrelationId = value; }
+            get
+            {
+                var logContext = Logger.ProcessLogContext;
+                if (logContext.IsSome)
+                {
+                    var id = logContext.Value.CorrelationIdValue;
+                    return id.IsSome ? id.Value : Guid.Empty;
+                }
+
+
+                return Guid.Empty;
+            }
+
+            set
+            {
+                var logContext = Logger.ProcessLogContext;
+                if (logContext.IsNone)
+                {
+                    logContext = Option.Some(new LogContext());
+                    Logger.ProcessLogContext = logContext;
+                }
+
+                logContext.Value.CorrelationIdValue = Option.Some(value);
+            }
         }
 
         /// <summary>
@@ -56,8 +116,30 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         public static Guid AppDomainCorrelationId
         {
-            get { return Logger.AppDomainCorrelationId.IsSome ? Logger.AppDomainCorrelationId.Value : Guid.Empty; }
-            set { Logger.AppDomainCorrelationId = value; }
+            get
+            {
+                var logContext = Logger.AppDomainLogContext;
+                if (logContext.IsSome)
+                {
+                    var id = logContext.Value.CorrelationIdValue;
+                    return id.IsSome ? id.Value : Guid.Empty;
+                }
+
+
+                return Guid.Empty;
+            }
+
+            set
+            {
+                var logContext = Logger.AppDomainLogContext;
+                if (logContext.IsNone)
+                {
+                    logContext = Option.Some(new LogContext());
+                    Logger.AppDomainLogContext = logContext;
+                }
+
+                logContext.Value.CorrelationIdValue = Option.Some(value);
+            }
         }
 
         #region Debug

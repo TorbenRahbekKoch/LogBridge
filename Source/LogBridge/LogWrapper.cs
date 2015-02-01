@@ -17,6 +17,8 @@ namespace SoftwarePassion.LogBridge
     /// </summary>
     public abstract class LogWrapper
     {
+        private const string AppDomainLogContextKey = "AppDomainLogContextKey";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogWrapper"/> class.
         /// </summary>
@@ -29,51 +31,95 @@ namespace SoftwarePassion.LogBridge
         }
 
         /// <summary>
-        /// A Thread specific CorrelationId. May be None.
+        /// A Thread specific LogContext. May be None.
         /// </summary>
-        public Option<Guid> ThreadCorrelationId
+        /// <value>The thread log context.</value>
+        public Option<LogContext> ThreadLogContext
         {
             get
             {
-                if (DefaultThreadCorrelationId.IsValueCreated)
+                if (DefaultThreadLogContext.IsValueCreated)
                 {
-                    Option<Guid> value = DefaultThreadCorrelationId.Value;
+                    Option<LogContext> value = DefaultThreadLogContext.Value;
                     return value;
                 }
 
-                return Option.None<Guid>();
+                return Option.None<LogContext>();
             }
 
-            
-            set { DefaultThreadCorrelationId.Value = value; }
+            set { DefaultThreadLogContext.Value = value; }
         }
 
         /// <summary>
-        /// A Process specific CorrelationId. May be None.
+        /// A Process specific LogContext. May be None.
         /// </summary>
-        public Option<Guid> ProcessCorrelationId
+        public Option<LogContext> ProcessLogContext
         {
-            get { return processCorrelationId; }
-            set { processCorrelationId = value; }
+            get { return processLogContext; }
+            set { processLogContext = value; }
         }
 
         /// <summary>
-        /// An AppDomain specific CorrelationId. May be None.
+        /// An AppDomain specific LogContext. May be None.
         /// </summary>
-        public Option<Guid> AppDomainCorrelationId
+        public Option<LogContext> AppDomainLogContext
         {
             get
             {
-                var dataValue = AppDomain.CurrentDomain.GetData(LogConstants.CorrelationIdKey);
+                var dataValue = AppDomain.CurrentDomain.GetData(AppDomainLogContextKey);
                 if (dataValue != null)
-                    return Option.Some((Guid) dataValue);
-                return Option.None<Guid>();
+                    return (Option<LogContext>) dataValue;
+
+                return defaultAppDomainLogContext;
             }
 
             set
             {
-                if (value.IsSome)
-                    AppDomain.CurrentDomain.SetData(LogConstants.CorrelationIdKey, value.Value);    
+                AppDomain.CurrentDomain.SetData(AppDomainLogContextKey, value);
+            }
+        }
+
+        /// <summary>
+        /// Returns a so specific as possible LogContext. That is, if there
+        /// is a ThreadLogContext assigned that is the one that is returned.
+        /// Otherwise if there is a ProcessLogContext assigned that one is
+        /// returned.
+        /// Then it is checked whether an AppDomainLogContext is assigned, and
+        /// then that one is returned. 
+        /// </summary>
+        public Option<LogContext> LogContext
+        {
+            get
+            {
+                var logContext = ThreadLogContext;
+                if (logContext.IsSome)
+                    return logContext;
+
+                logContext = AppDomainLogContext;
+                if (logContext.IsSome)
+                    return logContext;
+
+                logContext = ProcessLogContext;
+                if (logContext.IsSome)
+                    return logContext;
+
+                return defaultLogContext;
+            }
+        }
+
+        /// <summary>
+        /// Returns a so specific as possible StackFrameOffsetCount. If no
+        /// one is assigned, the default value - 0 (zero) is returned.
+        /// </summary>
+        public int StackFrameOffsetCount
+        {
+            get
+            {
+                var logContext = LogContext;
+                if (logContext.IsSome)
+                    return logContext.Value.StackFrameOffsetCount;
+
+                return 0;
             }
         }
 
@@ -90,25 +136,19 @@ namespace SoftwarePassion.LogBridge
         {
             get
             {
-                var threadDataValue = ThreadCorrelationId;
-                if (threadDataValue.IsSome)
-                {
-                    return threadDataValue.Value;
-                }
+                var logContext = ThreadLogContext;
+                if (logContext.IsSome && logContext.Value.CorrelationIdValue.IsSome)
+                    return logContext.Value.CorrelationIdValue;
 
-                var appDomainDataValue = AppDomainCorrelationId;
-                if (appDomainDataValue.IsSome)
-                {
-                    return appDomainDataValue.Value;
-                }
+                logContext = AppDomainLogContext;
+                if (logContext.IsSome && logContext.Value.CorrelationIdValue.IsSome)
+                    return logContext.Value.CorrelationIdValue;
 
-                var processDataValue = ProcessCorrelationId;
-                if (processDataValue.IsSome)
-                {
-                    return processDataValue.Value;
-                }
+                logContext = ProcessLogContext;
+                if (logContext.IsSome && logContext.Value.CorrelationIdValue.IsSome)
+                    return logContext.Value.CorrelationIdValue;
 
-                return defaultCorrelationId;
+                return defaultLogContext.Value.CorrelationIdValue;
             }
         }
 
@@ -194,7 +234,7 @@ namespace SoftwarePassion.LogBridge
         /// <returns>LogLocation.</returns>
         protected LogLocation GetLocationInfo()
         {
-            var callingMemberInformation = CallingMember.Find(3);
+            var callingMemberInformation = CallingMember.Find(3 + StackFrameOffsetCount);
             if (callingMemberInformation != null)
             {
                 var callingMember = callingMemberInformation.GetMethod();
@@ -241,9 +281,17 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         protected readonly string currentAppDomainName;
 
-        private static Option<Guid> processCorrelationId = Option.None<Guid>();
-        private static readonly ThreadLocal<Option<Guid>> DefaultThreadCorrelationId = new ThreadLocal<Option<Guid>>();
-        private static readonly Option<Guid> defaultCorrelationId = Option.None<Guid>();
+
+        private static Option<LogContext> processLogContext = Option.None<LogContext>();
+        private static readonly ThreadLocal<Option<LogContext>> DefaultThreadLogContext = new ThreadLocal<Option<LogContext>>();
+
+        private static readonly Option<LogContext> defaultLogContext = Option.Some(new LogContext());
+
+        private static readonly Option<LogContext> defaultAppDomainLogContext = Option.None<LogContext>();
+
+        //private static Option<Guid> processCorrelationId = Option.None<Guid>();
+        //private static readonly ThreadLocal<Option<Guid>> DefaultThreadCorrelationId = new ThreadLocal<Option<Guid>>();
+        //private static readonly Option<Guid> defaultCorrelationId = Option.None<Guid>();
     }
 
     /// <summary>
