@@ -97,9 +97,9 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
         }
 
         [MethodImpl(MethodImplOptions.NoOptimization)]
-        public static string Method18(TimeSpan value)
+        public static DescribeDescriptor Method18(TimeSpan value)
         {
-            return Describe.Parameters(value);
+            return Describe.MethodAndParameters(value);
         }
     }
 }
