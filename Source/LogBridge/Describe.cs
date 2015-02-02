@@ -26,6 +26,31 @@ namespace SoftwarePassion.LogBridge
     /// </remarks>
     public static class Describe
     {
+        /// <summary>
+        /// Creates a describer, which captures the Method calling, and therefore
+        /// can be used to describe the calling method in any other context.
+        /// </summary>
+        /// <param name="parameterValues">The method parameters.</param>
+        /// <returns>A Func, which describes the calling method.</returns>
+        public static Func<DescribeDescriptor> CreateDescriber(params object[] parameterValues)
+        {
+            // Find calling method
+            const int parentFrame = 1;
+            var stackFrame = new StackFrame(parentFrame);
+            MethodBase methodBase = stackFrame.GetMethod();
+            if (methodBase == null)
+            {
+                return () => new DescribeDescriptor()
+                {
+                    MethodName = string.Empty,
+                    FullClassName = string.Empty,
+                    ParameterDescription = string.Empty
+                };                
+            }
+
+            return () => Describe.MethodAndParameters(methodBase, parameterValues);
+        }
+
         public static DescribeDescriptor MethodAndParameters(params object[] parameterValues)
         {
             // Find calling method
@@ -33,13 +58,15 @@ namespace SoftwarePassion.LogBridge
             var stackFrame = new StackFrame(parentFrame);
             MethodBase methodBase = stackFrame.GetMethod();
             if (methodBase == null)
+            {
                 return new DescribeDescriptor()
                 {
                     MethodName = string.Empty,
                     FullClassName = string.Empty,
                     ParameterDescription = string.Empty
                 };
-
+                
+            }
             return MethodAndParameters(methodBase, parameterValues);
         }
 

@@ -101,5 +101,16 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
         {
             return Describe.MethodAndParameters(value);
         }
+
+        public static DescribeDescriptor LambdaMethod(int value)
+        {
+            Func<DescribeDescriptor> describer = Describe.CreateDescriber(value);
+            return RunLambda(describer);
+        }
+
+        private static DescribeDescriptor RunLambda(Func<DescribeDescriptor> describer)
+        {
+            return describer();
+        }
     }
 }

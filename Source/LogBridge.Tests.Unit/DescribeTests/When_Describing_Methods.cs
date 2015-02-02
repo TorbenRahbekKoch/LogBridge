@@ -183,6 +183,15 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description18.ParameterDescription.Should().Be(Namespace + "Method18(42.17:13:57.1230000)");
         }
 
+        [Test]
+        [MethodImpl(MethodImplOptions.NoOptimization)]
+        public void Verify_That_Description_From_Lambda_Is_Correct()
+        {
+            var value = 42;
+            var descriptionLambda = Methods.LambdaMethod(value);
+            descriptionLambda.ParameterDescription.Should().Be(Namespace + "LambdaMethod(42)");
+        }
+
         private const string ClassNameSpace = "SoftwarePassion.LogBridge.Tests.Unit.DescribeTests.";
         private const string Namespace = "SoftwarePassion.LogBridge.Tests.Unit.DescribeTests.Methods.";
     }
