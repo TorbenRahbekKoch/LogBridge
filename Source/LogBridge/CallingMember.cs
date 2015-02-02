@@ -7,14 +7,15 @@ namespace SoftwarePassion.LogBridge
 {
     internal static class CallingMember
     {
-        public static StackFrame Find(int startingStackFrameOffset)
+        public static StackFrame Find(int startingStackFrameOffset, int stackFrameOffsetCount)
         {
             Contract.Requires(startingStackFrameOffset >= 0);
+            Contract.Requires(stackFrameOffsetCount >= 0);
 
             try
             {
                 var thisAssembly = typeof (CallingMember).Assembly.FullName;
-                int currentFrame = 1 + startingStackFrameOffset;
+                int currentFrame = 1;
                 var stackFrame = new StackFrame(currentFrame);
                 
                 MethodBase methodBase = stackFrame.GetMethod();
@@ -31,7 +32,10 @@ namespace SoftwarePassion.LogBridge
                     }
                 }
 
-                return stackFrame;
+                if (stackFrameOffsetCount == 0)
+                    return stackFrame;
+                
+                return new StackFrame(currentFrame + stackFrameOffsetCount);
             }
             catch (Exception)
             {

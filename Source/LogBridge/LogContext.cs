@@ -10,7 +10,14 @@ namespace SoftwarePassion.LogBridge
         {
             CorrelationIdValue = Option.None<Guid>();
             StackFrameOffsetCountValue = Option.None<int>();
-            ExtendedPropertiesValue = Option.Some<IEnumerable<ExtendedProperty>>(new List<ExtendedProperty>());
+            ExtendedPropertiesValue = Option.Some<IEnumerable<ExtendedProperty>>(new List<ExtendedProperty>());            
+        }
+
+        public LogContext(IEnumerable<ExtendedProperty> extendedProperties)
+        {
+            CorrelationIdValue = Option.None<Guid>();
+            StackFrameOffsetCountValue = Option.None<int>();
+            ExtendedPropertiesValue = Option.Some<IEnumerable<ExtendedProperty>>(new List<ExtendedProperty>(extendedProperties));
         }
 
         public Guid CorrelationId

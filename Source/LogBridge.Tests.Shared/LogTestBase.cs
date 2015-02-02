@@ -60,7 +60,17 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 GetAppDomainName(),
                 null,
                 CreateLogLocation(),
-                new Dictionary<string, object>());
+                CreateExpectedProperties());
+        }
+
+        private static Dictionary<string, object> CreateExpectedProperties()
+        {
+            var properties = new Dictionary<string, object>()
+            {
+                {"Property1", "Value1"},
+                {"Property2", "Value2"},
+            };
+            return properties;
         }
 
         protected LogData CreateExpectedLogData(Guid eventId, Exception exception, string message)
@@ -80,7 +90,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 GetAppDomainName(),
                 exception,
                 CreateLogLocation(),
-                new Dictionary<string, object>());
+                CreateExpectedProperties());
         }
 
 
@@ -101,7 +111,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 GetAppDomainName(),
                 null,
                 CreateLogLocation(),
-                new Dictionary<string, object>());
+                CreateExpectedProperties());
         }
 
         protected LogData CreateExpectedLogData(Guid eventId, Guid correlationId, Exception exception,string message)
@@ -121,11 +131,17 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 GetAppDomainName(),
                 exception,
                 CreateLogLocation(),
-                new Dictionary<string, object>());
+                CreateExpectedProperties());
         }
 
         protected LogData CreateExpectedLogData(Guid eventId, string message, Dictionary<string, object> properties)
         {
+            var expectedProperties = CreateExpectedProperties();
+            foreach (var property in properties)
+            {
+                expectedProperties[property.Key] = property.Value;
+            }
+
             var process = Process.GetCurrentProcess();
             return new LogData(
                 Time.DateTime,
@@ -141,11 +157,17 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 GetAppDomainName(),
                 null,
                 CreateLogLocation(),
-                properties);
+                expectedProperties);
         }
 
         protected LogData CreateExpectedLogData(Guid eventId, Exception exception, string message, Dictionary<string, object> properties)
         {
+            var expectedProperties = CreateExpectedProperties();
+            foreach (var property in properties)
+            {
+                expectedProperties[property.Key] = property.Value;
+            }
+
             var process = Process.GetCurrentProcess();
             return new LogData(
                 Time.DateTime,
@@ -161,11 +183,17 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 GetAppDomainName(),
                 exception,
                 CreateLogLocation(),
-                properties);
+                expectedProperties);
         }
 
         protected LogData CreateExpectedLogData(Guid eventId, Guid correlationId, string message, Dictionary<string, object> properties)
         {
+            var expectedProperties = CreateExpectedProperties();
+            foreach (var property in properties)
+            {
+                expectedProperties[property.Key] = property.Value;
+            }
+
             var process = Process.GetCurrentProcess();
             return new LogData(
                 Time.DateTime,
@@ -181,11 +209,17 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 GetAppDomainName(),
                 null,
                 CreateLogLocation(),
-                properties);
+                expectedProperties);
         }
 
         protected LogData CreateExpectedLogData(Guid eventId, Guid correlationId, Exception exception, string message, Dictionary<string, object> properties)
         {
+            var expectedProperties = CreateExpectedProperties();
+            foreach (var property in properties)
+            {
+                expectedProperties[property.Key] = property.Value;
+            }
+
             var process = Process.GetCurrentProcess();
             return new LogData(
                 Time.DateTime,
@@ -201,7 +235,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 GetAppDomainName(),
                 exception,
                 CreateLogLocation(),
-                properties);
+                expectedProperties);
         }
 
         protected LogLocation CreateLogLocation()

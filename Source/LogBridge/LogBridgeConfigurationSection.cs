@@ -63,12 +63,6 @@ namespace SoftwarePassion.LogBridge
         private const string NameKey = "name";
         private const string ValueKey = "value";
 
-        //private static ConfigurationProperty nameProperty = new ConfigurationProperty(
-        //    NameKey,
-        //    typeof(string),
-        //    null,
-        //    ConfigurationPropertyOptions.IsRequired);
-
         [ConfigurationProperty(NameKey, IsRequired = true)]
         public string Name
         {
@@ -112,7 +106,5 @@ namespace SoftwarePassion.LogBridge
         {
             get { return (ConfigurationExtendedPropertyItem)base.BaseGet(name); }
         }
-
-        private static ConfigurationExtendedPropertiesCollection configurationExtendedPropertiesCollection = new ConfigurationExtendedPropertiesCollection();
     }
 }

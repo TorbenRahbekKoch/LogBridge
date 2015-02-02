@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SoftwarePassion.Common.Core;
 
 namespace SoftwarePassion.LogBridge.Tests.Shared
 {    
@@ -8,6 +9,31 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         public When_logging_debug_messages(ILogDataVerifier verifier) 
             : base(Level.Debug, verifier)
         {}
+
+        private Guid RunLambda(Func<Guid> code)
+        {
+            return code();
+        }
+
+        [Test]
+        public void Verify_that_StackFrameOffsetCount_works_correctly()
+        {
+            Log.ThreadLogContext = new LogContext()
+            {
+                StackFrameOffsetCount = 1,
+                ExtendedProperties   = Log.ActiveLogContext.ExtendedProperties
+            };
+
+            const string message = "Message";
+            Func<Guid> code = () => Log.Debug(message);
+
+            var eventId = RunLambda(code);
+            LogData expected = CreateExpectedLogData(eventId, message);
+
+            VerifyLogData(expected);
+
+            Log.ThreadLogContext = Option.None<LogContext>();
+        }
 
         [Test]
         public void Verify_that_message_is_logged_correctly()

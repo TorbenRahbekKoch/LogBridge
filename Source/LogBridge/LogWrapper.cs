@@ -85,23 +85,24 @@ namespace SoftwarePassion.LogBridge
         /// Otherwise if there is a ProcessLogContext assigned that one is
         /// returned.
         /// Then it is checked whether an AppDomainLogContext is assigned, and
-        /// then that one is returned. 
+        /// then that one is returned. If not, then a defaultLogContext with
+        /// None values is returned.
         /// </summary>
-        public Option<LogContext> LogContext
+        public LogContext LogContext
         {
             get
             {
                 var logContext = ThreadLogContext;
                 if (logContext.IsSome)
-                    return logContext;
+                    return logContext.Value;
 
                 logContext = AppDomainLogContext;
                 if (logContext.IsSome)
-                    return logContext;
+                    return logContext.Value;
 
                 logContext = ProcessLogContext;
                 if (logContext.IsSome)
-                    return logContext;
+                    return logContext.Value;
 
                 return defaultLogContext;
             }
@@ -116,8 +117,8 @@ namespace SoftwarePassion.LogBridge
             get
             {
                 var logContext = LogContext;
-                if (logContext.IsSome)
-                    return logContext.Value.StackFrameOffsetCount;
+                if (logContext.StackFrameOffsetCountValue.IsSome)
+                    return logContext.StackFrameOffsetCount;
 
                 return 0;
             }
@@ -148,7 +149,7 @@ namespace SoftwarePassion.LogBridge
                 if (logContext.IsSome && logContext.Value.CorrelationIdValue.IsSome)
                     return logContext.Value.CorrelationIdValue;
 
-                return defaultLogContext.Value.CorrelationIdValue;
+                return defaultLogContext.CorrelationIdValue;
             }
         }
 
@@ -234,7 +235,7 @@ namespace SoftwarePassion.LogBridge
         /// <returns>LogLocation.</returns>
         protected LogLocation GetLocationInfo()
         {
-            var callingMemberInformation = CallingMember.Find(3 + StackFrameOffsetCount);
+            var callingMemberInformation = CallingMember.Find(3, StackFrameOffsetCount);
             if (callingMemberInformation != null)
             {
                 var callingMember = callingMemberInformation.GetMethod();
@@ -285,7 +286,7 @@ namespace SoftwarePassion.LogBridge
         private static Option<LogContext> processLogContext = Option.None<LogContext>();
         private static readonly ThreadLocal<Option<LogContext>> DefaultThreadLogContext = new ThreadLocal<Option<LogContext>>();
 
-        private static readonly Option<LogContext> defaultLogContext = Option.Some(new LogContext());
+        private static readonly LogContext defaultLogContext = new LogContext(Configuration.ExtendedProperties);
 
         private static readonly Option<LogContext> defaultAppDomainLogContext = Option.None<LogContext>();
 
@@ -553,38 +554,71 @@ namespace SoftwarePassion.LogBridge
         {
             correlationId = Option.None<Guid>();
             applicationName = string.Empty;
+
             if (extendedProperties == null)
-                return CreateDictionary(true, defaultPropertySize);
-            
+            {
+                return CalculateExtendedPropertiesFromLogContext(defaultPropertySize, out correlationId, out applicationName);                
+            }
+
             // TypeDescriptor.GetProperties(Type...) is cached (by TypeDescriptor itself)
             var properties = TypeDescriptor.GetProperties(extendedProperties.GetType()).OfType<PropertyDescriptor>().ToList();
-            var propertyValues = CreateDictionary(true, defaultPropertySize + properties.Count());
+            var propertyValues = CalculateExtendedPropertiesFromLogContext(defaultPropertySize + properties.Count(), out correlationId, out applicationName);
             foreach (PropertyDescriptor property in properties)
             {
                 var propertyValue = property.GetValue(extendedProperties);
-                if (propertyValue is Guid && string.Compare(
-                        property.Name,
-                        LogConstants.CorrelationIdKey,
-                        StringComparison.OrdinalIgnoreCase)
-                    == 0)
-                {                    
-                    correlationId = (Guid) propertyValue;
-                }
-                else if (propertyValue is string && string.Compare(
-                        property.Name,
-                        LogConstants.ApplicationNameKey,
-                        StringComparison.OrdinalIgnoreCase)
-                    == 0)
-                {
-                    applicationName = (string) propertyValue;
-                }
-                else
+                if (!IsSpecialPropertyValue(propertyValue, property.Name, ref correlationId, ref applicationName))
                 {
                     propertyValues[property.Name] = propertyValue;
                 }
             }
             
             return propertyValues;
+        }
+
+        private Dictionary<string, object> CalculateExtendedPropertiesFromLogContext(int propertiesSize, out Option<Guid> correlationId, out string applicationName)
+        {
+            correlationId = Option.None<Guid>();
+            applicationName = string.Empty;
+
+            var logContext = LogContext;
+            if (logContext.ExtendedPropertiesValue.IsNone)
+                return CreateDictionary(true, propertiesSize);
+
+            var properties = logContext.ExtendedProperties;
+            var propertyValues = CreateDictionary(true, propertiesSize + logContext.ExtendedProperties.Count());
+            foreach (var property in properties)
+            {
+                if (!IsSpecialPropertyValue(property.Value, property.Name, ref correlationId, ref applicationName))
+                {
+                    propertyValues[property.Name] = property.Value;
+                }
+            }
+
+            return propertyValues;
+        }
+
+        private bool IsSpecialPropertyValue(object propertyValue, string propertyName, ref Option<Guid> correlationId, ref string applicationName)
+        {
+            if (propertyValue is Guid && string.Compare(
+                    propertyName,
+                    LogConstants.CorrelationIdKey,
+                    StringComparison.OrdinalIgnoreCase)
+                == 0)
+            {
+                correlationId = (Guid)propertyValue;
+                return true;
+            }
+            else if (propertyValue is string && string.Compare(
+                    propertyName,
+                    LogConstants.ApplicationNameKey,
+                    StringComparison.OrdinalIgnoreCase)
+                == 0)
+            {
+                applicationName = (string)propertyValue;
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

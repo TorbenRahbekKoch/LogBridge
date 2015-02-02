@@ -23,6 +23,11 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         public const string NullExceptionMessage = "[null exception]";
 
+        public static LogContext ActiveLogContext
+        {
+            get { return Logger.LogContext; }
+        }
+
         /// <summary>
         /// Gets or sets the thread log context.
         /// </summary>
@@ -72,7 +77,7 @@ namespace SoftwarePassion.LogBridge
                 var logContext = Logger.ThreadLogContext;
                 if (logContext.IsNone)
                 {
-                    logContext = Option.Some(new LogContext());
+                    logContext = Option.Some(new LogContext(Configuration.ExtendedProperties));
                     Logger.ThreadLogContext = logContext;
                 }
 
@@ -103,7 +108,7 @@ namespace SoftwarePassion.LogBridge
                 var logContext = Logger.ProcessLogContext;
                 if (logContext.IsNone)
                 {
-                    logContext = Option.Some(new LogContext());
+                    logContext = Option.Some(new LogContext(Configuration.ExtendedProperties));
                     Logger.ProcessLogContext = logContext;
                 }
 
@@ -134,7 +139,7 @@ namespace SoftwarePassion.LogBridge
                 var logContext = Logger.AppDomainLogContext;
                 if (logContext.IsNone)
                 {
-                    logContext = Option.Some(new LogContext());
+                    logContext = Option.Some(new LogContext(Configuration.ExtendedProperties));
                     Logger.AppDomainLogContext = logContext;
                 }
 
