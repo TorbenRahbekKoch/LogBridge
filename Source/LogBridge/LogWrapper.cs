@@ -116,11 +116,19 @@ namespace SoftwarePassion.LogBridge
         {
             get
             {
-                var logContext = LogContext;
-                if (logContext.StackFrameOffsetCountValue.IsSome)
-                    return logContext.StackFrameOffsetCount;
+                var logContext = ThreadLogContext;
+                if (logContext.IsSome && logContext.Value.StackFrameOffsetCountValue.IsSome)
+                    return logContext.Value.StackFrameOffsetCount;
 
-                return 0;
+                logContext = AppDomainLogContext;
+                if (logContext.IsSome && logContext.Value.StackFrameOffsetCountValue.IsSome)
+                    return logContext.Value.StackFrameOffsetCount;
+
+                logContext = ProcessLogContext;
+                if (logContext.IsSome && logContext.Value.StackFrameOffsetCountValue.IsSome)
+                    return logContext.Value.StackFrameOffsetCount;
+
+                return defaultLogContext.StackFrameOffsetCount;
             }
         }
 

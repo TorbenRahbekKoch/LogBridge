@@ -16,8 +16,8 @@
 		<tags>Utility Logging</tags>
     <dependencies>
       <dependency id="SoftwarePassion.Common.Core" version="1.1.0"/>
-      <dependency id="SoftwarePassion.LogBridge" version="1.1.4"/>
-      <dependency id="log4net" version="1.2.13"/>
+      <dependency id="SoftwarePassion.LogBridge" version="$version$"/>
+      <dependency id="log4net" version="2.0.3"/>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net45" />
