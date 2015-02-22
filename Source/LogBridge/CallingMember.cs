@@ -23,8 +23,7 @@ namespace SoftwarePassion.LogBridge
                 {
                     var declaringType = methodBase.DeclaringType;
                     while (declaringType != null  &&
-                        declaringType.Assembly.FullName == thisAssembly ||
-                        methodBase.Name.Contains("<")) // Check for lambda-method-syntax
+                        declaringType.Assembly.FullName == thisAssembly) // Check for lambda-method-syntax
                     {
                         stackFrame = new StackFrame(++currentFrame);
                         methodBase = stackFrame.GetMethod();

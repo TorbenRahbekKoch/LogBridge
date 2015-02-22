@@ -20,7 +20,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {
             Log.ThreadLogContext = new LogContext()
             {
-                StackFrameOffsetCount = 1,
+                StackFrameOffsetCount = 2,
                 ExtendedProperties   = Log.ActiveLogContext.ExtendedProperties
             };
 
