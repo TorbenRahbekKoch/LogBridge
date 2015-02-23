@@ -15,6 +15,12 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             return code();
         }
 
+        [SetUp]
+        public void Setup()
+        {
+            Log.ThreadLogContext = Option.None<LogContext>();
+        }
+
         [Test]
         public void Verify_that_StackFrameOffsetCount_works_correctly()
         {
@@ -31,8 +37,6 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             LogData expected = CreateExpectedLogData(eventId, message);
 
             VerifyLogData(expected);
-
-            Log.ThreadLogContext = Option.None<LogContext>();
         }
 
         [Test]

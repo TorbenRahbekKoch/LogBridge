@@ -82,9 +82,9 @@ namespace SoftwarePassion.LogBridge
         /// <summary>
         /// Returns a so specific as possible LogContext. That is, if there
         /// is a ThreadLogContext assigned that is the one that is returned.
-        /// Otherwise if there is a ProcessLogContext assigned that one is
+        /// Otherwise if there is a AppDomainLogContext assigned that one is
         /// returned.
-        /// Then it is checked whether an AppDomainLogContext is assigned, and
+        /// Then it is checked whether an ProcessLogContext is assigned, and
         /// then that one is returned. If not, then a defaultLogContext with
         /// None values is returned.
         /// </summary>
@@ -135,9 +135,9 @@ namespace SoftwarePassion.LogBridge
         /// <summary>
         /// Returns a so specific as possible correlation id. That is, if there
         /// is a ThreadCorrelationId assigned that is the one that is returned.
-        /// Otherwise if there is a ProcessCorrelationId assigned that one is
+        /// Otherwise if there is a AppDomainCorrelation assigned that one is
         /// returned.
-        /// Then it is checked whether an AppDomainCorrelation is assigned, and
+        /// Then it is checked whether an ProcessCorrelationId is assigned, and
         /// then that one is returned.
         /// Otherwise None&lt;Guid&gt; is returned.
         /// </summary>

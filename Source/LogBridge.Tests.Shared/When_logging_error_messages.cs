@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SoftwarePassion.Common.Core;
 
 namespace SoftwarePassion.LogBridge.Tests.Shared
 {
@@ -8,6 +9,12 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         public When_logging_error_messages(ILogDataVerifier verifier)
             : base(Level.Error, verifier)
         {}
+
+        [SetUp]
+        public void Setup()
+        {
+            Log.ThreadLogContext = Option.None<LogContext>();
+        }
 
         [Test]
         public void Verify_that_message_is_logged_correctly()

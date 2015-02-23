@@ -23,6 +23,11 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         public const string NullExceptionMessage = "[null exception]";
 
+        /// <summary>
+        /// Gets the active LogContext, which is a so specific as possible, LogContext,
+        /// in order from Thread -> AppDomain -> Process.
+        /// </summary>
+        /// <value>The active log context.</value>
         public static LogContext ActiveLogContext
         {
             get { return Logger.LogContext; }
