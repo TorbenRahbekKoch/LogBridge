@@ -11,7 +11,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             : base(Level.Debug, verifier)
         {}
 
-        [MethodImpl(MethodImplOptions.NoOptimization)]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private Guid RunLambda(Func<Guid> code)
         {
             return code();
