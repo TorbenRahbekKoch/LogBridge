@@ -7,7 +7,7 @@
     <ProjectGuid>{A268C13B-8C23-4637-8F0E-4D1C0FE57793}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LogBridge.UmbracoLog4Net.Tests.Unit</RootNamespace>
+    <RootNamespace>SoftwarePassion.LogBridge.UmbracoLog4Net.Tests.Unit</RootNamespace>
     <AssemblyName>LogBridge.UmbracoLog4Net.Tests.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -7,7 +7,7 @@
     <ProjectGuid>{9A15AA77-77B5-462B-B42A-AA0DED733658}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LogBridge.Log4Net.Tests.Unit</RootNamespace>
+    <RootNamespace>SoftwarePassion.LogBridge.Log4Net.Tests.Unit</RootNamespace>
     <AssemblyName>LogBridge.Log4Net.Tests.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
