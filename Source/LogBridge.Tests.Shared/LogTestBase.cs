@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using NUnit.Framework;
 using SoftwarePassion.Common.Core;
@@ -238,6 +239,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 expectedProperties);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         protected LogLocation CreateLogLocation()
         {
             int currentFrame = 0;

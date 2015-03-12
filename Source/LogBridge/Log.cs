@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Runtime.CompilerServices;
 using SoftwarePassion.Common.Core;
 
 namespace SoftwarePassion.LogBridge
@@ -282,6 +283,7 @@ namespace SoftwarePassion.LogBridge
         /// <param name="message">The message with optional curly brace parameters.</param>
         /// <param name="messageParameters">Matching parameters for curly braces in message.</param>
         /// <returns>The unique event id.</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static Guid Debug(string message, params object[] messageParameters)
         {
             return Logger.LogEntry(null, null, Level.Debug, null, message, messageParameters);
