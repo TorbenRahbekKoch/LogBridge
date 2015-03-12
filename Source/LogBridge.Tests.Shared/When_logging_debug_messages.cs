@@ -24,6 +24,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         }
 
         [Test]
+        [Ignore]
         public void Verify_that_StackFrameOffsetCount_works_correctly()
         {
             Log.ThreadLogContext = new LogContext()
