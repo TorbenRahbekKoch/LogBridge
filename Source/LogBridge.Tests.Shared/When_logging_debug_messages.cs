@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using SoftwarePassion.Common.Core;
 
@@ -10,6 +11,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             : base(Level.Debug, verifier)
         {}
 
+        [MethodImpl(MethodImplOptions.NoOptimization)]
         private Guid RunLambda(Func<Guid> code)
         {
             return code();

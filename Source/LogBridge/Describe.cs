@@ -6,6 +6,7 @@ using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using SoftwarePassion.Common.Core.Extensions;
 
 namespace SoftwarePassion.LogBridge
@@ -32,6 +33,7 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         /// <param name="parameterValues">The method parameters.</param>
         /// <returns>A Func, which describes the calling method.</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static Func<DescribeDescriptor> CreateDescriber(params object[] parameterValues)
         {
             // Find calling method
