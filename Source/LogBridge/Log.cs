@@ -30,7 +30,7 @@ namespace SoftwarePassion.LogBridge
         /// <value>The active log context.</value>
         public static LogContext ActiveLogContext
         {
-            get { return Logger.LogContext; }
+            get { return Logger.ActiveLogContext; }
         }
 
         /// <summary>

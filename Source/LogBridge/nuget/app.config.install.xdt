@@ -7,16 +7,4 @@
 
   <configSections xdt:Transform="RemoveAll" xdt:Locator="Condition(count(*)=0)"/>
 
-  <logBridge logWrapperType="SoftwarePassion.LogBridge"
-            throwOnResolverFail="true"
-            internalDiagnosticsEnabled="true"
-            stackFrameOffsetCount="0">
-    <extendedProperties>
-    </extendedProperties>
-  </logBridge>
-
-  <appSettings xdt:Transform="InsertIfMissing">
-    <add key="SoftwarePassion.LogBridge.InternalDiagnosticsEnabled" value="false" xdt:Transform="InsertIfMissing"  xdt:Locator="Match(key)"/>
-    <add key="SoftwarePassion.LogBridge.ThrowOnResolverFail" value="true" xdt:Transform="InsertIfMissing"  xdt:Locator="Match(key)"/>
-  </appSettings>
 </configuration>

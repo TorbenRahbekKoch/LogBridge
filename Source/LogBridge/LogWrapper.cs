@@ -88,7 +88,7 @@ namespace SoftwarePassion.LogBridge
         /// then that one is returned. If not, then a defaultLogContext with
         /// None values is returned.
         /// </summary>
-        public LogContext LogContext
+        public LogContext ActiveLogContext
         {
             get
             {
@@ -588,7 +588,7 @@ namespace SoftwarePassion.LogBridge
             correlationId = Option.None<Guid>();
             applicationName = string.Empty;
 
-            var logContext = LogContext;
+            var logContext = ActiveLogContext;
             if (logContext.ExtendedPropertiesValue.IsNone)
                 return CreateDictionary(true, propertiesSize);
 
