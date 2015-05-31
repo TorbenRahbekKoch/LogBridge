@@ -33,7 +33,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Unit
 
             Assert.AreEqual(expected.LogLocation.FileName, actual.ExtendedProperties[LogConstants.FilenameKey], "LogLocation.FileName does not match.");
             Assert.AreEqual(expected.LogLocation.LineNumber, actual.ExtendedProperties[LogConstants.LineNumberKey], "LogLocation.FileName does not match.");
-            Assert.AreEqual(expected.LogLocation.LoggingClassType, actual.ExtendedProperties[LogConstants.ClassNameKey], "LogLocation.LoggingClassType does not match.");
+            Assert.AreEqual(expected.LogLocation.LoggingClassType.Name, actual.ExtendedProperties[LogConstants.ClassNameKey], "LogLocation.LoggingClassType does not match.");
             Assert.AreEqual(expected.LogLocation.MethodName, actual.ExtendedProperties[LogConstants.MethodNameKey], "LogLocation.MethodName does not match.");
 
             Assert.AreEqual(expected.Exception, actual.ExtendedProperties[LogConstants.ExceptionKey], "Exception does not match.");

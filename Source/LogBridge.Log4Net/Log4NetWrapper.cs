@@ -23,7 +23,7 @@ namespace SoftwarePassion.LogBridge.Log4Net
         }
 
         /// <summary>
-        /// Performas the log entry. All logging for this wrapper eventually 
+        /// Performs the log entry. All logging for this wrapper eventually 
         /// ends up in this method.
         /// </summary>
         /// <param name="activeLogger">The active logger.</param>

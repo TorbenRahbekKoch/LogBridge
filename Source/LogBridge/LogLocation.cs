@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace SoftwarePassion.LogBridge
 {
@@ -14,12 +15,12 @@ namespace SoftwarePassion.LogBridge
         public Type LoggingClassType;
 
         /// <summary>
-        /// The method name of the menthod containing the Log.XXXX statement.
+        /// The method name of the method containing the Log.XXXX statement.
         /// </summary>
         public string MethodName;
 
         /// <summary>
-        /// The filenam of the source file containing the Log.XXXX statement.
+        /// The filename of the source file containing the Log.XXXX statement.
         /// </summary>
         public string FileName;
 
@@ -29,8 +30,26 @@ namespace SoftwarePassion.LogBridge
         public string LineNumber;
 
         /// <summary>
-        /// The stack frame for the method containing the Log.XXXX statement.
+        /// Manually creates a LogLocation from the current location.
         /// </summary>
-        public StackFrame StackFrame;
+        /// <param name="callerClassType">Type of the caller class.</param>
+        /// <param name="callerFilePath">The caller file path.</param>
+        /// <param name="callerMemberName">Name of the caller member.</param>
+        /// <param name="callerLineNumber">The caller line number.</param>
+        /// <returns>LogLocation.</returns>
+        public static LogLocation Here(
+            Type callerClassType,
+            [CallerFilePath] string callerFilePath = "",
+            [CallerMemberName] string callerMemberName = "", 
+            [CallerLineNumber] int callerLineNumber = 0)
+        {
+            return new LogLocation()
+            {
+                LoggingClassType = callerClassType,
+                MethodName = callerMemberName,
+                FileName = callerFilePath,
+                LineNumber = callerLineNumber.ToString(CultureInfo.InvariantCulture)
+            };
+        }
     }
 }

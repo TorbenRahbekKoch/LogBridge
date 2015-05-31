@@ -15,7 +15,7 @@ namespace SoftwarePassion.LogBridge
             try
             {
                 var thisAssembly = typeof (CallingMember).Assembly.FullName;
-                int currentFrame = 1;
+                int currentFrame = startingStackFrameOffset;
                 var stackFrame = new StackFrame(currentFrame);
                 
                 MethodBase methodBase = stackFrame.GetMethod();
@@ -23,7 +23,7 @@ namespace SoftwarePassion.LogBridge
                 {
                     var declaringType = methodBase.DeclaringType;
                     while (declaringType != null  &&
-                        declaringType.Assembly.FullName == thisAssembly) // Check for lambda-method-syntax
+                        declaringType.Assembly.FullName == thisAssembly) 
                     {
                         stackFrame = new StackFrame(++currentFrame);
                         methodBase = stackFrame.GetMethod();

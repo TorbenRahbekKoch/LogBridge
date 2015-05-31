@@ -39,6 +39,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.UmbracoLog4Net.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.UmbracoLog4Net.Tests.Performance", "Source\LogBridge.UmbracoLog4Net.Tests.Performance\LogBridge.UmbracoLog4Net.Tests.Performance.csproj", "{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Wcf", "Source\LogBridge.Wcf\LogBridge.Wcf.csproj", "{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Wcf.Tests.Integration", "Source\LogBridge.Wcf.Tests.Integration\LogBridge.Wcf.Tests.Integration.csproj", "{26111BD7-2317-4171-A23B-7AF656AD7086}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +97,14 @@ Global
 		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26111BD7-2317-4171-A23B-7AF656AD7086}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26111BD7-2317-4171-A23B-7AF656AD7086}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26111BD7-2317-4171-A23B-7AF656AD7086}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26111BD7-2317-4171-A23B-7AF656AD7086}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,5 +115,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

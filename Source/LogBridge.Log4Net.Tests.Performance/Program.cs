@@ -27,6 +27,12 @@ namespace SoftwarePassion.LogBridge.Log4Net.Tests.Performance
             // Log formatted message through LogBridge
             Time("LogBridge formatted message: {0}", () => Log.Warning("Message {0} {1} {2} {3}", 42, "87", now, 87.42));
 
+            // Log message with location through LogBridge
+            Time("LogBridge simple message with location: {0}", () => Log.Warning(LogLocation.Here(typeof(Program)), "Message"));
+
+            // Log formatted message with location through LogBridge
+            Time("LogBridge formatted message with location: {0}", () => Log.Warning(LogLocation.Here(typeof(Program)), "Message {0} {1} {2} {3}", 42, "87", now, 87.42));
+
             var logger = LogManager.GetLogger("RootLogger");
 
             // Log message directly through log4net
@@ -43,10 +49,12 @@ namespace SoftwarePassion.LogBridge.Log4Net.Tests.Performance
         {
             const int logCount = 2000;
 
-            var timerResult = new TimerResult(description);
-
             // Warm up
             action();
+            action();
+            action();
+
+            var timerResult = new TimerResult(description);
 
             appender.Clear();
             using (new Timer(timerResult))

@@ -1,0 +1,97 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System;
+using System.Runtime.CompilerServices;
+using SoftwarePassion.Common.Core;
+
+namespace SoftwarePassion.LogBridge
+{
+    /// <summary>
+    /// Convenience class for Logging.
+    /// </summary>
+    /// <remarks>
+    /// About correlationId: CorrelationId can be used to correlate log events
+    /// across e.g. several function calls. The LogWrapper used has to store the 
+    /// correlationId in an accessible and searchable manner for this to be 
+    /// really useful. CorrelationId is stored in the LogWrappers Properties.
+    /// About extendedProperties: Each property of a given extendedProperties
+    /// object is stored in the LogWrappers Properties. 
+    /// </remarks>
+    public static class Log
+    {
+        /// <summary>
+        /// The null exception message - used when an overload with an exception 
+        /// parameter is called, but said parameter is null.
+        /// </summary>
+        public const string NullExceptionMessage = "[null exception]";
+
+		<#
+			var methods = new List<string>();
+
+			var methodsText = File.ReadAllText(@"E:\Projects\LogBridge\Source\LogBridge\Log.Template.cs");
+
+			var currentMethod = new StringBuilder();
+			foreach (var line in methodsText.Split(new string[] {Environment.NewLine},StringSplitOptions.None))
+			{
+				if (line != "//-----")
+					currentMethod.AppendLine("        " + line);
+				else
+				{	
+					methods.Add(currentMethod.ToString());
+					currentMethod.Clear();
+				}
+			} 
+
+			var levels = new []{"Error", "Debug", "Information", "Fatal", "Warning"};
+			foreach (var level in levels)
+			{
+				WriteLine(string.Empty);
+				WriteLine("        #region " + level);
+
+				foreach (var method in methods)
+				{
+				    var methodText = method
+				        .Replace("LOGLEVEL", level)
+				        .Replace(".LogEntry(", ".LogEntry(null, ");
+					WriteLine(string.Empty);
+					Write(methodText);
+
+					// Create the LogLocation overload
+					WriteLine(string.Empty);
+					methodText = method
+						.Replace("LOGLEVEL(", level + "(LogLocation logLocation, ")
+						.Replace("LOGLEVEL", level)
+						.Replace("</summary>", "</summary>" + System.Environment.NewLine + "        /// <param name=\"logLocation\">The location of the log statement.</param>")
+						.Replace(".LogEntry(", ".LogEntry(logLocation, ");
+					WriteLine(methodText);
+				}
+				
+				WriteLine("        #endregion");
+				WriteLine(string.Empty);
+			}
+		#>
+
+        private static bool DiagnosticsEnabled
+        {
+            get
+            {
+                return Configuration.InternalDiagnosticsEnabled;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static string ExceptionMessage(Exception exception)
+        {
+            if (exception == null)
+                return NullExceptionMessage;
+            return exception.Message;
+        }
+
+        internal static readonly LogWrapper Logger = LogWrapperResolver.Resolve(DiagnosticsEnabled);
+    }
+}

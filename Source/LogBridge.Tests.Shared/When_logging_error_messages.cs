@@ -13,7 +13,8 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         [SetUp]
         public void Setup()
         {
-            Log.ThreadLogContext = Option.None<LogContext>();
+            LogContext.ThreadLogContext.CorrelationId = Option.None<Guid>();
+            LogContext.ThreadLogContext.StackFrameOffsetCount = Option.None<int>();
         }
 
         [Test]
@@ -33,7 +34,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             const string message = "Message";
             var eventId = Log.Error(correlationId, message);
             LogData expected = CreateExpectedLogData(eventId, correlationId, message);
-
+            
             VerifyLogData(expected);
         }
 

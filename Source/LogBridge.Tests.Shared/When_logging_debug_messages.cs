@@ -4,12 +4,12 @@ using NUnit.Framework;
 using SoftwarePassion.Common.Core;
 
 namespace SoftwarePassion.LogBridge.Tests.Shared
-{    
+{
     public class When_logging_debug_messages : LogTestBase
     {
-        public When_logging_debug_messages(ILogDataVerifier verifier) 
+        public When_logging_debug_messages(ILogDataVerifier verifier)
             : base(Level.Debug, verifier)
-        {}
+        { }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private Guid RunLambda(Func<Guid> code)
@@ -20,26 +20,26 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         [SetUp]
         public void Setup()
         {
-            Log.ThreadLogContext = Option.None<LogContext>();
+            LogContext.ThreadLogContext.CorrelationId = Option.None<Guid>();
+            LogContext.ThreadLogContext.StackFrameOffsetCount = Option.None<int>();
         }
 
         [Test]
         [Ignore]
         public void Verify_that_StackFrameOffsetCount_works_correctly()
         {
-            Log.ThreadLogContext = new LogContext()
+            using (var scope = LogContext.ThreadLogContext.Push())
             {
-                StackFrameOffsetCount = 2,
-                ExtendedProperties   = Log.ActiveLogContext.ExtendedProperties
-            };
+                LogContext.ThreadLogContext.StackFrameOffsetCount = 2;
+                LogContext.ThreadLogContext.ExtendedProperties = LogContext.ActiveExtendedProperties;
+                const string message = "Message";
+                Func<Guid> code = () => Log.Debug(message);
 
-            const string message = "Message";
-            Func<Guid> code = () => Log.Debug(message);
+                var eventId = RunLambda(code);
+                LogData expected = CreateExpectedLogData(eventId, message);
 
-            var eventId = RunLambda(code);
-            LogData expected = CreateExpectedLogData(eventId, message);
-
-            VerifyLogData(expected);
+                VerifyLogData(expected);
+            }
         }
 
         [Test]
@@ -625,7 +625,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 throw new ArgumentException("argument");
             }
             catch (Exception exception)
-            {                
+            {
                 var eventId = Log.Debug(correlationId, exception);
                 expected = CreateExpectedLogData(eventId, correlationId, exception, exception.Message);
             }
@@ -644,7 +644,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 throw new ArgumentException("argument");
             }
             catch (Exception exception)
-            {                
+            {
                 var eventId = Log.Debug(correlationId, exception, extended);
                 expected = CreateExpectedLogData(eventId, correlationId, exception, exception.Message, extended.AsProperties);
             }
@@ -664,7 +664,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 throw new ArgumentException("argument");
             }
             catch (Exception exception)
-            {                
+            {
                 var eventId = Log.Debug(correlationId, exception, extended, message);
                 expected = CreateExpectedLogData(eventId, correlationId, exception, message, extended.AsProperties);
             }
@@ -685,7 +685,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 throw new ArgumentException("argument");
             }
             catch (Exception exception)
-            {                
+            {
                 var eventId = Log.Debug(correlationId, exception, extended, message, 42);
                 expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }
@@ -706,7 +706,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 throw new ArgumentException("argument");
             }
             catch (Exception exception)
-            {                
+            {
                 var eventId = Log.Debug(correlationId, exception, extended, message, "17", 42, "87");
                 expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }
@@ -727,7 +727,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 throw new ArgumentException("argument");
             }
             catch (Exception exception)
-            {                
+            {
                 var eventId = Log.Debug(correlationId, exception, extended, message, 42, 87);
                 expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }
@@ -748,7 +748,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 throw new ArgumentException("argument");
             }
             catch (Exception exception)
-            {                
+            {
                 var eventId = Log.Debug(correlationId, exception, extended, message, "42", "87");
                 expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }
@@ -769,7 +769,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 throw new ArgumentException("argument");
             }
             catch (Exception exception)
-            {                
+            {
                 var eventId = Log.Debug(correlationId, exception, extended, message, null, null);
                 expected = CreateExpectedLogData(eventId, correlationId, exception, formattedMessage, extended.AsProperties);
             }

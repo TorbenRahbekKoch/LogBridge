@@ -73,7 +73,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
             etlProperties[LogConstants.ProcessNameKey] = logData.ProcessName;
             etlProperties[LogConstants.FilenameKey] = logData.LogLocation.FileName;
             etlProperties[LogConstants.LineNumberKey] = logData.LogLocation.LineNumber;
-            etlProperties[LogConstants.ClassNameKey] = logData.LogLocation.LoggingClassType;
+            etlProperties[LogConstants.ClassNameKey] = logData.LogLocation.LoggingClassType.Name;
             etlProperties[LogConstants.MethodNameKey] = logData.LogLocation.MethodName;
             etlProperties[LogConstants.UsernameKey] = logData.Username;
             etlProperties[LogConstants.ExceptionKey] = logData.Exception;

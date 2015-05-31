@@ -28,11 +28,11 @@ namespace SoftwarePassion.LogBridge
                     : new List<AssemblyName>();
 
                 var configuration = new PluginFinderConfiguration(
-                    ExcludeSystemAssemblies.Yes,
-                    new List<Type>() {typeof (NullLogWrapper)},
-                    new List<AssemblyName>(),
-                    explicitWrapperAssemblies,
-                    explicitWrapperType);
+                    excludeSystemAssemblies:    ExcludeSystemAssemblies.Yes,
+                    typesToExclude:             new List<Type>() {typeof (NullLogWrapper)},
+                    assembliesToExclude:        new List<AssemblyName>(),
+                    assembliesToLoadExplicitly: explicitWrapperAssemblies,
+                    typeToExplicitlyLookFor:    explicitWrapperType);
 
                 return PluginFinder.FindAndActivate<LogWrapper>(
                     configuration,

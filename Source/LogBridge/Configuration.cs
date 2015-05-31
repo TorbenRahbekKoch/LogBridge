@@ -7,7 +7,7 @@ using SoftwarePassion.Common.Core.Extensions;
 namespace SoftwarePassion.LogBridge
 {
     /// <summary>
-    /// Gobal configuration for LogBridge.
+    /// Global configuration for LogBridge.
     /// </summary>
     public static class Configuration
     {

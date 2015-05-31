@@ -261,8 +261,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
                 LoggingClassType = callingMember.DeclaringType,
                 FileName = stackFrame.GetFileName(),
                 LineNumber = stackFrame.GetFileLineNumber().ToString(CultureInfo.InvariantCulture),
-                MethodName = callingMember.Name,
-                StackFrame = stackFrame
+                MethodName = callingMember.Name
             };
         }
 
