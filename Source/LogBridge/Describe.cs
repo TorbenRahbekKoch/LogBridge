@@ -140,18 +140,19 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
-        private static void DescribeParameter(DescriptorBuilder descriptorBuilder, ParameterInfo methodParameter, object parameterValue)
+        private static void DescribeParameter(DescriptorBuilder descriptorBuilder, ParameterInfo parameterInfo, object parameterValue)
         {
             Contract.Requires(descriptorBuilder != null);
-            Contract.Requires(methodParameter != null);
+            Contract.Requires(parameterInfo != null);
 
             try
             {
-                DescribeParameter(descriptorBuilder, methodParameter.ParameterType, parameterValue);
+                descriptorBuilder.Append(parameterInfo.Name + ": ");
+                DescribeParameter(descriptorBuilder, parameterInfo.ParameterType, parameterValue);
             }
             catch (Exception ex)
             {
-                descriptorBuilder.AppendLine("Exception describing parameter '" + methodParameter.Name + "' : " + ex.ToString());
+                descriptorBuilder.AppendLine("Exception describing parameter '" + parameterInfo.Name + "' : " + ex.ToString());
             }
         }
 
@@ -165,13 +166,14 @@ namespace SoftwarePassion.LogBridge
                 var t = methodParameter.ParameterType;
                 if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof (Nullable<>))
                 {
+                    descriptorBuilder.Append(methodParameter.Name + ": ");
                     var nullableType = t.GetGenericArguments()[0];
                     descriptorBuilder.Append(nullableType.FullName);
                     descriptorBuilder.Append(": null");
                 }
                 else
                 {
-                    descriptorBuilder.Append("null");
+                    descriptorBuilder.Append(methodParameter.Name + ": null");
                 }
             }
             catch (Exception ex)

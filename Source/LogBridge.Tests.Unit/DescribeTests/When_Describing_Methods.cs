@@ -24,10 +24,10 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var description3 = Methods.Method3(42.87);
             var description4 = Methods.Method4(42, "Value", 42.87);
 
-            description1.Should().Be(Namespace + "Method1(42, 43, 44, 45, True, False)", "Description 1 incorrect.");
-            description2.Should().Be(Namespace + "Method2(\"Value\")", "Description 2 incorrect.");
-            description3.Should().Be(Namespace + "Method3(42.87)", "Description 3 incorrect.");
-            description4.Should().Be(Namespace + "Method4(42, \"Value\", 42.87)", "Description 4 incorrect.");
+            description1.Should().Be(Namespace + "Method1(value1: 42, value2: 43, value3: 44, value4: 45, value5: True, value6: False)", "Description 1 incorrect.");
+            description2.Should().Be(Namespace + "Method2(value: \"Value\")", "Description 2 incorrect.");
+            description3.Should().Be(Namespace + "Method3(value: 42.87)", "Description 3 incorrect.");
+            description4.Should().Be(Namespace + "Method4(value1: 42, value2: \"Value\", value3: 42.87)", "Description 4 incorrect.");
         }
 
         [Test]
@@ -36,7 +36,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
         {
             var description5 = Methods.Method5(new List<int>() { 1, 2 });
 
-            var expected = Namespace + "Method5([{0}  1,{0}  2])".FormatInvariant(Environment.NewLine);
+            var expected = Namespace + "Method5(value: [{0}  1,{0}  2])".FormatInvariant(Environment.NewLine);
             description5.Should().Be(expected, "Description 5 incorrect.");
         }
 
@@ -52,7 +52,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
 
             var description6 = Methods.Method6(values);
 
-            description6.Should().Be(Namespace + "Method6([{0}  [\"42\":43],{0}  [\"87\":88]])".FormatInvariant(Environment.NewLine), "Description 6 incorrect.");
+            description6.Should().Be(Namespace + "Method6(value: [{0}  [\"42\":43],{0}  [\"87\":88]])".FormatInvariant(Environment.NewLine), "Description 6 incorrect.");
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
         {
             var description7 = Methods.Method7(Enums.Enum1);
 
-            description7.Should().Be(Namespace + "Method7(Enums.Enum1)", "Description 7 incorrect.");
+            description7.Should().Be(Namespace + "Method7(value: Enums.Enum1)", "Description 7 incorrect.");
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var guid = Guid.NewGuid();
             var description8 = Methods.Method8(guid);
 
-            description8.Should().Be(Namespace + "Method8({0})".FormatInvariant(guid), "Description 8 incorrect.");
+            description8.Should().Be(Namespace + "Method8(value: {0})".FormatInvariant(guid), "Description 8 incorrect.");
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var class1 = new Class1 {Property1 = "1", Property2 = "2"};
             var description9 = Methods.Method9(class1);
 
-            string expected = Namespace + "Method9({0}[{1}  Property1: \"1\",{1}  Property2: \"2\"])".FormatInvariant(ClassNameSpace + "Class1", Environment.NewLine);
+            string expected = Namespace + "Method9(value: {0}[{1}  Property1: \"1\",{1}  Property2: \"2\"])".FormatInvariant(ClassNameSpace + "Class1", Environment.NewLine);
             description9.Should().Be(expected,  "Description 9 incorrect.");
         }
 
@@ -92,7 +92,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var class2 = new Class2 {PropertyA = new Class1() {Property1 = "A", Property2 = "B"}, PropertyB = 42.87m};
             var description10 = Methods.Method10(class2);
 
-            string expected = Namespace + "Method10({0}[{2}  PropertyA: {1}[{2}    Property1: \"A\",{2}    Property2: \"B\"],{2}  PropertyB: 42.87])"
+            string expected = Namespace + "Method10(value: {0}[{2}  PropertyA: {1}[{2}    Property1: \"A\",{2}    Property2: \"B\"],{2}  PropertyB: 42.87])"
                                 .FormatInvariant(ClassNameSpace + "Class2", ClassNameSpace + "Class1", Environment.NewLine);
             description10.Should().Be(expected, "Description 10 incorrect.");
         }
@@ -106,8 +106,8 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var description11a = Methods.Method11(dateTimea);
             var description11b = Methods.Method11(dateTimeb);
 
-            description11a.Should().Be(Namespace + "Method11(DateTimeKind.Utc:2012-10-25 12:34:56.000)", "Description 11a incorrect.");
-            description11b.Should().Be(Namespace + "Method11(DateTimeKind.Local:2012-10-25 12:34:56.000)", "Description 11b incorrect.");
+            description11a.Should().Be(Namespace + "Method11(value: DateTimeKind.Utc:2012-10-25 12:34:56.000)", "Description 11a incorrect.");
+            description11b.Should().Be(Namespace + "Method11(value: DateTimeKind.Local:2012-10-25 12:34:56.000)", "Description 11b incorrect.");
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
         {
             var description12 = Methods.Method12(null);
 
-            description12.Should().Be(Namespace + "Method12(null)", "Description 12 is incorrect.");
+            description12.Should().Be(Namespace + "Method12(value: null)", "Description 12 is incorrect.");
         }
 
         [Test]
@@ -126,7 +126,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var class1 = new Class1 { Property1 = "1", Property2 = null };
             var description13 = Methods.Method9(class1);
 
-            var expected = Namespace + "Method9({0}[{1}  Property1: \"1\",{1}  Property2: null])".FormatInvariant(ClassNameSpace + "Class1", Environment.NewLine);
+            var expected = Namespace + "Method9(value: {0}[{1}  Property1: \"1\",{1}  Property2: null])".FormatInvariant(ClassNameSpace + "Class1", Environment.NewLine);
             description13.Should().Be(expected, "Description 13 incorrect.");
         }
 
@@ -137,7 +137,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var class2 = new Class2 { PropertyA = null, PropertyB = 42.27m };
             var description14 = Methods.Method10(class2);
 
-            var expected = Namespace + "Method10({0}[{1}  PropertyA: null,{1}  PropertyB: 42.27])".FormatInvariant(ClassNameSpace + "Class2", Environment.NewLine);
+            var expected = Namespace + "Method10(value: {0}[{1}  PropertyA: null,{1}  PropertyB: 42.27])".FormatInvariant(ClassNameSpace + "Class2", Environment.NewLine);
             description14.Should().Be(expected, "Description 14 incorrect.");
         }
 
@@ -150,8 +150,8 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var description15a = Methods.Method15(dateTimea);
             var description15b = Methods.Method15(dateTimeb);
              
-            description15a.Should().Be(Namespace + "Method15(System.DateTime: null)", "Description 15a incorrect.");
-            description15b.Should().Be(Namespace + "Method15(DateTimeKind.Local:2012-10-25 12:34:56.000)", "Description 15b incorrect.");
+            description15a.Should().Be(Namespace + "Method15(value: System.DateTime: null)", "Description 15a incorrect.");
+            description15b.Should().Be(Namespace + "Method15(value: DateTimeKind.Local:2012-10-25 12:34:56.000)", "Description 15b incorrect.");
         }
 
         [Test]
@@ -161,8 +161,8 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var description16a = Methods.Method16("Text");
             var description16b = Methods.Method16(42);
 
-            description16a.Should().Be(Namespace + "Method16(\"{0}\")".FormatInvariant("Text"), "Description 16a incorrect.");
-            description16b.Should().Be(Namespace + "Method16({0})".FormatInvariant(42), "Description 16b incorrect.");
+            description16a.Should().Be(Namespace + "Method16(value: \"{0}\")".FormatInvariant("Text"), "Description 16a incorrect.");
+            description16b.Should().Be(Namespace + "Method16(value: {0})".FormatInvariant(42), "Description 16b incorrect.");
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
         public void Verify_That_Description_Of_IEnumerable_Parameters_Is_Correct()
         {
             var description17 = Methods.Method17(new Class3());
-            description17.Should().Be(Namespace + "Method17([{0}  27,{0}  42])".FormatInvariant(Environment.NewLine));
+            description17.Should().Be(Namespace + "Method17(value: [{0}  27,{0}  42])".FormatInvariant(Environment.NewLine));
         }
 
         [Test]
@@ -180,7 +180,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             var timespan = new TimeSpan(42, 17, 13, 57, 123);
 
             var description18 = Methods.Method18(timespan);
-            description18.ParameterDescription.Should().Be(Namespace + "Method18(42.17:13:57.1230000)");
+            description18.ParameterDescription.Should().Be(Namespace + "Method18(value: 42.17:13:57.1230000)");
         }
 
         [Test]
@@ -189,7 +189,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
         {
             var value = 42;
             var descriptionLambda = Methods.LambdaMethod(value);
-            descriptionLambda.ParameterDescription.Should().Be(Namespace + "LambdaMethod(42)");
+            descriptionLambda.ParameterDescription.Should().Be(Namespace + "LambdaMethod(value: 42)");
         }
 
         private const string ClassNameSpace = "SoftwarePassion.LogBridge.Tests.Unit.DescribeTests.";
