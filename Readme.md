@@ -10,32 +10,42 @@ instead log an incomplete message.
 
 Please see the Configuration section below for details about this.
 
-Usage
+Installation
 =====
 
-Install with Nuget:
+Install in the mail application (e.g. .exe or web application) with Nuget:
 
 -  [EnterpriseLibrary](https://www.nuget.org/packages/SoftwarePassion.LogBridge.EnterpriseLibrary/)
 -  [Log4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.Log4Net/)
 -  [UmbracoLog4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.UmbracoLog4Net/)
 
-There are five logging levels available:
+In supporting libraries you can simply restrict yourself to installing the basic LogBridge library
+with Nuget:
 
-- Information
-- Debug
-- Warning
-- Error
-- Fatal
+ - [LogBridge](http://www.nuget.org/packages/SoftwarePassion.LogBridge/)
 
-The exact meaning and ordering (if any) of these is defined by the individual
-log-provider, e.g. Enterprise Library or Log4Net.
+Usage
+=====
 
-Logging in your application is done by simply calling any of the 5*18
-(logging-levels * overloads) static methods on the Log class.
+### Logging levels
 
-E.g.
+There are five logging levels, which correspond to Log4Net and Enterprise Library as follows:
 
- `Log.Information("This is a informational message only.");`
+LogBridge   | Log4Net | Enterprise Library (Severity Level) 
+-----------------------------------------------------------
+Information | Info    | Information 
+Debug       | Debug   | Verbose
+Warning     | Warn    | Warning
+Error       | Error   | Error
+Fatal       | Fatal   | Critical
+
+To use the logger, simply put in a using statement:
+
+`using SoftwarePassion.LogBridge;`
+
+And call any of the static methods on the Log class, e.g
+
+`Log.Information("This is an informational message only.");`
 
 Each level has the exact same overloads available. You can also use formatting
 parameters like this:
@@ -46,20 +56,95 @@ It works in the same way as
 [string.Format()](http://msdn.microsoft.com/en-us/library/system.string.format%28v=vs.110%29.aspx)
 does. It uses
 [CultureInfo.InvariantCulture](http://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.invariantculture%28v=vs.110%29.aspx)
-as the formatting provider - this will be configurable in a later version.
+as the formatting provider - this will likely be configurable in a later version.
 
 You can easily log an exception:
 
-`Log.Exception(exception);`
+`Log.Warning(exception);`
 
 There are some overloads which have a parameter called `firstMessageParameter`.
 This parameter is only there to help with overload resolution and should,
 usage-wise, be considered the same method as the one without this parameter.
-Perhaps C# will render this unnecessary.
+Perhaps C# will render this unnecessary in a later version.
 
+### Describing Parameters
 
-Extended Properties
-===================
+Logging the value of the parameters to a method can be very useful when
+e.g. catching exceptions. To aid with that there is a static class *Describe*, which
+has a method *Parameters*. Calling this method with the parameters to the
+method in the exact same order will give back a string which contains a
+rather comprehensive description of the parameters.
+
+`Describe.Parameters(parm1, parm2, parm3)`
+
+It would, probably, be technically feasible to automatically detect the
+parameters and get the values, but this would include connecting to the
+debugger API, which would be prohibitively expensive and probably also
+required elevated priviliges.
+
+The *Describe* class also has a method *CreateDescriber*, which is very helpful
+in scenarios where one is running stuff inside a lambda-expression. E.g.
+
+````
+
+void MyMethod(int parm1, string parm2)
+{
+
+    var descriptor = Describe.CreateDescriptor(parm1, parm2);
+
+    var lambda = () =>
+    {
+        try
+        {
+            // Do something exceptional
+        }
+        catch (Exception e)
+        {
+            Log.Warning(e, descriptor().Tostring());
+        }
+    }
+
+    lambda();
+}
+````
+
+*CreateDescriber* captures the MethodInfo for the method from which it is 
+called, which makes it possible to properly describe the parameters for the 
+method in question.
+
+And why couldn't you just call `Describe.Parameters(...)` within the catch
+phrase? This is because the C# compiler generates (behind your back) a
+class with a method, which contains the actual code for the lambda. And if
+you just called `Describe.Parameters(...)` from within that method the 
+name of the method would be something weird with *DisplayClass* in it. Not
+a big issue ofcourse, but having the actual method name is quite helpful
+when logging errors.
+
+### LogLocation
+
+In general, LogBridge is perfectly able to figure out from where the Log 
+statement is called, but this sometimes does not work very well, when 
+called from within a lambda-closure. LogBridge finds the location by
+walking the stack until it hits something, which is NOT LogBridge.
+
+It gets the location right, so to speak, within the code, which the
+compiler generates from the lambda-closure, but this is generally something
+close to unreadable. 
+
+To totally and accurately pin point the location you can use 
+`LogLocation.Here()`:
+
+`Log.Information(LogLocation.Here(), "Just logging an informational message");`
+
+`LogLocation.Here()` uses the *CallerFilePath*, *CallerMemberName* and 
+*CallerLineNumber* attributes which makes the compiler insert the information - 
+on compile time.
+
+This is, by the way, substantially faster - it takes roughly 1/5 of the time 
+compared to having LogBridge figuring out the position itself, so if you are 
+concerned about performance this is a very good method.
+
+### Extended Properties
 
 To ease the possibility of adding varying properties to a log-message, LogBridge
 provides the concept of an extended-properties-object.
@@ -93,7 +178,7 @@ CorrelationId
     Several of the Log.* methods take a CorrelationId as the first parameter. This
     way of providing a CorrelationId takes precedence over all other ways.
 
-    There are in total give ways to provide a CorrelationId - on order of precedence
+    There are in total five ways to provide a CorrelationId - on order of precedence
     they are:
 
     1. Explicit correlationId parameter in Log.* methods.
@@ -275,14 +360,6 @@ LogBridge.Log4Net adds the following properties to the Log4Net Properties Dictio
 - processName
 - exception
 
-Describe.Parameters
-===================
-
-Logging the value of the parameters to a method can be very useful when
-catching exceptions. To aid with that there is a static class *Describe*, which
-has a method *Parameters*. Calling this method with the parameters to the
-method in the exact same order will give back a string which contains a
-rather comprehensive description of the parameters.
 
 ### Running Unit Tests
 
