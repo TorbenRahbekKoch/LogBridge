@@ -6,6 +6,9 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 using System;
+using System.Globalization;
+using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using SoftwarePassion.Common.Core;
 
@@ -24,6 +27,7 @@ namespace SoftwarePassion.LogBridge
     /// </remarks>
     public static class Log
     {
+
         /// <summary>
         /// The null exception message - used when an overload with an exception 
         /// parameter is called, but said parameter is null.
@@ -31,21 +35,48 @@ namespace SoftwarePassion.LogBridge
         public const string NullExceptionMessage = "[null exception]";
 
 		<#
-			var methods = new List<string>();
 
-			var methodsText = File.ReadAllText(@"E:\Projects\LogBridge\Source\LogBridge\Log.Template.cs");
+			var templateText = File.ReadAllText(@"E:\Projects\LogBridge\Source\LogBridge\LogParameters.txt")
+				.Split(new string[] {Environment.NewLine},StringSplitOptions.None);
 
-			var currentMethod = new StringBuilder();
-			foreach (var line in methodsText.Split(new string[] {Environment.NewLine},StringSplitOptions.None))
+			var parameterDescriptions = new Dictionary<string, Param>();
+
+			var index = 0;
+			while (true)
 			{
-				if (line != "//-----")
-					currentMethod.AppendLine("        " + line);
-				else
-				{	
-					methods.Add(currentMethod.ToString());
-					currentMethod.Clear();
-				}
-			} 
+			    var line = templateText[index];
+			    if (line == "//-----" || string.IsNullOrWhiteSpace(line))
+			        break;
+
+			    var items = line.Split(new[] {':'})
+					.Select(item => item.Trim())
+					.ToArray();
+			    var description = items[1];
+			    var lastSpace = items[0].LastIndexOf(' ');
+			    var type = items[0].Substring(0, lastSpace);
+			    var name = items[0].Substring(lastSpace + 1);
+
+			    var param = new Param {Name = name, ParamType = type, Description = description };
+				parameterDescriptions.Add(name, param);
+			    index++;
+			}
+
+			var methods = new List<Method>();
+			index++;
+			while (index < templateText.Length)
+			{
+			    var summary = RemoveLabel(templateText[index++]);
+				var parameters = RemoveLabel(templateText[index++])
+					.Split(new []{','})
+					.Select(p => p.Trim())
+					.ToList();
+			    var message = RemoveLabel(templateText[index++]);
+
+			    var method = new Method {Summary = summary, Parameters = parameters, Message = message};
+				methods.Add(method);
+
+			    index++;
+			}
 
 			var levels = new []{"Error", "Debug", "Information", "Fatal", "Warning"};
 			foreach (var level in levels)
@@ -53,22 +84,15 @@ namespace SoftwarePassion.LogBridge
 				WriteLine(string.Empty);
 				WriteLine("        #region " + level);
 
+			    var correlationId = new List<string>() {"correlationId"};
+			    var logLocation = new List<string>() {"logLocation"};
+			    
 				foreach (var method in methods)
 				{
-				    var methodText = method
-				        .Replace("LOGLEVEL", level)
-				        .Replace(".LogEntry(", ".LogEntry(null, ");
-					WriteLine(string.Empty);
-					Write(methodText);
-
-					// Create the LogLocation overload
-					WriteLine(string.Empty);
-					methodText = method
-						.Replace("LOGLEVEL(", level + "(LogLocation logLocation, ")
-						.Replace("LOGLEVEL", level)
-						.Replace("</summary>", "</summary>" + System.Environment.NewLine + "        /// <param name=\"logLocation\">The location of the log statement.</param>")
-						.Replace(".LogEntry(", ".LogEntry(logLocation, ");
-					WriteLine(methodText);
+					WriteMethod(level, method, method.Parameters, parameterDescriptions);
+					WriteMethod(level, method, correlationId.Union(method.Parameters).ToList(), parameterDescriptions);
+					WriteMethod(level, method, logLocation.Union(method.Parameters).ToList(), parameterDescriptions);
+					WriteMethod(level, method, logLocation.Union(correlationId).Union(method.Parameters).ToList(), parameterDescriptions);
 				}
 				
 				WriteLine("        #endregion");
@@ -84,6 +108,87 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
+	    private static string FormatMessage(string message, string firstStringParam, params object[] parameters)
+		{
+		    object[] messageParameters;
+            if (parameters == null)
+			{ 
+                // When parameters is null, it means that two null parameters 
+                // have been given. Beats me, why overload resolution works
+                // like this.
+                messageParameters = new List<object>() { firstStringParam, null }
+					.ToArray();
+            }
+            else
+			{ 
+                messageParameters = new List<object>() { firstStringParam }
+                    .Union(parameters)
+					.ToArray();
+            }
+
+			return FormatMessage(message, messageParameters);
+		}
+
+        /// <summary>
+        /// Formats the message with the given parameters.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>System.String.</returns>
+	    private static string FormatMessage(string message, params object[] parameters)
+	    {
+	        if (message == null)
+	            return string.Empty;
+	        if (parameters == null || parameters.Length == 0)
+	            return message;
+
+            string formattedMessage;
+            try
+            {                
+                var nullFormattedParameters = parameters.Select(p => p == null ? "[null]" : p.ToString()).ToArray();
+                switch (nullFormattedParameters.Length)
+                {
+                    case 1:
+                        formattedMessage = string.Format(CultureInfo.InvariantCulture, message, nullFormattedParameters[0]);
+                        break;
+                    case 2:
+                        formattedMessage = string.Format(
+                            CultureInfo.InvariantCulture, 
+                            message, 
+                            nullFormattedParameters[0],
+                            nullFormattedParameters[1]);
+                        break;
+                    case 3:
+                        formattedMessage = string.Format(
+                            CultureInfo.InvariantCulture,
+                            message,
+                            nullFormattedParameters[0],
+                            nullFormattedParameters[1],
+                            nullFormattedParameters[2]);
+                        break;
+                    case 4:
+                        formattedMessage = string.Format(
+                            CultureInfo.InvariantCulture,
+                            message,
+                            nullFormattedParameters[0],
+                            nullFormattedParameters[1],
+                            nullFormattedParameters[2],
+                            nullFormattedParameters[3]
+                            );
+                        break;
+                    default:
+                        formattedMessage = string.Format(CultureInfo.InvariantCulture, message, nullFormattedParameters);
+                        break;
+                }                                
+            }
+            catch (FormatException)
+            {
+                formattedMessage = message;
+            }
+
+	        return formattedMessage;
+	    }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static string ExceptionMessage(Exception exception)
         {
@@ -95,3 +200,87 @@ namespace SoftwarePassion.LogBridge
         internal static readonly LogWrapper Logger = LogWrapperResolver.Resolve(DiagnosticsEnabled);
     }
 }
+<#+
+
+    void WriteMethod(string level, Method method, IList<string> parameters, IDictionary<string, Param> parameterDescriptions)
+    {
+        const string returnName = "return";
+
+		WriteLine("        /// <summary>");
+		WriteLine("        /// " + method.Summary);
+		WriteLine("        /// </summary>");
+		foreach (var parameterName in parameters)
+		{
+			var parameter = parameterDescriptions[parameterName];
+			WriteLine("        /// <param name=\"" + parameterName + "\">" + parameter.Description + "</param>");
+		}
+
+		var returnParameter = parameterDescriptions[returnName];
+		WriteLine("        /// <return>"+ returnParameter.Description + "</return>");
+
+		Write("        public static Guid " + level + "(");
+		bool setComma = false;
+		foreach (var parameterName in parameters)
+		{
+			var parameter = parameterDescriptions[parameterName];
+			if (setComma)
+			{
+				Write(", ");
+			}
+			else
+			{
+			    setComma = true;
+			}
+
+			Write(parameter.ParamType + " " + parameter.Name);
+		}   
+
+		WriteLine(")");
+
+		WriteLine("        {");
+
+        var logLocation = parameters.FirstOrDefault(p => p == "logLocation");
+		var correlationId = parameters.FirstOrDefault(p => p == "correlationId");
+		var exception  = parameters.FirstOrDefault(p => p == "exception");
+		var extendedProperties = parameters.FirstOrDefault(p => p == "extendedProperties");
+		var message = parameters.FirstOrDefault(p => p == "message");
+		var formattedMessage = parameters.FirstOrDefault(p => p == "formattedMessage");
+
+        var m = message == null
+            ? formattedMessage == null ? "string.Empty" : method.Message
+            : method.Message;
+
+		Write("            return Logger.LogEntry(");
+		Write(logLocation != null ? "logLocation, " : "null, ");
+		Write(correlationId != null ? "correlationId, " : "null, ");
+		Write(exception != null ? "exception, " : "null, ");
+		Write("Level." + level + ", ");
+		Write(extendedProperties != null ? "extendedProperties, " : "null, ");
+		//Write(message != null ? "message" : formattedMessage ?? "null");
+		Write(method.Message);
+		WriteLine(");");
+		WriteLine("        }");
+		WriteLine("");
+    }
+
+    string RemoveLabel(string line)
+    {
+        var colonPos = line.IndexOf(':');
+        return line.Substring(colonPos + 1).Trim();
+    }
+
+	struct Param
+	{
+		public string Name { get; set; }
+		public string ParamType { get; set; }
+		public string Description { get; set; }
+	}
+
+    struct Method
+    {
+        public string Summary { get; set; }
+		public string Message { get; set; }
+		public List<string> Parameters { get; set; }
+    }
+
+#>

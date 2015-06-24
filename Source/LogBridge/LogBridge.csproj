@@ -53,9 +53,9 @@
     <Compile Include="ExtendedProperty.cs" />
     <Content Include="Log.Template.cs" />
     <Compile Include="Log.cs">
+      <DependentUpon>Log.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Log.tt</DependentUpon>
     </Compile>
     <Compile Include="LogBridgeConfigurationSection.cs" />
     <Compile Include="LogConstants.cs" />

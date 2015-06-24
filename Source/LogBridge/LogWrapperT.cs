@@ -39,80 +39,30 @@ namespace SoftwarePassion.LogBridge
         /// <param name="level">The logging level.</param>
         /// <param name="extendedProperties">The extended properties. May be null.</param>
         /// <param name="message">The message (with optional curly braces formatting). Must not be null.</param>
-        /// <param name="firstStringParam">The first parameter - necessary due to overload resolution. May be null.</param>
-        /// <param name="parameters">Optional formatting parameters. May be null.</param>
         /// <returns>A unique message id. May be Guid.Empty if an error occurs, or logging is not enabled for the given level.</returns>
         /// <exception cref="ArgumentNullException">If either level or message is null.</exception>
         protected override Guid PerformLogEntry(LogLocation? logLocation, Guid? correlationId, Exception exception, Level level,
-			object extendedProperties, string message, string firstStringParam, object[] parameters)
+			object extendedProperties, string message)
 		{
             var locationInformation = logLocation.HasValue ? logLocation.Value : GetLocationInfo();
             var activeLogger = PerformGetLogger(locationInformation);
 			if (!PerformIsLoggingEnabled(activeLogger, level))
 				return Guid.Empty;
 
-		    object[] messageParameters;
-            if (parameters == null)
-			{ 
-                // When parameters is null, it means that two null parameters 
-                // have been given. Beats me, why overload resolution works
-                // like this.
-                messageParameters = new List<object>() { firstStringParam, null }
-					.ToArray();
-            }
-            else
-			{ 
-                messageParameters = new List<object>() { firstStringParam }
-                    .Union(parameters)
-					.ToArray();
-            }
-
-			return LogEntry(activeLogger, locationInformation, correlationId, exception, level, extendedProperties, message, messageParameters);
+            return LogEntry(activeLogger, locationInformation, correlationId, exception, level, extendedProperties, message);
 		}
 
-
-        /// <summary>
-        /// Logs the given exception, message and extendedProperties.
-        /// </summary>
-        /// <param name="logLocation">The location of the log statement.</param>
-        /// <param name="correlationId">The correlationId. May be null.</param>
-        /// <param name="exception">The exception. May be null.</param>
-        /// <param name="level">The logging level. Must not be null.</param>
-        /// <param name="extendedProperties">The extended properties. May be null.</param>
-        /// <param name="message">The message (with optional curly braces formatting). Must not be null.</param>
-        /// <param name="parameters">Optional formatting parameters. May be null.</param>
-        /// <returns>A unique message id. May be Guid.Empty if an error occurs, or logging is not enabled for the given level.</returns>
-        /// <exception cref="ArgumentNullException">If either level or message is null.</exception>
-        protected override Guid PerformLogEntry(
-            LogLocation? logLocation,
-            Guid? correlationId, 
-            Exception exception, 
-            Level level,
-			object extendedProperties, 
-            string message, 
-            object[] parameters)
-		{
-            var locationInformation = logLocation.HasValue ? logLocation.Value : GetLocationInfo();
-			var activeLogger = PerformGetLogger(locationInformation);
-			if (!PerformIsLoggingEnabled(activeLogger, level))
-				return Guid.Empty;
-
-			return LogEntry(activeLogger, locationInformation, correlationId, exception, level, extendedProperties, message, parameters);
-		}
-
-	    private Guid LogEntry(
+        private Guid LogEntry(
             TLoggerImplementation activeLogger, 
             LogLocation logLocation, 
             Guid? explicitCorrelationId, 
             Exception exception, 
             Level level, 
             object extendedProperties, 
-            string message, 
-            object[] parameters)
+            string message)
 	    {
             try
             {
-                string formattedMessage = FormatMessage(message, parameters);
                 var eventId = Guid.NewGuid();
                 var calculatedException = CalculateExceptionObject(exception);
                 string applicationName;
@@ -130,7 +80,7 @@ namespace SoftwarePassion.LogBridge
                     eventId,                    
                     actualCorrelationId,
                     level,
-                    formattedMessage,
+                    message,
                     username,
                     MachineName,
                     applicationName,

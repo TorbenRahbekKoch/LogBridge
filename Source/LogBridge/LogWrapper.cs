@@ -151,7 +151,6 @@ namespace SoftwarePassion.LogBridge
         /// <param name="level">The logging level.</param>
         /// <param name="extendedProperties">The extended properties. May be null.</param>
         /// <param name="message">The message (with optional curly braces formatting). Must not be null.</param>
-        /// <param name="parameters">Optional formatting parameters. May be null.</param>
         /// <returns>A unique message id. May be Guid.Empty if an error occurs, or logging is not enabled for the given level.</returns>
         public Guid LogEntry(
             LogLocation? logLocation, 
@@ -159,8 +158,7 @@ namespace SoftwarePassion.LogBridge
             Exception exception, 
             Level level,
             object extendedProperties, 
-            string message, 
-            params object[] parameters)
+            string message)
         {
             try
             {
@@ -172,50 +170,11 @@ namespace SoftwarePassion.LogBridge
                 {
                     using (new TransactionScope(TransactionScopeOption.Suppress))
                     {
-                        return PerformLogEntry(logLocation, correlationId, exception, level, extendedProperties, message, parameters);
+                        return PerformLogEntry(logLocation, correlationId, exception, level, extendedProperties, message);
                     }
                 }
 
-                return PerformLogEntry(logLocation, correlationId, exception, level, extendedProperties, message, parameters);
-            }
-            catch (Exception ex)
-            {
-                if (DiagnosticsEnabled)
-                    Trace.WriteLine(ex.ToString());
-                // There's really not much else we can do here...
-                return Guid.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Logs the given exception, message and extendedProperties.
-        /// </summary>
-        /// <param name="logLocation">The location of the log statement.</param>
-        /// <param name="correlationId">The correlationId. May be null.</param>
-        /// <param name="exception">The exception. May be null.</param>
-        /// <param name="level">The logging level.</param>
-        /// <param name="extendedProperties">The extended properties. May be null.</param>
-        /// <param name="message">The message (with optional curly braces formatting). Must not be null.</param>
-        /// <param name="firstStringParam">The first parameter - necessary due to overload resolution. May be null.</param>
-        /// <param name="parameters">Optional formatting parameters. May be null.</param>
-        /// <returns>A unique message id. May be Guid.Empty if an error occurs, or logging is not enabled for the given level.</returns>
-        public Guid LogEntry(LogLocation? logLocation, Guid? correlationId, Exception exception, Level level,
-            object extendedProperties, string message, string firstStringParam, params object[] parameters)
-        {
-            try
-            {
-                // If we happen to be in a transaction and one of the appenders
-                // is a database'ish appender, we don't want it to mess with
-                // any existing transactions.
-                if (Transaction.Current != null)
-                {
-                    using (new TransactionScope(TransactionScopeOption.Suppress))
-                    {
-                        return PerformLogEntry(logLocation, correlationId, exception, level, extendedProperties, message, firstStringParam, parameters);
-                    }
-                }
-
-                return PerformLogEntry(logLocation, correlationId, exception, level, extendedProperties, message, firstStringParam, parameters);
+                return PerformLogEntry(logLocation, correlationId, exception, level, extendedProperties, message);
             }
             catch (Exception ex)
             {
@@ -262,11 +221,7 @@ namespace SoftwarePassion.LogBridge
         protected bool DiagnosticsEnabled { get; private set; }
 
         protected abstract Guid PerformLogEntry(LogLocation? logLocation, Guid? correlationId, Exception exception, Level level,
-            object extendedProperties, string message, string firstStringParam, object[] parameters);
-
-        protected abstract Guid PerformLogEntry(LogLocation? logLocation, Guid? correlationId, Exception exception, Level level,
-            object extendedProperties, string message, object[] parameters);
-
+            object extendedProperties, string message);
 
         /// <summary>
         /// The machine name on which the current process runs.
