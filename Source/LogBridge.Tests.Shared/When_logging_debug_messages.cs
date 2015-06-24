@@ -25,7 +25,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         }
 
         [Test]
-        [Ignore]
+        //[Ignore]
         public void Verify_that_StackFrameOffsetCount_works_correctly()
         {
             using (var scope = LogContext.ThreadLogContext.Push())
