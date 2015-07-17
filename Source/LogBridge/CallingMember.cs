@@ -7,10 +7,9 @@ namespace SoftwarePassion.LogBridge
 {
     internal static class CallingMember
     {
-        public static StackFrame Find(int startingStackFrameOffset, int stackFrameOffsetCount)
+        public static StackFrame Find(int startingStackFrameOffset)
         {
             Contract.Requires(startingStackFrameOffset >= 0);
-            Contract.Requires(stackFrameOffsetCount >= 0);
 
             try
             {
@@ -31,10 +30,7 @@ namespace SoftwarePassion.LogBridge
                     }
                 }
 
-                if (stackFrameOffsetCount == 0)
-                    return stackFrame;
-                
-                return new StackFrame(currentFrame + stackFrameOffsetCount);
+                return stackFrame;
             }
             catch (Exception)
             {

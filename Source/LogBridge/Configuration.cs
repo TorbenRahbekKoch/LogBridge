@@ -66,24 +66,6 @@ namespace SoftwarePassion.LogBridge
         }
 
         /// <summary>
-        /// Gets the stack frame offset count from the configuration, if indicated.
-        ///  Otherwise 0 (zero) is returned.
-        /// </summary>
-        /// <value>The stack frame offset count. The default value is zero.</value>
-        public static int StackFrameOffsetCount
-        {
-            get
-            {
-                if (configurationSection.IsSome)
-                {
-                    return configurationSection.Value.StackFrameOffsetCount;
-                }
-
-                return 0;
-            }
-        }
-
-        /// <summary>
         /// Gets the extended properties defined in the configuration file, if
         /// any. Otherwise an empty list is returned.
         /// </summary>

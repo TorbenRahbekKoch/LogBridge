@@ -5,20 +5,11 @@ namespace SoftwarePassion.LogBridge
 {
     public class LogBridgeConfigurationSection : ConfigurationSection
     {
-        private const string StackFrameOffsetCountKey = "stackFrameOffsetCount";
         private const string LogWrapperTypeKey = "logWrapperType";
         private const string LogWrapperAssemblyKey = "logWrapperAssembly";
         private const string ThrowOnResolverFailKey = "throwOnResolverFail";
         private const string InternalDiagnosticsEnabledKey = "internalDiagnosticsEnabled";
         private const string ExtendedPropertiesKey = "extendedProperties";
-
-        [IntegerValidator(MinValue = 0)]
-        [ConfigurationProperty(StackFrameOffsetCountKey, DefaultValue = 0, IsRequired = false)]
-        public int StackFrameOffsetCount
-        {
-            get { return (int) this[StackFrameOffsetCountKey]; } 
-            set { this[StackFrameOffsetCountKey] = value; }
-        }
 
         [ConfigurationProperty(ThrowOnResolverFailKey, DefaultValue = false, IsRequired = false)]
         public bool ThrowOnResolverFail

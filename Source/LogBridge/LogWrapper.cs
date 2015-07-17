@@ -69,30 +69,6 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
-        /// <summary>
-        /// Returns a so specific as possible StackFrameOffsetCount. If no
-        /// one is assigned, None&lt;int&gt; is returned.
-        /// </summary>
-        public Option<int> StackFrameOffsetCount
-        {
-            get
-            {
-                var logContext = ThreadLogContext;
-                if (logContext.StackFrameOffsetCount.IsSome)
-                    return logContext.StackFrameOffsetCount;
-
-                logContext = AppDomainLogContext;
-                if (logContext.StackFrameOffsetCount.IsSome)
-                    return logContext.StackFrameOffsetCount;
-
-                logContext = ProcessLogContext;
-                if (logContext.StackFrameOffsetCount.IsSome)
-                    return logContext.StackFrameOffsetCount;
-
-                return defaultLogContext.StackFrameOffsetCount;
-            }
-        }
-
         public Option<IEnumerable<ExtendedProperty>> ExtendedProperties
         {
             get
@@ -191,12 +167,7 @@ namespace SoftwarePassion.LogBridge
         /// <returns>LogLocation.</returns>
         protected LogLocation GetLocationInfo()
         {
-            int stackFrameOffsetCount = 0;
-            var stackFrameOffsetCountValue = StackFrameOffsetCount;
-            if (stackFrameOffsetCountValue.IsSome)
-                stackFrameOffsetCount = stackFrameOffsetCountValue.Value;
-
-            var callingMemberInformation = CallingMember.Find(3, stackFrameOffsetCount);
+            var callingMemberInformation = CallingMember.Find(3);
             if (callingMemberInformation != null)
             {
                 var callingMember = callingMemberInformation.GetMethod();

@@ -10,8 +10,7 @@
 
   <logBridge logWrapperAssembly="LogBridge.EnterpriseLibrary, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null" xdt:Transform="InsertIfMissing"
            throwOnResolverFail="true"
-           internalDiagnosticsEnabled="false"
-           stackFrameOffsetCount="0">
+           internalDiagnosticsEnabled="false">
     <extendedProperties>
     </extendedProperties>
   </logBridge>

@@ -232,8 +232,7 @@ values are supported:
 <logBridge logWrapperType="SoftwarePassion.LogBridge.Tests.Unit.TestLogWrapper"
             logWrapperAssembly="LogBridge.Log4Net, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null"
             throwOnResolverFail="true"
-            internalDiagnosticsEnabled="true"
-            stackFrameOffsetCount="0">
+            internalDiagnosticsEnabled="true">
 <extendedProperties>
     <add name="Key" value="Value"/>
 </extendedProperties>
@@ -243,18 +242,6 @@ values are supported:
 All properties are optional. 
 
 The properties new since 1.1.3 are:
-
-#### stackFrameOffsetCount
-
-LogBridge walks the stack frame in order to obtain the original code location of
-a log statement. Sometimes, especially when you log from inside lambdas, the 
-code location does not make much sense. In these cases you would want to 
-change *stackFrameOffsetCount* to have the code location point to the method
-surrounding the lambda.
-
-To be complete honest, you will only very seldomly use the setting in the 
-configuration file for this. This setting simply reflects the setting
-which you can set directly on the *Log* static class.
 
 #### extendedProperties
 

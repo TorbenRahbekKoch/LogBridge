@@ -11,30 +11,12 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             : base(Level.Debug, verifier)
         {
             LogContext.ThreadLogContext.CorrelationId = Option.None<Guid>();
-            LogContext.ThreadLogContext.StackFrameOffsetCount = Option.None<int>();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private Guid RunLambda(Func<Guid> code)
         {
             return code();
-        }
-
-        [Fact]
-        public void Verify_that_StackFrameOffsetCount_works_correctly()
-        {
-            using (var scope = LogContext.ThreadLogContext.Push())
-            {
-                LogContext.ThreadLogContext.StackFrameOffsetCount = 2;
-                LogContext.ThreadLogContext.ExtendedProperties = LogContext.ActiveExtendedProperties;
-                const string message = "Message";
-                Func<Guid> code = () => Log.Debug(message);
-
-                var eventId = RunLambda(code);
-                LogData expected = CreateExpectedLogData(eventId, message);
-
-                VerifyLogData(expected);
-            }
         }
 
         [Fact]

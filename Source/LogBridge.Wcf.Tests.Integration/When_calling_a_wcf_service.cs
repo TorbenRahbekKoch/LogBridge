@@ -6,17 +6,18 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using FluentAssertions;
 using SoftwarePassion.LogBridge;
 using SoftwarePassion.LogBridge.Wcf;
+using Xunit;
 
 namespace LogBridge.Wcf.Tests.Integration
 {
-    [TestFixture]
     public class When_calling_a_wcf_service
     {
         private const string ServiceAddress = "http://localhost:8000";
-        [Test]
+
+        [Fact]
         public void Check_that_correlationId_is_passed()
         {
             var correlationId = Guid.NewGuid();
@@ -39,8 +40,8 @@ namespace LogBridge.Wcf.Tests.Integration
                 }
             }
 
-            Assert.AreEqual("My message!", CorrelationIdService.ReceivedMessage);
-            Assert.AreEqual(correlationId, CorrelationIdService.CorrelationId);
+            CorrelationIdService.ReceivedMessage.Should().Be("My message!");
+            CorrelationIdService.CorrelationId.Should().Be(correlationId);
         }
     }
 }

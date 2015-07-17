@@ -10,7 +10,6 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             : base(Level.Error, verifier)
         {
             LogContext.ThreadLogContext.CorrelationId = Option.None<Guid>();
-            LogContext.ThreadLogContext.StackFrameOffsetCount = Option.None<int>();
         }
 
         [Fact]

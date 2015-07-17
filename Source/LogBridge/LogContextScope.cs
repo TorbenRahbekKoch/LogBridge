@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SoftwarePassion.Common.Core;
 
 namespace SoftwarePassion.LogBridge
@@ -13,20 +10,21 @@ namespace SoftwarePassion.LogBridge
         {
             this.existingContext = existingContext;
             this.correlationId = existingContext.CorrelationId;
-            this.stackFrameOffsetCount = existingContext.StackFrameOffsetCount;
             this.extendedProperties = existingContext.ExtendedProperties;
+            this.inheritExtendedProperties = existingContext.InheritExtendedProperties;
         }
 
         public void Dispose()
         {
             existingContext.CorrelationId = this.correlationId;
-            existingContext.StackFrameOffsetCount = this.stackFrameOffsetCount;
             existingContext.ExtendedProperties = this.extendedProperties;
+            existingContext.InheritExtendedProperties = this.inheritExtendedProperties;
         }
 
         private readonly LogContext existingContext;
-        private readonly Option<IEnumerable<ExtendedProperty>> extendedProperties;
-        private readonly Option<int> stackFrameOffsetCount;
+
         private readonly Option<Guid> correlationId;
+        private readonly Option<IEnumerable<ExtendedProperty>> extendedProperties;
+        private readonly bool inheritExtendedProperties;
     }
 }
