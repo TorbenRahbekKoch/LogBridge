@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using NUnit.Framework;
 using SoftwarePassion.Common.Core;
 using SoftwarePassion.Common.Core.TimeProviding;
 
@@ -24,15 +23,15 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             this.verifier.ClearLogData();
         }
 
-        [SetUp]
-        public void Setup()
-        {
-            verifier.ClearLogData();
-        }
-
         public TimeProviderMock Time { get; private set; }
 
         public Level LogLevel { get; private set; }
+
+        protected void InitVerifier(ILogDataVerifier verifier)
+        {
+            this.verifier = verifier;
+            this.verifier.ClearLogData();
+        }
 
         protected void VerifyLogData(LogData expected)
         {
@@ -276,6 +275,6 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         }
 
         private TimeSetter timeSetter;
-        private readonly ILogDataVerifier verifier;
+        private ILogDataVerifier verifier;
     }
 }

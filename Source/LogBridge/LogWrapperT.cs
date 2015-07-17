@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 using SoftwarePassion.Common.Core;
@@ -127,66 +126,6 @@ namespace SoftwarePassion.LogBridge
 	    protected abstract bool PerformIsLoggingEnabled(TLoggerImplementation activeLogger, Level level);
 
         /// <summary>
-        /// Formats the message with the given parameters.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>System.String.</returns>
-	    protected virtual string FormatMessage(string message, params object[] parameters)
-	    {
-	        if (message == null)
-	            return string.Empty;
-	        if (parameters == null || parameters.Length == 0)
-	            return message;
-
-            string formattedMessage;
-            try
-            {                
-                var nullFormattedParameters = parameters.Select(p => p == null ? "[null]" : p.ToString()).ToArray();
-                switch (nullFormattedParameters.Length)
-                {
-                    case 1:
-                        formattedMessage = string.Format(CultureInfo.InvariantCulture, message, nullFormattedParameters[0]);
-                        break;
-                    case 2:
-                        formattedMessage = string.Format(
-                            CultureInfo.InvariantCulture, 
-                            message, 
-                            nullFormattedParameters[0],
-                            nullFormattedParameters[1]);
-                        break;
-                    case 3:
-                        formattedMessage = string.Format(
-                            CultureInfo.InvariantCulture,
-                            message,
-                            nullFormattedParameters[0],
-                            nullFormattedParameters[1],
-                            nullFormattedParameters[2]);
-                        break;
-                    case 4:
-                        formattedMessage = string.Format(
-                            CultureInfo.InvariantCulture,
-                            message,
-                            nullFormattedParameters[0],
-                            nullFormattedParameters[1],
-                            nullFormattedParameters[2],
-                            nullFormattedParameters[3]
-                            );
-                        break;
-                    default:
-                        formattedMessage = string.Format(CultureInfo.InvariantCulture, message, nullFormattedParameters);
-                        break;
-                }                                
-            }
-            catch (FormatException)
-            {
-                formattedMessage = message;
-            }
-
-	        return formattedMessage;
-	    }
-
-        /// <summary>
         /// Calculates the exception object, taking into consideration various 
         /// special types of exceptions, like e.g. FaultException.
         /// </summary>
@@ -288,13 +227,15 @@ namespace SoftwarePassion.LogBridge
                 correlationId = (Guid)propertyValue;
                 return true;
             }
-            else if (propertyValue is string && string.Compare(
+
+            var propertyValueString = propertyValue as string;
+            if (propertyValueString != null && string.Compare(
                     propertyName,
                     LogConstants.ApplicationNameKey,
                     StringComparison.OrdinalIgnoreCase)
                 == 0)
             {
-                applicationName = (string)propertyValue;
+                applicationName = propertyValueString;
                 return true;
             }
 
@@ -308,7 +249,7 @@ namespace SoftwarePassion.LogBridge
         /// <param name="overrideDefaultPropertySize">If set to <c>true</c> override default property size.</param>
         /// <param name="actualPropertySize">Actual size of the dictionary, when overrideDefaultPropertySize is true.</param>
         /// <returns>Dictionary{System.StringSystem.Object}.</returns>
-	    protected Dictionary<string, object> CreateDictionary(bool overrideDefaultPropertySize, int actualPropertySize)
+	    private Dictionary<string, object> CreateDictionary(bool overrideDefaultPropertySize, int actualPropertySize)
 	    {
 	        return new Dictionary<string, object>(
                 overrideDefaultPropertySize ? actualPropertySize : defaultPropertySize, 

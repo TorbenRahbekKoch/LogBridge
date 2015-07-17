@@ -12,14 +12,13 @@ namespace SoftwarePassion.LogBridge
         public LogContext()
         {
             CorrelationId = Option.None<Guid>();
-            StackFrameOffsetCount = Option.None<int>();
             ExtendedProperties = Option.None<IEnumerable<ExtendedProperty>>();
+            InheritExtendedProperties = true;
         }
 
         public LogContext(IEnumerable<ExtendedProperty> extendedProperties)
         {
             CorrelationId = Option.None<Guid>();
-            StackFrameOffsetCount = Option.None<int>();
             ExtendedProperties = Option.Some<IEnumerable<ExtendedProperty>>(new List<ExtendedProperty>(extendedProperties));
         }
 
@@ -33,7 +32,6 @@ namespace SoftwarePassion.LogBridge
         {
             var scope = new LogContextScope(this);
             this.CorrelationId = newContext.CorrelationId;
-            this.StackFrameOffsetCount = newContext.StackFrameOffsetCount;
             this.ExtendedProperties = newContext.ExtendedProperties;
             return scope;
         }
@@ -45,26 +43,42 @@ namespace SoftwarePassion.LogBridge
         /// <value>The active correlation id.</value>
         public static Option<Guid> ActiveCorrelationId
         {
-            get;
-            private set; 
-        }
+            get
+            {
+                var logContext = ThreadLogContext;
+                if (logContext.CorrelationId.IsSome)
+                    return logContext.CorrelationId;
 
-        /// <summary>
-        /// Sets the active stack frame offset count, which is a so specific 
-        /// as possible, stack frame offset count,
-        /// in order from Thread -> AppDomain -> Process.
-        /// </summary>
-        /// <value>The active stack frame offset count.</value>
-        public static Option<int> ActiveStackFrameOffsetCount
-        {
-            get;
-            private set; 
+                logContext = AppDomainLogContext;
+                if (logContext.CorrelationId.IsSome)
+                    return logContext.CorrelationId;
+
+                logContext = ProcessLogContext;
+                if (logContext.CorrelationId.IsSome)
+                    return logContext.CorrelationId;
+
+                return defaultLogContext.CorrelationId;
+            }
         }
 
         public static Option<IEnumerable<ExtendedProperty>> ActiveExtendedProperties
         {
-            get; 
-            private set; 
+            get
+            {
+                var logContext = ThreadLogContext;
+                if (logContext.ExtendedProperties.IsSome)
+                    return logContext.ExtendedProperties;
+
+                logContext = AppDomainLogContext;
+                if (logContext.ExtendedProperties.IsSome)
+                    return logContext.ExtendedProperties;
+
+                logContext = ProcessLogContext;
+                if (logContext.ExtendedProperties.IsSome)
+                    return logContext.ExtendedProperties;
+
+                return defaultLogContext.ExtendedProperties;
+            }
         }
 
         /// <summary>
@@ -122,39 +136,23 @@ namespace SoftwarePassion.LogBridge
             set { Log.Logger.AppDomainLogContext.CorrelationId = value; }
         }
 
-        public static Option<LogContext> Merge(Option<LogContext> left, Guid correlationId)
-        {
-            LogContext logContext;
-            if (left.IsNone)
-            {
-                logContext = new LogContext() { CorrelationId = correlationId};
-            }
-            else
-            {
-                logContext = new LogContext()
-                {
-                    CorrelationId = correlationId,
-                    StackFrameOffsetCount = left.Value.StackFrameOffsetCount,
-                    ExtendedProperties = left.Value.ExtendedProperties
-                };
-            }
-                
-            return Option.Some(logContext);
-        }
+        /// <summary>
+        /// Determines whether ExtendedProperties are inherited from less
+        /// specific LogContexts. The default is true.
+        /// </summary>
+        public bool InheritExtendedProperties 
+        { get; set; }
 
         public Option<Guid> CorrelationId
         {
             get;set;
         }
 
-        public Option<int> StackFrameOffsetCount
-        {
-            get; set;
-        }
-
         public Option<IEnumerable<ExtendedProperty>> ExtendedProperties 
         {
             get; set;
         }
+
+        private static readonly LogContext defaultLogContext = new LogContext(Configuration.ExtendedProperties);
     }
 }

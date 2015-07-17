@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using FluentAssertions;
 using log4net;
 using log4net.Appender;
 using log4net.Config;
-using log4net.Repository.Hierarchy;
 using log4net.Util;
-using NUnit.Framework;
-using SoftwarePassion.LogBridge;
 using SoftwarePassion.LogBridge.Tests.Shared;
 
-namespace LogBridge.Log4Net.Tests.Unit
+namespace SoftwarePassion.LogBridge.Log4Net.Tests.Unit
 {
     public class LogDataVerifier : ILogDataVerifier
     {
@@ -28,24 +23,25 @@ namespace LogBridge.Log4Net.Tests.Unit
             
             var actual = appender.GetEvents().First().GetLoggingEventData();
 
-            Assert.AreEqual(expected.TimeStamp, actual.TimeStamp, "TimeStamp does not match.");
-            Assert.AreEqual(expected.EventId, actual.Properties[LogConstants.EventIdKey], "EventId does not match.");
+            actual.TimeStamp.Should().Be(expected.TimeStamp, because: "Timestamp should match.");
+            actual.Properties[LogConstants.EventIdKey].Should().Be(expected.EventId);
+
             if (expected.CorrelationId.IsSome)
-                Assert.AreEqual(expected.CorrelationId.Value, actual.Properties[LogConstants.CorrelationIdKey], "CorrelationId does not match.");
+                actual.Properties[LogConstants.CorrelationIdKey].Should().Be(expected.CorrelationId.Value);
             else
-                Assert.IsNull(actual.Properties[LogConstants.CorrelationIdKey], "CorrelationId does not match.");
+                actual.Properties[LogConstants.CorrelationIdKey].Should().BeNull(because: "CorrelationId was not set");
 
-            Assert.AreEqual(expected.Level, FromLog4NetLevel(actual.Level), "Level does not match.");
-            Assert.AreEqual(expected.Message, actual.Message, "Message does not match.");
-            Assert.AreEqual(expected.Username, actual.UserName, "Username does not match.");
-            Assert.AreEqual(expected.AppDomainName, actual.Domain, "AppDomainName does not match.");
+            FromLog4NetLevel(actual.Level).Should().Be(expected.Level, because: "Levels should match.");
+            actual.Message.Should().Be(expected.Message, because: "Message should match.");
+            actual.UserName.Should().Be(expected.Username, because: "Username should match.");
+            actual.Domain.Should().Be(expected.AppDomainName, because: "AppDomainName does not match.");
 
-            Assert.AreEqual(expected.LogLocation.FileName, actual.LocationInfo.FileName, "LogLocation.FileName does not match.");
-            Assert.AreEqual(expected.LogLocation.LineNumber, actual.LocationInfo.LineNumber, "LogLocation.LineNumber does not match.");
-            Assert.AreEqual(expected.LogLocation.LoggingClassType.FullName, actual.LocationInfo.ClassName, "LogLocation.LoggingClassType does not match.");
-            Assert.AreEqual(expected.LogLocation.MethodName, actual.LocationInfo.MethodName, "LogLocation.MethodName does not match.");
+            actual.LocationInfo.FileName.Should().Be(expected.LogLocation.FileName, because: "LogLocation.FileName does not match.");
+            actual.LocationInfo.LineNumber.Should().Be(expected.LogLocation.LineNumber, because: "LogLocation.LineNumber does not match.");
+            actual.LocationInfo.ClassName.Should().Be(expected.LogLocation.LoggingClassType.FullName, because: "LogLocation.LoggingClassType does not match.");
+            actual.LocationInfo.MethodName.Should().Be(expected.LogLocation.MethodName, because: "LogLocation.MethodName does not match.");
 
-            Assert.AreEqual(expected.Exception, actual.Properties[LogConstants.ExceptionKey], "Exception does not match.");
+            actual.Properties[LogConstants.ExceptionKey].Should().Be(expected.Exception, because:"Exception does not match.");
 
             CompareProperties(expected.Properties, actual.Properties);
         }
@@ -53,7 +49,8 @@ namespace LogBridge.Log4Net.Tests.Unit
         public void VerifyOneEventLogged()
         {
             var appender = GetAppender();
-            Assert.AreEqual(1, appender.GetEvents().Count(), "Not exactly one event were logged, but: " + appender.GetEvents().Count());
+            var count = appender.GetEvents().Count();
+            count.Should().Be(1, "Not exactly one event were logged, but: " + count);
         }
 
         public void ClearLogData()
@@ -85,8 +82,8 @@ namespace LogBridge.Log4Net.Tests.Unit
                 .Where(key => !Equals(expected[key], actual[key]))
                 .ToList();
 
-            Assert.AreEqual(0, missingKeys.Count(), "Missing properties: " + string.Join(", ", missingKeys));
-            Assert.AreEqual(0, nonMatchingKeys.Count(), "Non-matching properties: " + string.Join(", ", nonMatchingKeys));
+            missingKeys.Count().Should().Be(0, because: "Missing properties: " + string.Join(", ", missingKeys));
+            nonMatchingKeys.Count().Should().Be(0, because: "Non-matching properties: " + string.Join(", ", nonMatchingKeys));
         }
 
         private Level FromLog4NetLevel(log4net.Core.Level level)

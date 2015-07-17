@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using NUnit.Framework;
+using FluentAssertions;
 using SoftwarePassion.LogBridge.Tests.Shared;
 
 namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Unit
@@ -20,23 +20,26 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Unit
 
             var actual = traceListener.Events.First();
 
-            Assert.AreEqual(expected.TimeStamp, actual.TimeStamp, "TimeStamp does not match.");
-            Assert.AreEqual(expected.EventId, actual.ExtendedProperties[LogConstants.EventIdKey], "EventId does not match.");
+
+            actual.TimeStamp.Should().Be(expected.TimeStamp, because: "Timestamp should match.");
+            actual.ExtendedProperties[LogConstants.EventIdKey].Should().Be(expected.EventId, because: "EventId should match");
+
             if (expected.CorrelationId.IsSome)
-                Assert.AreEqual(expected.CorrelationId.Value, actual.ExtendedProperties[LogConstants.CorrelationIdKey], "CorrelationId does not match.");
+                actual.ExtendedProperties[LogConstants.CorrelationIdKey].Should().Be(expected.CorrelationId.Value);
             else
-                Assert.IsNull(actual.ExtendedProperties[LogConstants.CorrelationIdKey], "CorrelationId does not match.");
-            Assert.AreEqual(expected.Level, FromETLSeverity(actual.Severity), "Level does not match.");
-            Assert.AreEqual(expected.Message, actual.Message, "Message does not match.");
-            Assert.AreEqual(expected.Username, actual.ExtendedProperties[LogConstants.UsernameKey], "Username does not match.");
-            Assert.AreEqual(expected.AppDomainName, actual.AppDomainName, "AppDomainName does not match.");
+                actual.ExtendedProperties[LogConstants.CorrelationIdKey].Should().BeNull(because: "CorrelationId was not set");
 
-            Assert.AreEqual(expected.LogLocation.FileName, actual.ExtendedProperties[LogConstants.FilenameKey], "LogLocation.FileName does not match.");
-            Assert.AreEqual(expected.LogLocation.LineNumber, actual.ExtendedProperties[LogConstants.LineNumberKey], "LogLocation.FileName does not match.");
-            Assert.AreEqual(expected.LogLocation.LoggingClassType.Name, actual.ExtendedProperties[LogConstants.ClassNameKey], "LogLocation.LoggingClassType does not match.");
-            Assert.AreEqual(expected.LogLocation.MethodName, actual.ExtendedProperties[LogConstants.MethodNameKey], "LogLocation.MethodName does not match.");
+            FromETLSeverity(actual.Severity).Should().Be(expected.Level, because: "Levels should match.");
+            actual.Message.Should().Be(expected.Message, because: "Message should match.");
+            actual.ExtendedProperties[LogConstants.UsernameKey].Should().Be(expected.Username, because: "Username should match.");
+            actual.AppDomainName.Should().Be(expected.AppDomainName, because: "AppDomainName does not match.");
 
-            Assert.AreEqual(expected.Exception, actual.ExtendedProperties[LogConstants.ExceptionKey], "Exception does not match.");
+            actual.ExtendedProperties[LogConstants.FilenameKey].Should().Be(expected.LogLocation.FileName, because: "LogLocation.FileName does not match.");
+            actual.ExtendedProperties[LogConstants.LineNumberKey].Should().Be(expected.LogLocation.LineNumber, because: "LogLocation.LineNumber does not match.");
+            actual.ExtendedProperties[LogConstants.ClassNameKey].Should().Be(expected.LogLocation.LoggingClassType.Name, because: "LogLocation.LoggingClassType does not match.");
+            actual.ExtendedProperties[LogConstants.MethodNameKey].Should().Be(expected.LogLocation.MethodName, because: "LogLocation.MethodName does not match.");
+
+            actual.ExtendedProperties[LogConstants.ExceptionKey].Should().Be(expected.Exception, because: "Exception does not match.");
 
             CompareProperties(expected.Properties, actual.ExtendedProperties);
             //Assert.IsTrue(expected.Properties.Intersect(actual.Properties).Count() == expected.Properties.Count(), "Incorrect properties.");
@@ -54,7 +57,8 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Unit
         public void VerifyOneEventLogged()
         {
             var traceListener = GetTraceListener();
-            Assert.AreEqual(1, traceListener.Events.Count(), "Not exactly one event were logged, but: " + traceListener.Events.Count());
+            var count = traceListener.Events.Count();
+            count.Should().Be(1, "because only one event should be logged, " + count);
         }
 
         internal MemoryTraceListener GetTraceListener()
@@ -76,8 +80,8 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Unit
                 .Where(key => !Equals(expected[key], actual[key]))
                 .ToList();
 
-            Assert.AreEqual(0, missingKeys.Count(), "Missing properties: " + string.Join(", ", missingKeys));
-            Assert.AreEqual(0, nonMatchingKeys.Count(), "Non-matching properties: " + string.Join(", ", nonMatchingKeys));
+            missingKeys.Count().Should().Be(0, because: "Missing properties: " + string.Join(", ", missingKeys));
+            nonMatchingKeys.Count().Should().Be(0, because: "Non-matching properties: " + string.Join(", ", nonMatchingKeys));
         }
 
         private Level FromETLSeverity(TraceEventType level)

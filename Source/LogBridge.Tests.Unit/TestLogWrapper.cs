@@ -34,6 +34,5 @@ namespace SoftwarePassion.LogBridge.Tests.Unit
         }
 
         private static readonly List<LogData> logEntries = new List<LogData>();
-
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using NUnit.Framework;
+using FluentAssertions;
 using SoftwarePassion.LogBridge.Tests.Shared;
 
 namespace SoftwarePassion.LogBridge.Tests.Unit
@@ -11,24 +10,26 @@ namespace SoftwarePassion.LogBridge.Tests.Unit
         public void VerifyLogData(LogData expected)
         {
             var actual = TestLogWrapper.LogEntries.First();
-            Assert.AreEqual(expected.TimeStamp, actual.TimeStamp, "TimeStamp does not match.");
-            Assert.AreEqual(expected.EventId, actual.EventId, "EventId does not match.");
+
+            actual.TimeStamp.Should().Be(expected.TimeStamp, because: "Timestamp should match.");
+            actual.EventId.Should().Be(expected.EventId, because: "EventId should match");
+
             if (expected.CorrelationId.IsSome)
-                Assert.AreEqual(expected.CorrelationId, actual.CorrelationId, "CorrelationId does not match.");
-            Assert.AreEqual(expected.Level, actual.Level, "Level does not match.");
-            Assert.AreEqual(expected.Message, actual.Message, "Message does not match.");
-            Assert.AreEqual(expected.ProcessId, actual.ProcessId, "LogLocation.ProcessId does not match.");
-            Assert.AreEqual(expected.ProcessName, actual.ProcessName, "LogLocation.ProcessName does not match.");
-            Assert.AreEqual(expected.Username, actual.Username, "Username does not match.");
-            Assert.AreEqual(expected.AppDomainName, actual.AppDomainName, "AppDomainName does not match.");
-            Assert.AreEqual(expected.MachineName, actual.MachineName, "MachineName does not match.");
+                actual.CorrelationId.Value.Should().Be(expected.CorrelationId.Value);
+            else
+                actual.CorrelationId.IsNone.Should().BeTrue(because: "CorrelationId was not set");
 
-            Assert.AreEqual(expected.LogLocation.FileName, actual.LogLocation.FileName, "LogLocation.FileName does not match.");
-            Assert.AreEqual(expected.LogLocation.LineNumber, actual.LogLocation.LineNumber, "LogLocation.LineNumber does not match.");
-            Assert.AreEqual(expected.LogLocation.LoggingClassType, actual.LogLocation.LoggingClassType, "LogLocation.LoggingClassType does not match.");
-            Assert.AreEqual(expected.LogLocation.MethodName, actual.LogLocation.MethodName, "LogLocation.MethodName does not match.");
+            actual.Level.Should().Be(expected.Level, because: "Levels should match.");
+            actual.Message.Should().Be(expected.Message, because: "Message should match.");
+            actual.Username.Should().Be(expected.Username, because: "Username should match.");
+            actual.AppDomainName.Should().Be(expected.AppDomainName, because: "AppDomainName does not match.");
 
-            Assert.AreEqual(expected.Exception, actual.Exception, "Exception does not match.");
+            actual.LogLocation.FileName.Should().Be(expected.LogLocation.FileName, because: "LogLocation.FileName does not match.");
+            actual.LogLocation.LineNumber.Should().Be(expected.LogLocation.LineNumber, because: "LogLocation.LineNumber does not match.");
+            actual.LogLocation.LoggingClassType.Should().Be(expected.LogLocation.LoggingClassType, because: "LogLocation.LoggingClassType does not match.");
+            actual.LogLocation.MethodName.Should().Be(expected.LogLocation.MethodName, because: "LogLocation.MethodName does not match.");
+
+            actual.Exception.Should().Be(expected.Exception, because: "Exception does not match.");
 
             CompareProperties(expected.Properties, actual.Properties);
         }
@@ -36,7 +37,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit
         public void VerifyOneEventLogged()
         {
             var count = TestLogWrapper.LogEntries.Count();
-            Assert.AreEqual(1, count, "Not exactly one event were logged, but: " + count);
+            count.Should().Be(1, "because only one event should be logged, " + count);
         }
 
         private void CompareProperties(Dictionary<string, object> expected, Dictionary<string, object> actual)
@@ -53,8 +54,8 @@ namespace SoftwarePassion.LogBridge.Tests.Unit
                 .Where(key => !Equals(expected[key], actual[key]))
                 .ToList();
 
-            Assert.AreEqual(0, missingKeys.Count(),  "Missing properties: " + string.Join(", " , missingKeys));
-            Assert.AreEqual(0, nonMatchingKeys.Count(), "Non-matching properties: " + string.Join(", ", nonMatchingKeys));
+            missingKeys.Count().Should().Be(0, because: "Missing properties: " + string.Join(", ", missingKeys));
+            nonMatchingKeys.Count().Should().Be(0, because: "Non-matching properties: " + string.Join(", ", nonMatchingKeys));
         }
 
         public void ClearLogData()

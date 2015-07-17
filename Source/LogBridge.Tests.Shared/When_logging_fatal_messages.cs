@@ -1,15 +1,19 @@
 ﻿using System;
-using NUnit.Framework;
+using Xunit;
+
 
 namespace SoftwarePassion.LogBridge.Tests.Shared
 {
-    public class When_logging_fatal_messages : LogTestBase
+    public abstract class When_logging_fatal_messages : LogTestBase
     {
         public When_logging_fatal_messages(ILogDataVerifier verifier)
             : base(Level.Fatal, verifier)
         {}
 
-        [Test]
+
+
+
+        [Fact]
         public void Verify_that_message_is_logged_correctly()
         {
             const string message = "Message";
@@ -19,7 +23,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_message_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -30,7 +34,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_extended_properties_and_message_is_logged_correctly()
         {
             var extended = new ExtendedProperties();
@@ -41,7 +45,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_extended_properties_and_message_with_non_string_parameters_is_logged_correctly()
         {
             var extended = new ExtendedProperties();
@@ -53,7 +57,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_extended_properties_and_message_with_string_parameters_is_logged_correctly()
         {
             var extended = new ExtendedProperties();
@@ -65,7 +69,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_extended_properties_and_message_with_null_parameters_is_logged_correctly()
         {
             var extended = new ExtendedProperties();
@@ -77,7 +81,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_extended_properties_and_message_with_too_few_parameters_is_logged_correctly()
         {
             var extended = new ExtendedProperties();
@@ -89,7 +93,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_extended_properties_and_message_with_too_many_parameters_is_logged_correctly()
         {
             var extended = new ExtendedProperties();
@@ -101,7 +105,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_extended_properties_and_message_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -113,7 +117,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_extended_properties_and_message_with_string_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -126,7 +130,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_extended_properties_and_message_with_too_few_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -139,7 +143,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_extended_properties_and_message_with_too_many_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -152,7 +156,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_extended_properties_and_message_with_non_string_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -165,7 +169,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_extended_properties_and_message_with_null_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -178,7 +182,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_message_with_string_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -189,7 +193,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_message_with_non_string_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -200,7 +204,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_message_with_non_string_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -212,7 +216,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_message_with_string_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -224,7 +228,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_message_with_too_few_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -235,7 +239,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_message_with_too_few_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -247,7 +251,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_message_with_too_many_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -258,7 +262,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_message_with_too_many_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -270,7 +274,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_message_with_null_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -281,7 +285,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_message_with_null_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -293,7 +297,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_exception_is_logged_correctly()
         {
             LogData expected;
@@ -310,7 +314,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_exception_and_extended_properties_is_logged_correctly()
         {
             var extended = new ExtendedProperties();
@@ -328,7 +332,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_exception_and_message_is_logged_correctly()
         {
             const string message = "Message";
@@ -346,7 +350,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_exception_and_message_with_null_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -365,7 +369,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_exception_and_message_with_non_string_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -384,7 +388,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_exception_and_message_with_string_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -403,7 +407,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_exception_and_message_with_too_few_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -422,7 +426,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_exception_and_message_with_too_many_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -441,7 +445,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_message_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -460,7 +464,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_message_with_non_string_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -480,7 +484,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_message_with_string_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -500,7 +504,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_message_with_too_few_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -520,7 +524,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_message_with_too_many_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -540,7 +544,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_message_with_null_parameters_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -560,7 +564,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_extended_properties_is_logged_correctly()
         {
             var extended = new ExtendedProperties();
@@ -570,7 +574,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_extended_properties_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -582,7 +586,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -600,7 +604,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_extended_properties_is_logged_correctly()
         {
             var correlationId = Guid.NewGuid();
@@ -619,7 +623,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_extended_properties_and_message_is_logged_correctly()
         {
             const string message = "Message";
@@ -639,7 +643,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_extended_properties_and_message_with_too_few_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -660,7 +664,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_extended_properties_and_message_with_too_many_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -681,7 +685,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_extended_properties_and_message_with_non_string_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -702,7 +706,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_extended_properties_and_message_with_string_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";
@@ -723,7 +727,7 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
             VerifyLogData(expected);
         }
 
-        [Test]
+        [Fact]
         public void Verify_that_correlationid_and_exception_and_extended_properties_and_message_with_null_parameters_is_logged_correctly()
         {
             const string message = "Message {0} {1}";

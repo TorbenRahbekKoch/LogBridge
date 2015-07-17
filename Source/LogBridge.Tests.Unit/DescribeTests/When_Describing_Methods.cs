@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using FluentAssertions;
-using NUnit.Framework;
 using SoftwarePassion.Common.Core.Extensions;
+using Xunit;
 
 namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
 {
@@ -12,10 +12,9 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
     /// Note that the [MethodImpl(MethodImplOptions.NoOptimization)] is necessary to avoid inlining
     /// of the called methods.
     /// </summary>
-    [TestFixture]
     public class When_Describing_Methods
     {
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_Simple_Parameters_Is_Correct()
         {
@@ -30,7 +29,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description4.Should().Be(Namespace + "Method4(value1: 42, value2: \"Value\", value3: 42.87)", "Description 4 incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_ICollection_Parameters_Is_Correct()
         {
@@ -40,7 +39,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description5.Should().Be(expected, "Description 5 incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_IDictionary_Parameters_Is_Correct()
         {
@@ -55,7 +54,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description6.Should().Be(Namespace + "Method6(value: [{0}  [\"42\":43],{0}  [\"87\":88]])".FormatInvariant(Environment.NewLine), "Description 6 incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_Enum_Parameters_Is_Correct()
         {
@@ -64,7 +63,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description7.Should().Be(Namespace + "Method7(value: Enums.Enum1)", "Description 7 incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_Guid_Parameters_Is_Correct()
         {
@@ -74,7 +73,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description8.Should().Be(Namespace + "Method8(value: {0})".FormatInvariant(guid), "Description 8 incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_Class_Parameters_Is_Correct()
         {
@@ -85,7 +84,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description9.Should().Be(expected,  "Description 9 incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_Complex_Class_Parameters_Is_Correct()
         {
@@ -97,7 +96,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description10.Should().Be(expected, "Description 10 incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_DateTime_Parameters_Is_Correct()
         {
@@ -110,7 +109,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description11b.Should().Be(Namespace + "Method11(value: DateTimeKind.Local:2012-10-25 12:34:56.000)", "Description 11b incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_Null_Parameters_Is_Correct()
         {
@@ -119,7 +118,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description12.Should().Be(Namespace + "Method12(value: null)", "Description 12 is incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_Class_Parameters_With_Null_Strings_Is_Correct()
         {
@@ -130,7 +129,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description13.Should().Be(expected, "Description 13 incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_Class_Parameters_With_Null_Properties_Is_Correct()
         {
@@ -141,7 +140,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description14.Should().Be(expected, "Description 14 incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]        
         public void Verify_That_Description_Of_Nullable_DateTime_Is_Correct()
         {
@@ -154,7 +153,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description15b.Should().Be(Namespace + "Method15(value: DateTimeKind.Local:2012-10-25 12:34:56.000)", "Description 15b incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_object_Property_Is_Correct()
         {
@@ -165,7 +164,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description16b.Should().Be(Namespace + "Method16(value: {0})".FormatInvariant(42), "Description 16b incorrect.");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_IEnumerable_Parameters_Is_Correct()
         {
@@ -173,7 +172,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description17.Should().Be(Namespace + "Method17(value: [{0}  27,{0}  42])".FormatInvariant(Environment.NewLine));
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_Of_TimeSpan_Is_Correct()
         {
@@ -183,7 +182,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.DescribeTests
             description18.ParameterDescription.Should().Be(Namespace + "Method18(value: 42.17:13:57.1230000)");
         }
 
-        [Test]
+        [Fact]
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public void Verify_That_Description_From_Lambda_Is_Correct()
         {
