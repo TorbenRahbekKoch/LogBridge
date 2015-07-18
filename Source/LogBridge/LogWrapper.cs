@@ -73,19 +73,35 @@ namespace SoftwarePassion.LogBridge
         {
             get
             {
+                var result = Enumerable.Empty<ExtendedProperty>();
+
                 var logContext = ThreadLogContext;
                 if (logContext.ExtendedProperties.IsSome)
-                    return logContext.ExtendedProperties;
+                {
+                    if (!logContext.InheritExtendedProperties)
+                        return logContext.ExtendedProperties;
+
+                    result = logContext.ExtendedProperties.Value;
+                }
 
                 logContext = AppDomainLogContext;
                 if (logContext.ExtendedProperties.IsSome)
-                    return logContext.ExtendedProperties;
+                {
+                    result = result.Union(logContext.ExtendedProperties.Value);
+                    if (!logContext.InheritExtendedProperties)
+                        return Option.Some(result);
+                }
 
                 logContext = ProcessLogContext;
                 if (logContext.ExtendedProperties.IsSome)
-                    return logContext.ExtendedProperties;
+                {
+                    result = result.Union(logContext.ExtendedProperties.Value);
+                    if (!logContext.InheritExtendedProperties)
+                        return Option.Some(result);
+                }
 
-                return defaultLogContext.ExtendedProperties;
+                result = result.Union(defaultLogContext.ExtendedProperties.Value);
+                return Option.Some(result);                
             }
         }
 

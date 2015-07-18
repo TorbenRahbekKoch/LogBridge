@@ -47,5 +47,38 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.LogContextScopeTests
 
             actual.ShouldAllBeEquivalentTo(expected);
         }
+
+        [Fact]
+        public void Verify_that_extended_properties_are_inherited()
+        {
+            var original = new List<ExtendedProperty>
+            {
+                new ExtendedProperty("original1", "originalValue1"),
+                new ExtendedProperty("original2", "originalValue2"),
+            };
+
+            var added = new List<ExtendedProperty>
+            {
+                new ExtendedProperty("name1", "value1"),
+                new ExtendedProperty("name2", "value2")
+            };
+
+            var expected = original.Union(added)
+                .ToList();
+
+
+            LogContext.ThreadLogContext.ExtendedProperties = original;
+            List<ExtendedProperty> actual;
+
+            using (var scope = LogContext.ThreadLogContext.Push())
+            {
+                LogContext.ThreadLogContext.ExtendedProperties = expected;
+                LogContext.ThreadLogContext.InheritExtendedProperties = true;
+
+                actual = LogContext.ActiveExtendedProperties.Value.ToList();
+            }
+
+            actual.ShouldAllBeEquivalentTo(expected);
+        }
     }
 }
