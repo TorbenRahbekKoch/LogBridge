@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge", "Source\LogBridge\LogBridge.csproj", "{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}"
 EndProject
@@ -38,10 +38,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.UmbracoLog4Net.Tests.Unit", "Source\LogBridge.UmbracoLog4Net.Tests.Unit\LogBridge.UmbracoLog4Net.Tests.Unit.csproj", "{A268C13B-8C23-4637-8F0E-4D1C0FE57793}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.UmbracoLog4Net.Tests.Performance", "Source\LogBridge.UmbracoLog4Net.Tests.Performance\LogBridge.UmbracoLog4Net.Tests.Performance.csproj", "{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Wcf", "Source\LogBridge.Wcf\LogBridge.Wcf.csproj", "{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogBridge.Wcf.Tests.Integration", "Source\LogBridge.Wcf.Tests.Integration\LogBridge.Wcf.Tests.Integration.csproj", "{26111BD7-2317-4171-A23B-7AF656AD7086}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,14 +93,6 @@ Global
 		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23DA47CF-AC4F-42A8-94E7-7AC8D9F9C308}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26111BD7-2317-4171-A23B-7AF656AD7086}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26111BD7-2317-4171-A23B-7AF656AD7086}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26111BD7-2317-4171-A23B-7AF656AD7086}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26111BD7-2317-4171-A23B-7AF656AD7086}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

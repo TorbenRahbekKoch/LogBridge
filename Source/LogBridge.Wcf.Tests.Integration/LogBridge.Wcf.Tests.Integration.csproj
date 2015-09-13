@@ -81,10 +81,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LogBridge.Wcf\LogBridge.Wcf.csproj">
-      <Project>{05C13A23-CD0E-447D-8ED2-8BB463E9E3E2}</Project>
-      <Name>LogBridge.Wcf</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LogBridge\LogBridge.csproj">
       <Project>{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}</Project>
       <Name>LogBridge</Name>
