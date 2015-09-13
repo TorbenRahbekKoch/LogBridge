@@ -117,7 +117,7 @@ namespace SoftwarePassion.LogBridge
                         DescribeNullParameter(descriptorBuilder, methodParameters[index]);
                     else
                     {
-                        DescribeParameter(descriptorBuilder, methodParameters[index], parameterValue);
+                        DescribeParameter(0, descriptorBuilder, methodParameters[index], parameterValue);
                     }
                 }
 
@@ -140,15 +140,18 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
-        private static void DescribeParameter(DescriptorBuilder descriptorBuilder, ParameterInfo parameterInfo, object parameterValue)
+        private static void DescribeParameter(int recursionDepth, DescriptorBuilder descriptorBuilder, ParameterInfo parameterInfo, object parameterValue)
         {
             Contract.Requires(descriptorBuilder != null);
             Contract.Requires(parameterInfo != null);
 
+            if (RecursionDepthExceeded(recursionDepth, descriptorBuilder))
+                return;
+
             try
             {
                 descriptorBuilder.Append(parameterInfo.Name + ": ");
-                DescribeParameter(descriptorBuilder, parameterInfo.ParameterType, parameterValue);
+                DescribeParameter(recursionDepth + 1, descriptorBuilder, parameterInfo.ParameterType, parameterValue);
             }
             catch (Exception ex)
             {
@@ -182,10 +185,13 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
-        private static void DescribeParameter(DescriptorBuilder descriptorBuilder, Type type, object parameterValue)
+        private static void DescribeParameter(int recursionDepth, DescriptorBuilder descriptorBuilder, Type type, object parameterValue)
         {
             Contract.Requires(descriptorBuilder != null);
             Contract.Requires(type != null);
+
+            if (RecursionDepthExceeded(recursionDepth, descriptorBuilder))
+                return;
 
             if (parameterValue == null)
             {
@@ -268,21 +274,21 @@ namespace SoftwarePassion.LogBridge
 
             if (compareType.FullName.StartsWith("System.Collections.Generic.KeyValuePair", StringComparison.Ordinal))
             {
-                DescribeKeyValuePair(descriptorBuilder, parameterValue);
+                DescribeKeyValuePair(recursionDepth + 1, descriptorBuilder, parameterValue);
                 return;
             }
 
             var iCollectionValue = parameterValue as ICollection;
             if (iCollectionValue != null)
             {
-                DescribeParameter(descriptorBuilder, iCollectionValue);
+                DescribeParameter(recursionDepth + 1, descriptorBuilder, iCollectionValue);
                 return;
             }
 
             var iEnumerableValue = parameterValue as IEnumerable;
             if (iEnumerableValue != null)
             {
-                DescribeParameter(descriptorBuilder, iEnumerableValue);
+                DescribeParameter(recursionDepth + 1, descriptorBuilder, iEnumerableValue);
                 return;
             }
 
@@ -294,7 +300,7 @@ namespace SoftwarePassion.LogBridge
 
             if (compareType.IsClass)
             {
-                DescribeClassParameter(descriptorBuilder, parameterValue);
+                DescribeClassParameter(recursionDepth + 1, descriptorBuilder, parameterValue);
                 return;
             }
 
@@ -311,10 +317,13 @@ namespace SoftwarePassion.LogBridge
             return "DateTimeKind.{0}:{1}".FormatInvariant(value.Kind, value.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture));
         }
 
-        private static void DescribeClassParameter(DescriptorBuilder descriptorBuilder, object value)
+        private static void DescribeClassParameter(int recursionDepth, DescriptorBuilder descriptorBuilder, object value)
         {
             Contract.Requires(descriptorBuilder != null);
             Contract.Requires(value != null);
+
+            if (RecursionDepthExceeded(recursionDepth, descriptorBuilder))
+                return;
 
             // Describing a class parameter requires describing each property, each of which can also
             // be class parameters. Therefore there is an element of recursion.
@@ -340,7 +349,7 @@ namespace SoftwarePassion.LogBridge
                 {
                     var propertyValue = propertyInfo.GetValue(value, BindingFlags.GetProperty, null, null,
                                                               CultureInfo.InvariantCulture);
-                    DescribeParameter(descriptorBuilder, propertyInfo.PropertyType, propertyValue);
+                    DescribeParameter(recursionDepth + 1, descriptorBuilder, propertyInfo.PropertyType, propertyValue);
                 }
                 catch (NullReferenceException)
                 {
@@ -397,9 +406,12 @@ namespace SoftwarePassion.LogBridge
             return "{0}".FormatInvariant(value);
         }
 
-        private static void DescribeParameter(DescriptorBuilder parameterDescription, ICollection value)
+        private static void DescribeParameter(int recursionDepth, DescriptorBuilder parameterDescription, ICollection value)
         {
             Contract.Requires(parameterDescription != null);
+
+            if (RecursionDepthExceeded(recursionDepth, parameterDescription))
+                return;
 
             if (value == null)
             {
@@ -416,16 +428,19 @@ namespace SoftwarePassion.LogBridge
                     parameterDescription.AppendLine(",");
                 isFirst = false;
 
-                DescribeParameter(parameterDescription, item.GetType(), item);
+                DescribeParameter(recursionDepth + 1, parameterDescription, item.GetType(), item);
             }
 
             parameterDescription.Append("]");
             parameterDescription.Outdent();
         }
 
-        private static void DescribeParameter(DescriptorBuilder parameterDescription, IEnumerable value)
+        private static void DescribeParameter(int recursionDepth, DescriptorBuilder parameterDescription, IEnumerable value)
         {
             Contract.Requires(parameterDescription != null);
+
+            if (RecursionDepthExceeded(recursionDepth, parameterDescription))
+                return;
 
             if (value == null)
             {
@@ -442,19 +457,23 @@ namespace SoftwarePassion.LogBridge
                     parameterDescription.AppendLine(",");
                 isFirst = false;
 
-                DescribeParameter(parameterDescription, item.GetType(), item);
+                DescribeParameter(recursionDepth + 1, parameterDescription, item.GetType(), item);
             }
 
             parameterDescription.Append("]");
             parameterDescription.Outdent();
         }
 
-        private static void DescribeKeyValuePair(DescriptorBuilder descriptorBuilder, object keyValuePair)
+        private static void DescribeKeyValuePair(int recursionDepth, DescriptorBuilder descriptorBuilder, object keyValuePair)
         {
             Contract.Requires(descriptorBuilder != null);
             Contract.Requires(keyValuePair != null);
 
-            var properties = keyValuePair.GetType().GetProperties();
+            if (RecursionDepthExceeded(recursionDepth, descriptorBuilder))
+                return;
+
+            var properties = keyValuePair.GetType().GetProperties(); 
+
             var keyProperty = properties.Single(p => p.Name == "Key");
             var valueProperty = properties.Single(p => p.Name == "Value");
 
@@ -462,10 +481,18 @@ namespace SoftwarePassion.LogBridge
             var valueValue = valueProperty.GetValue(keyValuePair, BindingFlags.GetProperty, null, null, CultureInfo.InvariantCulture);
 
             descriptorBuilder.Append("[");
-            DescribeParameter(descriptorBuilder, keyValue.GetType(), keyValue);
+            DescribeParameter(recursionDepth + 1, descriptorBuilder, keyValue.GetType(), keyValue);
             descriptorBuilder.Append(":");
-            DescribeParameter(descriptorBuilder, valueValue.GetType(), valueValue);
+            DescribeParameter(recursionDepth + 1, descriptorBuilder, valueValue.GetType(), valueValue);
             descriptorBuilder.Append("]");
+        }
+
+        private static bool RecursionDepthExceeded(int recursionDepth, DescriptorBuilder descriptorBuilder)
+        {
+            bool recursionTooDeep = recursionDepth > 8;
+            if (recursionTooDeep)
+                descriptorBuilder.Append("Recursion to deep.");
+            return recursionTooDeep;
         }
     }
 }
