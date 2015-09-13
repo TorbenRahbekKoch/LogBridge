@@ -63,7 +63,6 @@ namespace SoftwarePassion.LogBridge
             try
             {
                 var eventId = Guid.NewGuid();
-                var calculatedException = CalculateExceptionObject(exception);
                 string applicationName;
                 Option<Guid> extendedCorrelationId;
                 var extendedPropertyValues = CalculateExtendedProperties(extendedProperties, out extendedCorrelationId, out applicationName);
@@ -86,7 +85,7 @@ namespace SoftwarePassion.LogBridge
                     currentProcess.Id,
                     currentProcessName,
                     currentAppDomainName,
-                    calculatedException,
+                    exception,
                     logLocation,
                     extendedPropertyValues);
 
@@ -124,37 +123,6 @@ namespace SoftwarePassion.LogBridge
         /// <param name="level">The level.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
 	    protected abstract bool PerformIsLoggingEnabled(TLoggerImplementation activeLogger, Level level);
-
-        /// <summary>
-        /// Calculates the exception object, taking into consideration various 
-        /// special types of exceptions, like e.g. FaultException.
-        /// </summary>
-        /// <param name="exception">The exception to examine.</param>
-        /// <returns>The calculated exception, null if the given exception is null.</returns>
-        protected virtual Exception CalculateExceptionObject(Exception exception)
-        {
-            if (exception == null)
-                return null;
-
-            var exceptionType = exception.GetType();
-            if (exceptionType.IsGenericType &&
-                exceptionType.GetGenericTypeDefinition() == typeof(FaultException<>))
-            {
-                // Since we don't know what generic type the FaultException<> is we cannot statically cast it in
-                // any way. Therefore we assign it to a dynamic and try to access the Detail property on 
-                // that one to obtain details about the FaultException.
-                dynamic faultException = exception;
-                dynamic detailObject = faultException.Detail;
-                if (detailObject != null)
-                {
-                    return detailObject as Exception;
-                }
-
-                return faultException as Exception;
-            }
-
-            return exception;
-        }
 
         private Option<Guid> CalculateCorrelationId(
             Guid? explicitCorrelationId, 
