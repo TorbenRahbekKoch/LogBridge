@@ -15,9 +15,11 @@ Installation
 
 Install in the mail application (e.g. .exe or web application) with Nuget:
 
--  [EnterpriseLibrary](https://www.nuget.org/packages/SoftwarePassion.LogBridge.EnterpriseLibrary/)
--  [Log4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.Log4Net/)
--  [UmbracoLog4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.UmbracoLog4Net/)
+-  [Install-package SoftwarePassion.LogBridge.EnterpriseLibrary](https://www.nuget.org/packages/SoftwarePassion.LogBridge.EnterpriseLibrary/)
+-  [Install-package SoftwarePassion.LogBridge.Log4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.Log4Net/)
+-  [Install-package SoftwarePassion.LogBridge.UmbracoLog4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.UmbracoLog4Net/)
+
+There is a special package for Umbraco since it uses a custom build of Log4net.
 
 In supporting libraries you can simply restrict yourself to installing the basic LogBridge library
 with Nuget:
@@ -131,18 +133,21 @@ It gets the location right, so to speak, within the code, which the
 compiler generates from the lambda-closure, but this is generally something
 close to unreadable. 
 
-To totally and accurately pin point the location you can use 
+To totally and accurately pinpoint the location you can use 
 `LogLocation.Here()`:
 
 `Log.Information(LogLocation.Here(), "Just logging an informational message");`
 
-`LogLocation.Here()` uses the *CallerFilePath*, *CallerMemberName* and 
-*CallerLineNumber* attributes which makes the compiler insert the information - 
-on compile time.
+`LogLocation.Here()` uses the *[CallerFilePath](https://msdn.microsoft.com/en-us/library/system.runtime.compilerservices.callerfilepathattribute%28v=vs.110%29.aspx)*, 
+*[CallerMemberName](https://msdn.microsoft.com/en-us/library/system.runtime.compilerservices.callermembernameattribute%28v=vs.110%29.aspx)* and 
+*[CallerLineNumber](https://msdn.microsoft.com/en-us/library/system.runtime.compilerservices.callerlinenumberattribute%28v=VS.110%29.aspx)* attributes 
+which makes the compiler insert the information - on compile time.
 
 This is, by the way, substantially faster - it takes roughly 1/5 of the time 
 compared to having LogBridge figuring out the position itself, so if you are 
 concerned about performance this is a very good method.
+
+LogLocation is new from 1.3.
 
 ### Extended Properties
 
@@ -156,48 +161,65 @@ Dictionary<string, object>
     log-provider. What that log-provider does with it is, of course, implementation
     dependent.
 
-    Only one type of property gets a special treatment:
+Only one type of property gets a special treatment:
 
 `public Guid CorrelationId {get;}`
 
-    If an extendedProperties object has one of these (case-insensitive) this may be
-    used as the CorrelationId for the log message. If more properties with a
-    CorrelationId (in varying case) is present, it is undefined which one is used.
+If an extendedProperties object has one of these (case-insensitive) this may be
+used as the CorrelationId for the log message. If more properties with a
+CorrelationId (in varying case) is present, it is undefined which one is used.
 
-    If the property is not of type Guid, it is ignored.
+If the property is not of type Guid, it is ignored.
 
-    Please read about CorrelationId below.
+Please read about CorrelationId below.
+
+#### Adding Extended Properties in application/web configuration file.
+
+Application-wide properties like e.g. ApplicationName can be added in the 
+configuration file:
+
+  <pre>
+  &lt;logBridge logWrapperType="SoftwarePassion.LogBridge.Log4Net.Log4NetWrapper"
+             logWrapperAssembly="LogBridge.Log4Net, Version=1.3.0.0, Culture=neutral, PublicKeyToken=null"
+             throwOnResolverFail="true"
+             internalDiagnosticsEnabled="true"&gt;
+    &lt;extendedProperties&gt;
+      &lt;add name="Property1" value="Value1"/&gt;
+      &lt;add name="Property2" value="Value2"/&gt;
+    &lt;/extendedProperties&gt;
+  &lt;/logBridge&gt;
+  </pre>
 
 CorrelationId
 =============
-    To make it possible to correlate logging messages there are several ways to
-    indicate a *CorrelationId*. This CorrelationId (which is a Guid) can be handled
-    by the log-provider and e.g. stored in a database together with other
-    logging-information to make it possible to group log-messages by CorrelationId.
+To make it possible to correlate logging messages there are several ways to
+indicate a *CorrelationId*. This CorrelationId (which is a Guid) can be handled
+by the log-provider and e.g. stored in a database together with other
+logging-information to make it possible to group log-messages by CorrelationId.
 
-    Several of the Log.* methods take a CorrelationId as the first parameter. This
-    way of providing a CorrelationId takes precedence over all other ways.
+Several of the Log.* methods take a CorrelationId as the first parameter. This
+way of providing a CorrelationId takes precedence over all other ways.
 
-    There are in total five ways to provide a CorrelationId - on order of precedence
-    they are:
+There are in total five ways to provide a CorrelationId - on order of precedence
+they are:
 
-    1. Explicit correlationId parameter in Log.* methods.
-    2. Guid CorrelationId property on extensionProperties object.
-    3. ThreadCorrelationId - if assigned.
-    4. AppDomainCorrelationId - if assigned.
-    5. ProcessCorrelationId - if assinged.
+1. Explicit correlationId parameter in Log.* methods.
+2. Guid CorrelationId property on extensionProperties object.
+3. ThreadCorrelationId - if assigned.
+4. AppDomainCorrelationId - if assigned.
+5. ProcessCorrelationId - if assinged.
 
-    If none of these are assigned, no CorrelationId will be added to the properties
-    of the log message.
+If none of these are assigned, no CorrelationId will be added to the properties
+of the log message.
 
 Configuration
 =============
-    Currently the configuration is very simple. In theory (and even, at  times, in
-    practice) LogBridge should be able to automatically find an implementation of
-    LogWrapper<> and load that. This presupposes that the assembly has been loaded
-    into the application. Simply having the assembly in the application directory
-    does not suffice, you also have to call code in the assembly to make .NET
-    load the assembly.
+Currently the configuration is very simple. In theory (and even, at  times, in
+practice) LogBridge should be able to automatically find an implementation of
+LogWrapper<> and load that. This presupposes that the assembly has been loaded
+into the application. Simply having the assembly in the application directory
+does not suffice, you also have to call code in the assembly to make .NET
+load the assembly.
 
 To get over this problem you simply have to state in which
 assembly the log-wrapper is located. This is done using an *appSetting* called
@@ -208,17 +230,17 @@ values are supported:
     - LogBridge.UmbracoLog4Net, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null
     - LogBridge.EnterpriseLibrary, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null
 
-    The meaning of these should be self-evident. What this value does internally is
-    to have LogBridge manually load the Assembly and thereby making it available
-    for searching for implementations of LogWrapper<>.
+The meaning of these should be self-evident. What this value does internally is
+to have LogBridge manually load the Assembly and thereby making it available
+for searching for implementations of LogWrapper<>.
 
-    You can also be more specific and set the *appSetting* **SoftwarePassion.LogBridge.LogWrapperType**
-    to the *full name* of the type.
+You can also be more specific and set the *appSetting* **SoftwarePassion.LogBridge.LogWrapperType**
+to the *full name* of the type.
 
 ### Version 1.2 changes
 
-    From version 1.2 LogBridge have a real configuration section, which means you
-    have to register a configuration section:
+From version 1.2 LogBridge have a real configuration section, which means you
+have to register a configuration section:
 
 ```
 <configSections>
@@ -226,8 +248,9 @@ values are supported:
 </configSections>
 ```
 
-    A configuration section can look like this - with the entire set of settings supported
-    in 1.2: 
+A configuration section can look like this - with the entire set of settings supported
+in 1.2: 
+
 ```
 <logBridge logWrapperType="SoftwarePassion.LogBridge.Tests.Unit.TestLogWrapper"
             logWrapperAssembly="LogBridge.Log4Net, Version=1.3.0.0, Culture=neutral, PublicKeyToken=null"
@@ -240,13 +263,6 @@ values are supported:
 ```
 
 All properties are optional. 
-
-The properties new since 1.1.3 are:
-
-#### extendedProperties
-
-If you want a static set of extended properties to follow all log statements
-you can set them here.
 
 One useful property to set would be *ApplicationName*, but any other property
 can be set at will.
