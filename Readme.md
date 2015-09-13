@@ -314,11 +314,11 @@ stating that the application has started. You can wrap this in a try-catch:
 ```
 try
 {
-Log.Information("Application started.");
+    Log.Information("Application started.");
 }
 catch (TypeInitializationException)
 {
-// Handle problem...
+    // Handle problem...
 }
 ```
 
