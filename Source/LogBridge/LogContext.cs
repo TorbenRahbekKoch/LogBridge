@@ -94,7 +94,9 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         public static LogContext ProcessLogContext
         {
-            get; internal set; 
+            get { return Log.Logger.ProcessLogContext; }
+
+            set { Log.Logger.ProcessLogContext = value; }
         }
 
         /// <summary>

@@ -13,7 +13,6 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.LogContextScopeTests
         {
             var expected = Guid.NewGuid();
             LogContext.ThreadLogContext.CorrelationId = expected;
-            Guid actual;
             
             using (var scope = LogContext.ThreadLogContext.Push())
             {
@@ -21,7 +20,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.LogContextScopeTests
 
             }
 
-            actual = LogContext.ActiveCorrelationId.Value;
+            Guid actual = LogContext.ActiveCorrelationId.Value;
 
             actual.Should().Be(expected);
         }
@@ -31,11 +30,11 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.LogContextScopeTests
         {
             var expected = new List<ExtendedProperty>
             {
-                new ExtendedProperty("name1", "value1"),
-                new ExtendedProperty("name2", "value2")
+                new ExtendedProperty("Property1", "Value1"),
+                new ExtendedProperty("Property2", "Value2")
             };
 
-            List<ExtendedProperty> actual;
+            // actual;
 
             using (var scope = LogContext.ThreadLogContext.Push())
             {
@@ -47,15 +46,10 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.LogContextScopeTests
 
                 LogContext.ThreadLogContext.ExtendedProperties = extras;
                 LogContext.ThreadLogContext.InheritExtendedProperties = false;
-
             }
 
-
-            actual = LogContext.ActiveExtendedProperties.Value.ToList();
+            List<ExtendedProperty> actual = LogContext.ActiveExtendedProperties.Value.ToList();
             actual.ShouldAllBeEquivalentTo(expected);
-        }
-
-        
+        }        
     }
-
 }

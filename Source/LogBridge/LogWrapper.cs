@@ -30,8 +30,8 @@ namespace SoftwarePassion.LogBridge
             currentProcessName = currentProcess.ProcessName;
             currentAppDomainName = AppDomain.CurrentDomain.FriendlyName;
 
-            ProcessLogContext = new LogContext();
-            AppDomainLogContext = new LogContext();
+            ProcessLogContext = new LogContext(Configuration.ExtendedProperties);
+            AppDomainLogContext = new LogContext(Configuration.ExtendedProperties);
         }
 
         /// <summary>
