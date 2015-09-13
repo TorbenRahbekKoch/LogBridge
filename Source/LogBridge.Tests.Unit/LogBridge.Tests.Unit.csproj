@@ -66,6 +66,7 @@
     <Compile Include="DescribeTests\Enums.cs" />
     <Compile Include="DescribeTests\Methods.cs" />
     <Compile Include="DescribeTests\When_Describing_Methods.cs" />
+    <Compile Include="LogContextScopeTests\When_popping_scope_on_thread_context.cs" />
     <Compile Include="LogContextScopeTests\When_pushing_scope_on_thread_context.cs" />
     <Compile Include="LogDataVerifier.cs" />
     <Compile Include="LogTests\When_logging_warning_messages_with_null_parameters.cs" />

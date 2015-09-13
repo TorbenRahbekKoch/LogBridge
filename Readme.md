@@ -230,7 +230,7 @@ values are supported:
     in 1.2: 
 ```
 <logBridge logWrapperType="SoftwarePassion.LogBridge.Tests.Unit.TestLogWrapper"
-            logWrapperAssembly="LogBridge.Log4Net, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null"
+            logWrapperAssembly="LogBridge.Log4Net, Version=1.3.0.0, Culture=neutral, PublicKeyToken=null"
             throwOnResolverFail="true"
             internalDiagnosticsEnabled="true">
 <extendedProperties>
