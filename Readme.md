@@ -1,10 +1,12 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/niturj0ljaimfmt0/branch/master?svg=true)](https://ci.appveyor.com/project/TorbenRahbekKoch/logbridge/branch/master)
+
 LogBridge
 ---------
 
-Aiming to give a consistent and versatile interface to various logging
-frameworks, starting with Log4Net, and Enterprise Library.
+A no-nonsense logging wrapper aiming to give a consistent and versatile interface
+to various logging frameworks, such as Log4Net and Enterprise Library.
 
-LogBridge is a no-nonsense logging wrapper, trying as hard as possible never to
+LogBridge tries as hard as possible never to
 throw exceptions in any logging method. Instead it will continue but may
 instead log an incomplete message.
 
@@ -13,7 +15,7 @@ Please see the Configuration section below for details about this.
 Installation
 =====
 
-Install in the mail application (e.g. .exe or web application) with Nuget:
+Install in the main application (e.g. .exe or web application) with Nuget:
 
 -  [Install-package SoftwarePassion.LogBridge.EnterpriseLibrary](https://www.nuget.org/packages/SoftwarePassion.LogBridge.EnterpriseLibrary/)
 -  [Install-package SoftwarePassion.LogBridge.Log4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.Log4Net/)
