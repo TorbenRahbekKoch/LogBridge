@@ -89,7 +89,7 @@ required elevated priviliges.
 The *Describe* class also has a method *CreateDescriber*, which is very helpful
 in scenarios where one is running stuff inside a lambda-expression. E.g.
 
-````
+```
 
 void MyMethod(int parm1, string parm2)
 {
@@ -110,7 +110,8 @@ void MyMethod(int parm1, string parm2)
 
     lambda();
 }
-````
+```
+
 
 *CreateDescriber* captures the MethodInfo for the method from which it is 
 called, which makes it possible to properly describe the parameters for the 
@@ -278,7 +279,7 @@ To figure out whether LogBridge is at fault, you can do two things:
 
 ### 1. Enable internal logging
 
-- Set appSettings key *SoftwarePassion.LogBridge.InternalDiagnosticsEnabled* to *true*.
+- Set the property *internalDiagnosticsEnabled* on the *logBridge* configuration element to *true*.
 - Enable tracing to a file:
 
 ```
@@ -298,8 +299,7 @@ initializeData="c:\log\logbridge.txt" />
 If, for some reason, LogBrige cannot find a log-wrapper, this will now be stated
 in the Debug View and the above *logbridge.txt* file.
 
-In general, setting the appSettings key
-*SoftwarePassion.LogBridge.InternalDiagnosticsEnabled* to *true*, will make
+In general, property *internalDiagnosticsEnabled* on the *logBridge* configuration element to *true*, will make
 LogBridge log internal exceptions using [`Trace.WriteLine(...)`](http://msdn.microsoft.com/en-us/library/system.diagnostics.trace.writeline%28v=vs.110%29.aspx)
 which, among other configurable places, can be seen in the Visual Studio
 Debugging Output View.
@@ -307,7 +307,7 @@ Debugging Output View.
 ### 2. Enable exception on resolver fail
 
 You can, also, urge LogBridge to throw an exception when it cannot find a
-log wrapper. This is done by setting the appSettings key *SoftwarePassion.LogBridge.ThrowOnResolverFail*
+log wrapper. This is done by setting the property *throwOnResolverFail*
 to *true*.
 
 This can be helpful, if you early in the application make a simple log message
