@@ -40,8 +40,11 @@ namespace SoftwarePassion.LogBridge.UmbracoLog4Net.Tests.Unit
             actual.LocationInfo.LineNumber.Should().Be(expected.LogLocation.LineNumber, because: "LogLocation.LineNumber does not match.");
             actual.LocationInfo.ClassName.Should().Be(expected.LogLocation.LoggingClassType.FullName, because: "LogLocation.LoggingClassType does not match.");
             actual.LocationInfo.MethodName.Should().Be(expected.LogLocation.MethodName, because: "LogLocation.MethodName does not match.");
-
+            
             actual.Properties[LogConstants.ExceptionKey].Should().Be(expected.Exception, because: "Exception does not match.");
+
+            if (expected.Exception != null)
+                actual.ExceptionString.Should().Be(expected.Exception.ToString());
 
             CompareProperties(expected.Properties, actual.Properties);
         }

@@ -43,6 +43,9 @@ namespace SoftwarePassion.LogBridge.Log4Net.Tests.Unit
 
             actual.Properties[LogConstants.ExceptionKey].Should().Be(expected.Exception, because:"Exception does not match.");
 
+            if (expected.Exception != null)
+                actual.ExceptionString.Should().Be(expected.Exception.ToString());
+
             CompareProperties(expected.Properties, actual.Properties);
         }
 

@@ -40,6 +40,9 @@ namespace SoftwarePassion.LogBridge.UmbracoLog4Net
                 Domain = logData.AppDomainName,                
                 Properties = ToLog4NetProperties(logData),
                 LoggerName = activeLogger.Name,
+                ExceptionString = logData.Exception == null
+                    ? string.Empty
+                    : logData.Exception.ToString()
             };
 
             var logEntry = new LoggingEvent(
