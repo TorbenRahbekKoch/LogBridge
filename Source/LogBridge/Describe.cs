@@ -53,6 +53,12 @@ namespace SoftwarePassion.LogBridge
             return () => Describe.MethodAndParameters(methodBase, parameterValues);
         }
 
+        /// <summary>
+        /// Creates a <see cref="DescribeDescriptor"/> from the surrounding
+        /// method and the given parameterValues.
+        /// </summary>
+        /// <param name="parameterValues">The parameter values in correct order</param>
+        /// <returns>A <see cref="DescribeDescriptor"/>.</returns>
         public static DescribeDescriptor MethodAndParameters(params object[] parameterValues)
         {
             // Find calling method
@@ -72,6 +78,12 @@ namespace SoftwarePassion.LogBridge
             return MethodAndParameters(methodBase, parameterValues);
         }
 
+        /// <summary>
+        /// Creates a textual description of the parameters from the
+        /// surrounding method and the given parameters.
+        /// </summary>
+        /// <param name="parameterValues">The parameter values in correct order.</param>
+        /// <returns>A textual description of the parameters.</returns>
         public static string Parameters(params object[] parameterValues)
         {
             // Find calling method
