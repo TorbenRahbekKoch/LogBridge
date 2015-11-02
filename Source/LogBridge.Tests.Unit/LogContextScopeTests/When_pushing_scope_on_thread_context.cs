@@ -44,8 +44,8 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.LogContextScopeTests
                 actual = LogContext.ActiveExtendedProperties.Value.ToList();
             }
 
-
             actual.ShouldAllBeEquivalentTo(expected);
+            LogContext.ActiveExtendedProperties.Value.ToList().Count.Should().Be(2, because: "There are two properties in the configuration file.");
         }
 
         [Fact]
@@ -79,6 +79,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.LogContextScopeTests
             }
 
             actual.ShouldAllBeEquivalentTo(expected);
+            LogContext.ActiveExtendedProperties.Value.ToList().ShouldAllBeEquivalentTo(original);
         }
     }
 }
