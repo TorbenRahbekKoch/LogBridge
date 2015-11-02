@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Build\Debug\LogBridge.XML</DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,7 +53,6 @@
     <Compile Include="DescribeDescriptor.cs" />
     <Compile Include="DescriptorBuilder.cs" />
     <Compile Include="ExtendedProperty.cs" />
-    <Content Include="Log.Template.cs" />
     <Compile Include="Log.cs">
       <DependentUpon>Log.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -70,7 +71,7 @@
     <Compile Include="NullLogWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadPrincipal.cs" />
-    <Content Include="LogParameters.txt" />
+    <None Include="LogParameters.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Log.tt">
