@@ -64,7 +64,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit
                     .Should()
                     .Be(0, because: "Non-matching properties: " + string.Join(", ", nonMatchingKeys));
             }
-            catch (KeyNotFoundException e)
+            catch (KeyNotFoundException)
             {
                 var m = string.Join(", ", missingKeys);
                 var nm = string.Join(", ", nonMatchingKeys);
