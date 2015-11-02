@@ -28,11 +28,11 @@
     </frameworkAssemblies>
   </metadata>
 	<files>
-		<file src="..\..\Build\Release\LogBridge.UmbracoLog4Net.dll" target="lib\net45\" />
 		<file src="..\..\Build\Release\LogBridge.UmbracoLog4Net.pdb" target="lib\net45\" />
-		<file src="..\..\Build\Release\LogBridge.UmbracoLog4Net.xml" target="lib\net45\" />
 		<file src="lib\log4net.dll" target="lib\net45\" />
     <file src="nuget\app.config.install.xdt" target="content"/>
     <file src="nuget\app.config.uninstall.xdt" target="content"/>
-	</files>
+    <file src="..\..\Readme.md" target=""/>
+    <file src="..\..\Changes.md" target=""/>
+  </files>
 </package>

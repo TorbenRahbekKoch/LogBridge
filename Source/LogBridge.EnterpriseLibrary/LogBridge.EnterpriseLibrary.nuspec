@@ -25,10 +25,10 @@
     </frameworkAssemblies>
   </metadata>
 	<files>
-		<file src="..\..\Build\Release\LogBridge.EnterpriseLibrary.dll" target="lib\net45\" />
 		<file src="..\..\Build\Release\LogBridge.EnterpriseLibrary.pdb" target="lib\net45\" />
-		<file src="..\..\Build\Release\LogBridge.EnterpriseLibrary.xml" target="lib\net45\" />
     <file src="nuget\app.config.install.xdt" target="content"/>
     <file src="nuget\app.config.uninstall.xdt" target="content"/>
-	</files>
+    <file src="..\..\Readme.md" target=""/>
+    <file src="..\..\Changes.md" target=""/>
+  </files>
 </package>
