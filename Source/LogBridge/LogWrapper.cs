@@ -69,6 +69,9 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
+        /// <summary>
+        /// Gets the list of extended properties.
+        /// </summary>
         public Option<IEnumerable<ExtendedProperty>> ExtendedProperties
         {
             get
@@ -207,6 +210,17 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         protected bool DiagnosticsEnabled { get; private set; }
 
+        /// <summary>
+        /// Performs the actual logging. Specialized LogWrappers implement this 
+        /// to perform the logging.
+        /// </summary>
+        /// <param name="logLocation">The location of the log statement.</param>
+        /// <param name="correlationId">The correlation id of the log statement.</param>
+        /// <param name="exception">The exception of the log statement. May be null.</param>
+        /// <param name="level">The log level.</param>
+        /// <param name="extendedProperties">The extended properties. May be null.</param>
+        /// <param name="message">The formatted log message.</param>
+        /// <returns></returns>
         protected abstract Guid PerformLogEntry(LogLocation? logLocation, Guid? correlationId, Exception exception, Level level,
             object extendedProperties, string message);
 

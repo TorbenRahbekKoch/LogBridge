@@ -5,10 +5,18 @@ using SoftwarePassion.Common.Core;
 
 namespace SoftwarePassion.LogBridge
 {
+    /// <summary>
+    /// Describes a context for a logger. 
+    /// </summary>
     public class LogContext
     {
         private const string AppDomainLogContextKey = "AppDomainLogContextKey";
 
+        /// <summary>
+        /// Instantiates a new LogContext. 
+        /// CorrelationId and ExtendedProperties will be None.
+        /// InheritExtendedProperties will be true.
+        /// </summary>
         public LogContext()
         {
             CorrelationId = Option.None<Guid>();
@@ -16,23 +24,44 @@ namespace SoftwarePassion.LogBridge
             InheritExtendedProperties = true;
         }
 
+        /// <summary>
+        /// Instantiates a new LogContext setting ExtendedProperties to the given
+        /// properties.
+        /// CorrelationId will be None.
+        /// InheritExtendedProperties will be false.
+        /// </summary>
+        /// <param name="extendedProperties">The extended properties for the context.</param>
         public LogContext(IEnumerable<ExtendedProperty> extendedProperties)
         {
             CorrelationId = Option.None<Guid>();
             ExtendedProperties = Option.Some<IEnumerable<ExtendedProperty>>(new List<ExtendedProperty>(extendedProperties));
         }
 
+        /// <summary>
+        /// Pushes the current LogContext, and returns a 
+        /// LogContextScope, which - when Disposed - will reestablish the 
+        /// previous LogContext.
+        /// </summary>
+        /// <returns>A LogContextScope which can be Disposed to reestablish 
+        /// the previous LogContext.</returns>
         public LogContextScope Push()
         {
             var scope = new LogContextScope(this);
             return scope;
         }
 
+        /// <summary>
+        /// Pushes the current LogContext, and activates the given LogContext.
+        /// </summary>
+        /// <param name="newContext">The LogContext to activate.</param>
+        /// <returns>A LogContextScope which can be Disposed to reestablish 
+        /// the previous LogContext.</returns>
         public LogContextScope Push(LogContext newContext)
         {
             var scope = new LogContextScope(this);
             this.CorrelationId = newContext.CorrelationId;
             this.ExtendedProperties = newContext.ExtendedProperties;
+            this.InheritExtendedProperties = newContext.InheritExtendedProperties;
             return scope;
         }
 
@@ -61,6 +90,10 @@ namespace SoftwarePassion.LogBridge
             }
         }
 
+        /// <summary>
+        /// Gets the active extended properties, which is so specific as possible
+        /// in the order from Thread -> AppDomain -> Process.
+        /// </summary>
         public static Option<IEnumerable<ExtendedProperty>> ActiveExtendedProperties
         {
             get
@@ -145,11 +178,17 @@ namespace SoftwarePassion.LogBridge
         public bool InheritExtendedProperties 
         { get; set; }
 
+        /// <summary>
+        /// The correlation id for this LogContext.
+        /// </summary>
         public Option<Guid> CorrelationId
         {
             get;set;
         }
 
+        /// <summary>
+        /// The extended properties for this LogContext.
+        /// </summary>
         public Option<IEnumerable<ExtendedProperty>> ExtendedProperties 
         {
             get; set;

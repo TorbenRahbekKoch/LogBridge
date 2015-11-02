@@ -78,18 +78,64 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         public Option<Guid> CorrelationId { get; private set; }
 
+        /// <summary>
+        /// Gets the log level.
+        /// </summary>
         public Level Level { get; private set; }
+
+        /// <summary>
+        /// Gets the message.
+        /// </summary>
         public string Message { get; private set; }
+
+        /// <summary>
+        /// Gets the Username.
+        /// </summary>
         public string Username { get; private set; }
+
+        /// <summary>
+        /// Gets the MachineName.
+        /// </summary>
         public string MachineName { get; private set; }
+
+        /// <summary>
+        /// Gets the ApplicationName.
+        /// </summary>
         public string ApplicationName { get; private set; }
+
+        /// <summary>
+        /// Gets the ProcessId.
+        /// </summary>
         public int ProcessId { get; private set; }
+
+        /// <summary>
+        /// Gets the ProcessIdString. Used for saving a few conversions.
+        /// </summary>
         public string ProcessIdString { get; private set; }
+
+        /// <summary>
+        /// Gets the ProcessName.
+        /// </summary>
         public string ProcessName { get; set; }
+
+        /// <summary>
+        /// Gets the AppDomainName.
+        /// </summary>
         public string AppDomainName { get; private set; }
 
+        /// <summary>
+        /// Gets the Exception, if any.
+        /// </summary>
         public Exception Exception { get; private set; }
+
+        /// <summary>
+        /// Gets the location of the log message.
+        /// </summary>
         public LogLocation LogLocation { get; private set; }
+
+        /// <summary>
+        /// Gets the extended properties.
+        /// </summary>
         public Dictionary<string, object> Properties { get; private set; }
     }
 }
