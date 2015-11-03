@@ -215,6 +215,46 @@ they are:
 If none of these are assigned, no CorrelationId will be added to the properties
 of the log message.
 
+LogContext
+==========
+
+LogBridge contains the notion of a *LogContext* which basically encapsulates
+*CorrelationId* and *ExtendedProperties* but it can do that on several levels 
+in an application. Currently three levels are supported:
+
+1. Process
+2. AppDomain
+3. Thread
+
+With Thread being more specific than AppDomain, which again is more specific
+than Process.
+
+The extended properties set in the configuration are Process-wide.
+
+To e.g. set the extended properties for a thread (e.g. the thread for a 
+synchronous web request) you would simply use:
+
+```
+var extendedProperties = new List<ExtendedProperty>() {...}
+LogContext.ThreadLogContext.ExtendedProperties = extendedProperties;
+```
+
+To make it easier to temporarily change the scope for a logging statement
+LogContext has a `Push()` method, which returns a instance of a disposable 
+LogContextScope class, which will automatically restore the previous
+LogContext when disposed.
+
+```
+
+using (LogContext.ThreadLogContext.Push())
+{
+    LogContext.ThreadLogContext.ExtendedProperties = ....;
+
+    // Do some logging
+}
+
+```
+
 Configuration
 =============
 Currently the configuration is very simple. In theory (and even, at  times, in

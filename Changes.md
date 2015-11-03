@@ -10,6 +10,7 @@ This version has a few internal plumbing changes, e.g.
 
   - Issue #3 with missing exception message for log4net
   - Missing exception message for FaultExceptions - a minor brain hemorage on my part. 
+  - Describe.XXX now has an internal recursionDepth stopping infinite recursion AKA stack overflows from happening.
 
 ### New featuers
 
@@ -19,3 +20,4 @@ This version has a few internal plumbing changes, e.g.
 ### Breaking changes
 
   - Removal of the *stackFrameOffsetCount* property from the *logBridge* configuration element. Please remove this manually when upgrading.
+  - The static ThreadLogContext etc. on the Log class have been moved to the LogContext class instead.
