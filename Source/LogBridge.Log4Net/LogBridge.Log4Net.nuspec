@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-		<id>$id$</id>
-		<version>$version$</version>
+    <id>$title$</id>
+    <title>$id$</title>
+    <version>$version$</version>
 		<authors>Torben Rahbek Koch</authors>
 		<owners>Torben Rahbek Koch</owners>
 		<licenseUrl>https://github.com/TorbenRahbekKoch/LogBridge/blob/master/LICENSE</licenseUrl>
@@ -15,7 +16,7 @@
     <copyright>$copyright$</copyright>
 		<tags>Utility Logging</tags>
     <dependencies>
-      <dependency id="SoftwarePassion.Common.Core" version="1.1.0"/>
+      <dependency id="SoftwarePassion.Common.Core" version="1.2.0"/>
       <dependency id="SoftwarePassion.LogBridge" version="$version$"/>
       <dependency id="log4net" version="2.0.3"/>
     </dependencies>
