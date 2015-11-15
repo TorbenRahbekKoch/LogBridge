@@ -8,7 +8,7 @@
 		<owners>Torben Rahbek Koch</owners>
 		<licenseUrl>https://github.com/TorbenRahbekKoch/LogBridge/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/TorbenRahbekKoch/LogBridge</projectUrl>
-		<iconUrl>https://github.com/TorbenRahbekKoch/LogBridge/blob/master/nuget/SoftwarePassion.LogBridge.png</iconUrl>
+		<iconUrl>https://raw.githubusercontent.com/TorbenRahbekKoch/LogBridge/master/nuget/SoftwarePassion.LogBridge.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>$description$</summary>
 		<description>$description$</description>
