@@ -3,7 +3,6 @@
 	<metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <id>$title$</id>
     <title>$id$</title>
-    <title></title>
 		<version>$version$</version>
 		<authors>Torben Rahbek Koch</authors>
 		<owners>Torben Rahbek Koch</owners>
