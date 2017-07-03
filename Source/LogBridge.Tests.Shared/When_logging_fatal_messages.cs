@@ -12,6 +12,17 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
 
 
 
+        [Fact]
+        public void Verify_that_level_is_enabled()
+        {
+            const string message = "Message";
+            Guid eventId = Guid.Empty;
+            if (Log.IsFatalLevelEnabled)
+                eventId = Log.Fatal(message);
+            LogData expected = CreateExpectedLogData(eventId, message);
+
+            VerifyLogData(expected);
+        }
 
         [Fact]
         public void Verify_that_message_is_logged_correctly()

@@ -88,16 +88,25 @@ namespace SoftwarePassion.LogBridge.Log4Net
             return defaultLogger;
         }
 
-
         /// <summary>
         /// Checks whether logging is enabled for the given logging Level.
         /// </summary>
         /// <param name="activeLogger">The active logger.</param>
         /// <param name="level">The level.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if enabled, <c>false</c> otherwise.</returns>
         protected override bool PerformIsLoggingEnabled(ILogger activeLogger, Level level)
         {
             return activeLogger.IsEnabledFor(ToLog4NetLevel(level));
+        }
+
+        /// <summary>
+        /// Checks whether logging is enabled for the given logging Level.
+        /// </summary>
+        /// <param name="level">The level.</param>
+        /// <returns><c>true</c> if enabled, <c>false</c> otherwise.</returns>
+        protected override bool PerformIsLoggingEnabled(Level level)
+        {
+            return PerformGetLogger(GetLocationInfo()).IsEnabledFor(ToLog4NetLevel(level));
         }
 
         private PropertiesDictionary ToLog4NetProperties(LogData logData)

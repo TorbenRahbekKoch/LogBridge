@@ -30,6 +30,16 @@ namespace SoftwarePassion.LogBridge
         }
 
         /// <summary>
+        /// Reports whether the provider has the given Level enabled.
+        /// </summary>
+        /// <param name="level">The Level to ask about.</param>
+        /// <returns>If the level is enabled, true is returned, otherwise false.</returns>
+	    protected override bool PerformIsLevelEnabled(Level level)
+	    {
+            return PerformIsLoggingEnabled(level);
+        }
+
+	    /// <summary>
         /// Logs the given exception, message and extendedProperties.
         /// </summary>
         /// <param name="logLocation">The location of the log statement.</param>
@@ -43,7 +53,7 @@ namespace SoftwarePassion.LogBridge
         protected override Guid PerformLogEntry(LogLocation? logLocation, Guid? correlationId, Exception exception, Level level,
 			object extendedProperties, string message)
 		{
-            var locationInformation = logLocation.HasValue ? logLocation.Value : GetLocationInfo();
+            var locationInformation = logLocation ?? GetLocationInfo();
             var activeLogger = PerformGetLogger(locationInformation);
 			if (!PerformIsLoggingEnabled(activeLogger, level))
 				return Guid.Empty;
@@ -121,8 +131,15 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         /// <param name="activeLogger">The active logger.</param>
         /// <param name="level">The level.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if the given level is enabled, <c>false</c> otherwise.</returns>
 	    protected abstract bool PerformIsLoggingEnabled(TLoggerImplementation activeLogger, Level level);
+
+        /// <summary>
+        /// Checks whether logging is enabled for the given logging Level.
+        /// </summary>
+        /// <param name="level">The level.</param>
+        /// <returns><c>true</c> if the given level is enabled, <c>false</c> otherwise.</returns>
+        protected abstract bool PerformIsLoggingEnabled(Level level);
 
         private Option<Guid> CalculateCorrelationId(
             Guid? explicitCorrelationId, 
@@ -139,9 +156,6 @@ namespace SoftwarePassion.LogBridge
 
         private Dictionary<string, object> CalculateExtendedProperties(object extendedProperties, out Option<Guid> correlationId, out string applicationName)
         {
-            correlationId = Option.None<Guid>();
-            applicationName = string.Empty;
-
             if (extendedProperties == null)
             {
                 return CalculateExtendedPropertiesFromLogContext(defaultPropertySize, out correlationId, out applicationName);                

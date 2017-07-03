@@ -108,7 +108,7 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
         {
             try
             {
-                return logWriter;
+                return GetLogger();
             }
             catch (Exception ex)
             {
@@ -126,10 +126,26 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary
         /// </summary>
         /// <param name="activeLogger">The active logger.</param>
         /// <param name="level">The level.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if enabled, <c>false</c> otherwise.</returns>
         protected override bool PerformIsLoggingEnabled(LogWriter activeLogger, Level level)
         {            
             return activeLogger.IsLoggingEnabled();
+        }
+
+        /// <summary>
+        /// Performs the is logging enabled.
+        /// </summary>
+        /// <param name="level">The level.</param>
+        /// <returns><c>true</c> if enabled, <c>false</c> otherwise.</returns>
+        protected override bool PerformIsLoggingEnabled(Level level)
+        {
+            var activeLogger = GetLogger();
+            return activeLogger.IsLoggingEnabled();
+        }
+
+        private LogWriter GetLogger()
+        {
+            return logWriter;
         }
 
         private readonly LogWriter logWriter;

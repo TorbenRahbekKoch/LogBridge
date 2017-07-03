@@ -44,10 +44,20 @@ namespace SoftwarePassion.LogBridge
         /// </summary>
         /// <param name="activeLogger">The active logger.</param>
         /// <param name="level">The level.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if enabled, <c>false</c> otherwise.</returns>
         protected override bool PerformIsLoggingEnabled(NullLogWrapper activeLogger, Level level)
         {
             return false;
+        }
+
+        /// <summary>
+        /// Checks whether logging is enabled for the given logging Level.
+        /// </summary>
+        /// <param name="level">The level.</param>
+        /// <returns><c>true</c> if enabled, <c>false</c> otherwise.</returns>
+        protected override bool PerformIsLoggingEnabled(Level level)
+        {
+            return PerformIsLoggingEnabled(this, level);
         }
     }
 }

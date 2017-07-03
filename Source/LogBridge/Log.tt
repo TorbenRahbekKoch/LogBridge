@@ -78,6 +78,7 @@ namespace SoftwarePassion.LogBridge
 			    index++;
 			}
 
+			// Must match the levels in the Level enum.
 			var levels = new []{"Error", "Debug", "Information", "Fatal", "Warning"};
 			foreach (var level in levels)
 			{
@@ -96,6 +97,13 @@ namespace SoftwarePassion.LogBridge
 				}
 				
 				WriteLine("        #endregion");
+				WriteLine(string.Empty);
+				WriteLine("        /// <summary>");
+				WriteLine("        /// Verifies whether the given log level is actually being logged.");
+				WriteLine("        /// </summary>");
+				Write("        public static bool Is" + level + "LevelEnabled => ");
+				WriteLine("Logger.IsLevelEnabled(Level." + level + ");");
+
 				WriteLine(string.Empty);
 			}
 		#>

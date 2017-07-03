@@ -33,6 +33,11 @@ namespace SoftwarePassion.LogBridge.Tests.Unit
             return true;
         }
 
+        protected override bool PerformIsLoggingEnabled(Level level)
+        {
+            return true;
+        }
+
         private static readonly List<LogData> logEntries = new List<LogData>();
     }
 }

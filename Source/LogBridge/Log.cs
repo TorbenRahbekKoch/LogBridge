@@ -527,6 +527,11 @@ namespace SoftwarePassion.LogBridge
 
         #endregion
 
+        /// <summary>
+        /// Verifies whether the given log level is actually being logged.
+        /// </summary>
+        public static bool IsErrorLevelEnabled => Logger.IsLevelEnabled(Level.Error);
+
 
         #region Debug
         /// <summary>
@@ -1026,6 +1031,11 @@ namespace SoftwarePassion.LogBridge
         }
 
         #endregion
+
+        /// <summary>
+        /// Verifies whether the given log level is actually being logged.
+        /// </summary>
+        public static bool IsDebugLevelEnabled => Logger.IsLevelEnabled(Level.Debug);
 
 
         #region Information
@@ -1527,6 +1537,11 @@ namespace SoftwarePassion.LogBridge
 
         #endregion
 
+        /// <summary>
+        /// Verifies whether the given log level is actually being logged.
+        /// </summary>
+        public static bool IsInformationLevelEnabled => Logger.IsLevelEnabled(Level.Information);
+
 
         #region Fatal
         /// <summary>
@@ -2027,6 +2042,11 @@ namespace SoftwarePassion.LogBridge
 
         #endregion
 
+        /// <summary>
+        /// Verifies whether the given log level is actually being logged.
+        /// </summary>
+        public static bool IsFatalLevelEnabled => Logger.IsLevelEnabled(Level.Fatal);
+
 
         #region Warning
         /// <summary>
@@ -2526,6 +2546,11 @@ namespace SoftwarePassion.LogBridge
         }
 
         #endregion
+
+        /// <summary>
+        /// Verifies whether the given log level is actually being logged.
+        /// </summary>
+        public static bool IsWarningLevelEnabled => Logger.IsLevelEnabled(Level.Warning);
 
 
         private static bool DiagnosticsEnabled

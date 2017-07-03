@@ -10,6 +10,18 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         {}
 
         [Fact]
+        public void Verify_that_level_is_enabled()
+        {
+            const string message = "Message";
+            Guid eventId = Guid.Empty;
+            if (Log.IsWarningLevelEnabled)
+                eventId = Log.Warning(message);
+            LogData expected = CreateExpectedLogData(eventId, message);
+
+            VerifyLogData(expected);
+        }
+
+        [Fact]
         public void Verify_that_message_is_logged_correctly()
         {
             const string message = "Message";

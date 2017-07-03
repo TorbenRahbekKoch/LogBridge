@@ -138,6 +138,16 @@ namespace SoftwarePassion.LogBridge
         }
 
         /// <summary>
+        /// Returns true if the provider reports that the given level is active.
+        /// </summary>
+        /// <param name="level">The Level to ask about.</param>
+        /// <returns>If the level is enabled, <c>true</c> is returned, otherwise <c>false</c>.</returns>
+        public bool IsLevelEnabled(Level level)
+        {
+            return PerformIsLevelEnabled(level);
+        }
+
+        /// <summary>
         /// Logs the given exception, message and extendedProperties.
         /// </summary>
         /// <param name="logLocation">The location of the log statement.</param>
@@ -209,6 +219,13 @@ namespace SoftwarePassion.LogBridge
         /// Gets a value indicating whether diagnostics is enabled. 
         /// </summary>
         protected bool DiagnosticsEnabled { get; private set; }
+
+        /// <summary>
+        /// Reports whether the provider has the given Level enabled.
+        /// </summary>
+        /// <param name="level">The Level to ask about.</param>
+        /// <returns>If the level is enabled, true is returned, otherwise false.</returns>
+        protected abstract bool PerformIsLevelEnabled(Level level);
 
         /// <summary>
         /// Performs the actual logging. Specialized LogWrappers implement this 
