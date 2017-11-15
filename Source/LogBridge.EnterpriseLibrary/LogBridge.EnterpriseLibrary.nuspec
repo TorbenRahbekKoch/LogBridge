@@ -21,12 +21,12 @@
       <dependency id="EnterpriseLibrary.Logging" version="6.0.0"/>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System" targetFramework="net45" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
+      <frameworkAssembly assemblyName="System" targetFramework="net461" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net461" />
     </frameworkAssemblies>
   </metadata>
 	<files>
-		<file src="..\..\Build\Release\LogBridge.EnterpriseLibrary.pdb" target="lib\net45\" />
+		<file src="..\..\Build\Release\LogBridge.EnterpriseLibrary.pdb" target="lib\net461\" />
     <file src="nuget\app.config.install.xdt" target="content"/>
     <file src="nuget\app.config.uninstall.xdt" target="content"/>
     <file src="..\..\Readme.md" target=""/>

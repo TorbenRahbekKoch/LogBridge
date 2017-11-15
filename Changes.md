@@ -1,3 +1,7 @@
+## Version 1.4
+
+  - Updated framework references to 4.6.1 from 4.5
+
 ## Version 1.3
 
 This version has a few internal plumbing changes, e.g.
