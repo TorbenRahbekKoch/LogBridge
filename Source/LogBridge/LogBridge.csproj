@@ -34,9 +34,8 @@
     <DocumentationFile>..\..\Build\Release\LogBridge.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SoftwarePassion.Common.Core, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SoftwarePassion.Common.Core.1.2.0\lib\net45\SoftwarePassion.Common.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SoftwarePassion.Common.Core, Version=1.3.0.0, Culture=neutral, PublicKeyToken=914f179c8e0b67cf, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SoftwarePassion.Common.Core.1.3.0\lib\net461\SoftwarePassion.Common.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
