@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using SoftwarePassion.Common.Core;
 
@@ -169,6 +170,28 @@ namespace SoftwarePassion.LogBridge
         {
             get { return Log.Logger.AppDomainLogContext.CorrelationId; }
             set { Log.Logger.AppDomainLogContext.CorrelationId = value; }
+        }
+
+        /// <summary>
+        /// Ensures that the context has an extended property with the given 
+        /// name and value.
+        /// </summary>
+        /// <param name="name">The name of the property</param>
+        /// <param name="value">The value of the property</param>
+        public void SetExtendedProperty(string name, string value)
+        {
+            if (ExtendedProperties.IsNone)
+                this.ExtendedProperties = Option.Some(new List<ExtendedProperty>().AsEnumerable());
+
+            var property = new ExtendedProperty(name, value);
+            var properties = ExtendedProperties.Value.ToList();
+            var propertyIndex = properties.FindIndex(p => p.Name == name);
+            if (propertyIndex >= 0)
+                properties[propertyIndex] = property;
+            else
+                properties.Add(new ExtendedProperty(name, value));
+
+            this.ExtendedProperties = Option.Some(properties.AsEnumerable());
         }
 
         /// <summary>

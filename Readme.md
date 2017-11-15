@@ -183,7 +183,7 @@ configuration file:
 
   <pre>
   &lt;logBridge logWrapperType="SoftwarePassion.LogBridge.Log4Net.Log4NetWrapper"
-             logWrapperAssembly="LogBridge.Log4Net, Version=1.3.1.0, Culture=neutral, PublicKeyToken=null"
+             logWrapperAssembly="LogBridge.Log4Net, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null"
              throwOnResolverFail="true"
              internalDiagnosticsEnabled="true"&gt;
     &lt;extendedProperties&gt;
@@ -239,6 +239,11 @@ var extendedProperties = new List<ExtendedProperty>() {...}
 LogContext.ThreadLogContext.ExtendedProperties = extendedProperties;
 ```
 
+You can also simply set one property (new from 1.4):
+```
+LogContext.ThreadLogContext.SetExtendedProperty("propertyName", "propertyValue");
+```
+
 To make it easier to temporarily change the scope for a logging statement
 LogContext has a `Push()` method, which returns a instance of a disposable 
 LogContextScope class, which will automatically restore the previous
@@ -269,9 +274,9 @@ assembly the log-wrapper is located. This is done using an *appSetting* called
 *SoftwarePassion.LogBridge.LogWrapperAssembly*. Out of the box only the three
 values are supported:
 
-    - LogBridge.Log4Net, Version=1.3.1.0, Culture=neutral, PublicKeyToken=null
-    - LogBridge.UmbracoLog4Net, Version=1.3.1.0, Culture=neutral, PublicKeyToken=null
-    - LogBridge.EnterpriseLibrary, Version=1.3.1.0, Culture=neutral, PublicKeyToken=null
+    - LogBridge.Log4Net, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null
+    - LogBridge.UmbracoLog4Net, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null
+    - LogBridge.EnterpriseLibrary, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null
 
 The meaning of these should be self-evident. What this value does internally is
 to have LogBridge manually load the Assembly and thereby making it available
@@ -292,11 +297,11 @@ have to register a configuration section:
 ```
 
 A configuration section can look like this - with the entire set of settings supported
-in 1.2: 
+in 1.2 (and forward): 
 
 ```
 <logBridge logWrapperType="SoftwarePassion.LogBridge.Tests.Unit.TestLogWrapper"
-            logWrapperAssembly="LogBridge.Log4Net, Version=1.3.1.0, Culture=neutral, PublicKeyToken=null"
+            logWrapperAssembly="LogBridge.Log4Net, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null"
             throwOnResolverFail="true"
             internalDiagnosticsEnabled="true">
 <extendedProperties>

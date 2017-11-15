@@ -56,7 +56,7 @@ namespace SoftwarePassion.LogBridge.Tests.Unit
                     .ToList();
 
                 nonMatchingKeys = expectedKeys
-                    .Where(key => !Equals(expected[key], actual[key]))
+                    .Where(key => !Equals(expected[key].ToString(), actual[key].ToString()))
                     .ToList();
 
                 missingKeys.Count().Should().Be(0, because: "Missing properties: " + string.Join(", ", missingKeys));

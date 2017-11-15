@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using SoftwarePassion.Common.Core;
 using Xunit;
@@ -17,6 +18,21 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
         private Guid RunLambda(Func<Guid> code)
         {
             return code();
+        }
+
+        [Fact]
+        public void Verify_that_extended_property_is_set()
+        {
+            var extended = new ExtendedProperties();
+            LogContext.ThreadLogContext.SetExtendedProperty("StringValue", extended.StringValue);
+            LogContext.ThreadLogContext.SetExtendedProperty("IntValue", extended.IntValue.ToString(CultureInfo.InvariantCulture));
+            LogContext.ThreadLogContext.SetExtendedProperty("GuidValue", extended.GuidValue.ToString());
+
+            const string message = "Simple";
+            var eventId = Log.Debug(message);
+            LogData expected = CreateExpectedLogData(eventId, message, extended.AsProperties);
+
+            VerifyLogData(expected);
         }
 
         [Fact]

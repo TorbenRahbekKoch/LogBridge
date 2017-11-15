@@ -1,6 +1,8 @@
 ## Version 1.4
 
   - Updated framework references to 4.6.1 from 4.5
+  - Add SetExtendedProperty method to LogContext
+  - Fix a couple of brittle tests
 
 ## Version 1.3
 

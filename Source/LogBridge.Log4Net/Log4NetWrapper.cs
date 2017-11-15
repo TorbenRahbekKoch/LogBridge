@@ -32,7 +32,7 @@ namespace SoftwarePassion.LogBridge.Log4Net
         {
             var eventData = new LoggingEventData()
             {
-                TimeStamp = logData.TimeStamp,
+                TimeStampUtc = logData.TimeStamp,
                 Message = logData.Message,
                 Level = ToLog4NetLevel(logData.Level),
                 LocationInfo = ToLog4NetLocationInfo(logData.LogLocation),

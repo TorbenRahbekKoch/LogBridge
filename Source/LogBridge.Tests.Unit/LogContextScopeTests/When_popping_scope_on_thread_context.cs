@@ -28,14 +28,8 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.LogContextScopeTests
         [Fact]
         public void Verify_that_extended_properties_are_restored()
         {
-            var expected = new List<ExtendedProperty>
-            {
-                new ExtendedProperty("Property1", "Value1"),
-                new ExtendedProperty("Property2", "Value2")
-            };
-
-            // actual;
-
+            var expected = LogContext.ActiveExtendedProperties.Value.ToList();
+            
             using (var scope = LogContext.ThreadLogContext.Push())
             {
                 var extras = new List<ExtendedProperty>

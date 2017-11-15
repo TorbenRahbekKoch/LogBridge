@@ -45,7 +45,6 @@ namespace SoftwarePassion.LogBridge.Tests.Unit.LogContextScopeTests
             }
 
             actual.ShouldAllBeEquivalentTo(expected);
-            LogContext.ActiveExtendedProperties.Value.ToList().Count.Should().Be(2, because: "There are two properties in the configuration file.");
         }
 
         [Fact]
