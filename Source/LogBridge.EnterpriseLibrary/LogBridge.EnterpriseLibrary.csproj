@@ -34,6 +34,12 @@
     <DocumentationFile>..\..\Build\Release\LogBridge.EnterpriseLibrary.XML</DocumentationFile>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SoftwarePassion.LogBridge.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging">
       <HintPath>..\..\packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
@@ -55,6 +61,7 @@
     <None Include="nuget\app.config.uninstall.xdt" />
     <None Include="nuget\app.config.install.xdt" />
     <None Include="packages.config" />
+    <None Include="SoftwarePassion.LogBridge.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LogBridge\LogBridge.csproj">

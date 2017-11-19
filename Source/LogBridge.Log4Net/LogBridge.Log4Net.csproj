@@ -34,6 +34,12 @@
     <DocumentationFile>..\..\Build\Release\LogBridge.Log4Net.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SoftwarePassion.LogBridge.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
@@ -60,6 +66,7 @@
     <None Include="nuget\app.config.install.xdt" />
     <None Include="nuget\app.config.uninstall.xdt" />
     <None Include="packages.config" />
+    <None Include="SoftwarePassion.LogBridge.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LogBridge\LogBridge.csproj">
