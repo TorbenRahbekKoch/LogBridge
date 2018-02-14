@@ -8,7 +8,7 @@
 
   <configSections xdt:Transform="RemoveAll" xdt:Locator="Condition(count(*)=0)" />
 
-  <logBridge logWrapperAssembly="LogBridge.UmbracoLog4Net, Version=1.4.0.0, Culture=neutral, PublicKeyToken=null" xdt:Transform="InsertIfMissing"
+  <logBridge logWrapperAssembly="LogBridge.UmbracoLog4Net, Version=1.5.0.0, Culture=neutral, PublicKeyToken=null" xdt:Transform="InsertIfMissing"
            throwOnResolverFail="true"
            internalDiagnosticsEnabled="false">
     <extendedProperties>
