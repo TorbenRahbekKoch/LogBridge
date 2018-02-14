@@ -73,9 +73,8 @@ namespace SoftwarePassion.LogBridge
             try
             {
                 var eventId = Guid.NewGuid();
-                string applicationName;
-                Option<Guid> extendedCorrelationId;
-                var extendedPropertyValues = CalculateExtendedProperties(extendedProperties, out extendedCorrelationId, out applicationName);
+                var extendedPropertyValues = 
+                    CalculateExtendedProperties(extendedProperties, out var extendedCorrelationId);
 
                 var username = ThreadPrincipal.Resolve(DiagnosticsEnabled);
 
@@ -91,7 +90,6 @@ namespace SoftwarePassion.LogBridge
                     message,
                     username,
                     MachineName,
-                    applicationName,
                     currentProcess.Id,
                     currentProcessName,
                     currentAppDomainName,
@@ -154,20 +152,20 @@ namespace SoftwarePassion.LogBridge
             return CorrelationId;
         }
 
-        private Dictionary<string, object> CalculateExtendedProperties(object extendedProperties, out Option<Guid> correlationId, out string applicationName)
+        private Dictionary<string, object> CalculateExtendedProperties(object extendedProperties, out Option<Guid> correlationId)
         {
             if (extendedProperties == null)
             {
-                return CalculateExtendedPropertiesFromLogContext(defaultPropertySize, out correlationId, out applicationName);                
+                return CalculateExtendedPropertiesFromLogContext(defaultPropertySize, out correlationId);                
             }
 
             // TypeDescriptor.GetProperties(Type...) is cached (by TypeDescriptor itself)
             var properties = TypeDescriptor.GetProperties(extendedProperties.GetType()).OfType<PropertyDescriptor>().ToList();
-            var propertyValues = CalculateExtendedPropertiesFromLogContext(defaultPropertySize + properties.Count(), out correlationId, out applicationName);
+            var propertyValues = CalculateExtendedPropertiesFromLogContext(defaultPropertySize + properties.Count(), out correlationId);
             foreach (PropertyDescriptor property in properties)
             {
                 var propertyValue = property.GetValue(extendedProperties);
-                if (!IsSpecialPropertyValue(propertyValue, property.Name, ref correlationId, ref applicationName))
+                if (!IsSpecialPropertyValue(propertyValue, property.Name, ref correlationId))
                 {
                     propertyValues[property.Name] = propertyValue;
                 }
@@ -176,10 +174,9 @@ namespace SoftwarePassion.LogBridge
             return propertyValues;
         }
 
-        private Dictionary<string, object> CalculateExtendedPropertiesFromLogContext(int propertiesSize, out Option<Guid> correlationId, out string applicationName)
+        private Dictionary<string, object> CalculateExtendedPropertiesFromLogContext(int propertiesSize, out Option<Guid> correlationId)
         {
             correlationId = Option.None<Guid>();
-            applicationName = string.Empty;
 
             var propertiesValue = ExtendedProperties;
             if (propertiesValue.IsNone)
@@ -189,7 +186,7 @@ namespace SoftwarePassion.LogBridge
             var propertyValues = CreateDictionary(true, propertiesSize + properties.Count());
             foreach (var property in properties)
             {
-                if (!IsSpecialPropertyValue(property.Value, property.Name, ref correlationId, ref applicationName))
+                if (!IsSpecialPropertyValue(property.Value, property.Name, ref correlationId))
                 {
                     propertyValues[property.Name] = property.Value;
                 }
@@ -198,26 +195,15 @@ namespace SoftwarePassion.LogBridge
             return propertyValues;
         }
 
-        private bool IsSpecialPropertyValue(object propertyValue, string propertyName, ref Option<Guid> correlationId, ref string applicationName)
+        private bool IsSpecialPropertyValue(object propertyValue, string propertyName, ref Option<Guid> correlationId)
         {
-            if (propertyValue is Guid && string.Compare(
+            if (propertyValue is Guid guid && string.Compare(
                     propertyName,
                     LogConstants.CorrelationIdKey,
                     StringComparison.OrdinalIgnoreCase)
                 == 0)
             {
-                correlationId = (Guid)propertyValue;
-                return true;
-            }
-
-            var propertyValueString = propertyValue as string;
-            if (propertyValueString != null && string.Compare(
-                    propertyName,
-                    LogConstants.ApplicationNameKey,
-                    StringComparison.OrdinalIgnoreCase)
-                == 0)
-            {
-                applicationName = propertyValueString;
+                correlationId = guid;
                 return true;
             }
 

@@ -1,4 +1,6 @@
-﻿namespace SoftwarePassion.LogBridge
+﻿using System.Collections.Generic;
+
+namespace SoftwarePassion.LogBridge
 {
     /// <summary>
     /// Encapsulates an extended property whether assigned programmatically
@@ -26,5 +28,18 @@
         /// The Value of the property.
         /// </summary>
         public string Value { get; private set; }
+    }
+
+    internal class ExtendedPropertyComparer : IEqualityComparer<ExtendedProperty>
+    {
+        public bool Equals(ExtendedProperty x, ExtendedProperty y)
+        {
+            return y != null && (x != null && x.Name.Equals(y.Name));
+        }
+
+        public int GetHashCode(ExtendedProperty obj)
+        {
+            return obj.Name.GetHashCode();
+        }
     }
 }

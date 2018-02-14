@@ -20,7 +20,6 @@ namespace SoftwarePassion.LogBridge
         /// <param name="message">The message.</param>
         /// <param name="username">The username.</param>
         /// <param name="machineName">Name of the machine.</param>
-        /// <param name="applicationName">Name of the application.</param>
         /// <param name="processId">The process identifier.</param>
         /// <param name="processName">Name of the process.</param>
         /// <param name="appDomainName">Name of the application domain.</param>
@@ -36,7 +35,6 @@ namespace SoftwarePassion.LogBridge
             string message, 
             string username, 
             string machineName,
-            string applicationName,
             int processId,
             string processName,
             string appDomainName,
@@ -54,7 +52,6 @@ namespace SoftwarePassion.LogBridge
             LogLocation = logLocation;
             Username = username;
             MachineName = machineName;
-            ApplicationName = applicationName;
             ProcessId = processId;
             ProcessIdString = processId.ToString(CultureInfo.InvariantCulture);
             ProcessName = processName;
@@ -97,11 +94,6 @@ namespace SoftwarePassion.LogBridge
         /// Gets the MachineName.
         /// </summary>
         public string MachineName { get; private set; }
-
-        /// <summary>
-        /// Gets the ApplicationName.
-        /// </summary>
-        public string ApplicationName { get; private set; }
 
         /// <summary>
         /// Gets the ProcessId.

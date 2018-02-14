@@ -70,7 +70,8 @@ namespace SoftwarePassion.LogBridge
         }
 
         /// <summary>
-        /// Gets the list of extended properties.
+        /// Gets the list of extended properties. When properties are inherited
+        /// the most specific will win.
         /// </summary>
         public Option<IEnumerable<ExtendedProperty>> ExtendedProperties
         {
@@ -90,7 +91,7 @@ namespace SoftwarePassion.LogBridge
                 logContext = AppDomainLogContext;
                 if (logContext.ExtendedProperties.IsSome)
                 {
-                    result = result.Union(logContext.ExtendedProperties.Value);
+                    result = result.Union(logContext.ExtendedProperties.Value, ExtendedPropertyComparer);
                     if (!logContext.InheritExtendedProperties)
                         return Option.Some(result);
                 }
@@ -98,12 +99,12 @@ namespace SoftwarePassion.LogBridge
                 logContext = ProcessLogContext;
                 if (logContext.ExtendedProperties.IsSome)
                 {
-                    result = result.Union(logContext.ExtendedProperties.Value);
+                    result = result.Union(logContext.ExtendedProperties.Value, ExtendedPropertyComparer);
                     if (!logContext.InheritExtendedProperties)
                         return Option.Some(result);
                 }
 
-                result = result.Union(defaultLogContext.ExtendedProperties.Value);
+                result = result.Union(defaultLogContext.ExtendedProperties.Value, ExtendedPropertyComparer);
                 return Option.Some(result);                
             }
         }
@@ -266,6 +267,8 @@ namespace SoftwarePassion.LogBridge
         private static readonly LogContext defaultLogContext = new LogContext(Configuration.ExtendedProperties);
 
         private static readonly LogContext defaultAppDomainLogContext = new LogContext();
+
+        private static readonly ExtendedPropertyComparer ExtendedPropertyComparer = new ExtendedPropertyComparer();
     }
 }
 

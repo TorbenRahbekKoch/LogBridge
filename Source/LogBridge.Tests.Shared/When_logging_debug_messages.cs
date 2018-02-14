@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using SoftwarePassion.Common.Core;
 using Xunit;
@@ -8,16 +9,34 @@ namespace SoftwarePassion.LogBridge.Tests.Shared
 {
     public abstract class When_logging_debug_messages : LogTestBase
     {
-        public When_logging_debug_messages(ILogDataVerifier verifier)
+        public When_logging_debug_messages(ILogDataVerifier verifier)   
             : base(Level.Debug, verifier)
         {
+            // Clear correlation id and extended properties before each test
             LogContext.ThreadLogContext.CorrelationId = Option.None<Guid>();
+            LogContext.ThreadLogContext.ExtendedProperties = Option.Some(Enumerable.Empty<ExtendedProperty>());
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private Guid RunLambda(Func<Guid> code)
         {
             return code();
+        }
+
+
+        [Fact]
+        public void Verify_that_propertyname_can_be_overwritten()
+        {
+            var extended = new ExtendedProperties();
+            LogContext.ProcessLogContext.SetExtendedProperty("StringValue", "Do not expect this");
+            LogContext.ThreadLogContext.SetExtendedProperty("StringValue", extended.StringValue);
+            LogContext.ThreadLogContext.SetExtendedProperty("IntValue", extended.IntValue.ToString(CultureInfo.InvariantCulture));
+            LogContext.ThreadLogContext.SetExtendedProperty("GuidValue", extended.GuidValue.ToString());
+            const string message = "Simple";
+            var eventId = Log.Debug(message);
+            LogData expected = CreateExpectedLogData(eventId, message, extended.AsProperties);
+
+            VerifyLogData(expected);
         }
 
         [Fact]

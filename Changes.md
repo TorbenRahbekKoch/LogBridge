@@ -1,3 +1,8 @@
+## Version 1.5
+
+  - Removed special handling of the ApplicationName property. This can be considered a (minor) breaking change.
+  - Fixed a bug where more specifically given properties - e.g. in a thread instead of process-level - were not always overridden correctly.
+
 ## Version 1.4
 
   - Updated framework references to 4.6.1 from 4.5

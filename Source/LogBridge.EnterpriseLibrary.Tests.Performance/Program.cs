@@ -41,7 +41,6 @@ namespace SoftwarePassion.LogBridge.EnterpriseLibrary.Tests.Performance
                 "Message",
                 "Username",
                 "Machinename",
-                "EnterpriseLibrary Performance Tester",
                 42,
                 "ProcessName",
                 "AppDomainName",
