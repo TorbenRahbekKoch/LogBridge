@@ -1,0 +1,32 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ include file="Includes.tt" #>
+<#@ output extension=".cs" #>
+
+<#
+	var staticValue = " static "; 
+	var configurationName = "Configuration";
+	var loggerValue = "Logger.";
+	var messagePrefix = "Logger.";
+    var writeTestMethods = false;
+#>
+namespace SoftwarePassion.LogBridge.Ambient
+{
+    /// <summary>
+    /// Convenience ambient class for Logging.
+    /// </summary>
+    public partial class Log
+    {
+<#@ include file="LogBase.tt" #>
+        public static void Configure(Configuration configuration, ITime timeProvider, IUsernameProvider usernameProvider, ILogProvider logProvider)
+        {
+			Logger = new Logger(configuration, timeProvider, usernameProvider, logProvider);
+        }
+
+		internal static Logger Logger;
+	}
+}

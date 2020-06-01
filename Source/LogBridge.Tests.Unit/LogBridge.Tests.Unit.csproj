@@ -1,107 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6FE826BF-F4D0-44E4-9A84-6D572F72C9B7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SoftwarePassion.LogBridge.Tests.Unit</RootNamespace>
-    <AssemblyName>LogBridge.Tests.Unit</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\Test\Debug\LogBridge\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\Test\Release\LogBridge\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="FluentAssertions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FluentAssertions.4.0.0\lib\net45\FluentAssertions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FluentAssertions.4.0.0\lib\net45\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SoftwarePassion.Common.Core, Version=1.3.0.0, Culture=neutral, PublicKeyToken=914f179c8e0b67cf, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SoftwarePassion.Common.Core.1.3.0\lib\net461\SoftwarePassion.Common.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="xunit.core, Version=2.0.0.2929, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.core.2.0.0\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Compile Include="..\LogBridge.Generator\When_logging_with_injectable_logger.cs" Link="When_logging_with_injectable_logger.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="DescribeTests\Class1.cs" />
-    <Compile Include="DescribeTests\Class2.cs" />
-    <Compile Include="DescribeTests\Class3.cs" />
-    <Compile Include="DescribeTests\Enums.cs" />
-    <Compile Include="DescribeTests\Methods.cs" />
-    <Compile Include="DescribeTests\When_Describing_Methods.cs" />
-    <Compile Include="LogContextScopeTests\When_popping_scope_on_thread_context.cs" />
-    <Compile Include="LogContextScopeTests\When_pushing_scope_on_thread_context.cs" />
-    <Compile Include="LogDataVerifier.cs" />
-    <Compile Include="LogTests\When_logging_warning_messages_with_null_parameters.cs" />
-    <Compile Include="LogTests\When_logging_warning_messages.cs" />
-    <Compile Include="LogTests\When_logging_fatal_messages_with_null_parameters.cs" />
-    <Compile Include="LogTests\When_logging_fatal_messages.cs" />
-    <Compile Include="LogTests\When_logging_information_messages_with_null_parameters.cs" />
-    <Compile Include="LogTests\When_logging_information_messages.cs" />
-    <Compile Include="LogTests\When_logging_error_messages.cs" />
-    <Compile Include="LogTests\When_logging_debug_messages.cs" />
-    <Compile Include="LogTests\When_logging_error_messages_with_null_parameters.cs" />
-    <Compile Include="LogTests\When_logging_debug_messages_with_null_parameters.cs" />
-    <Compile Include="TestLogWrapper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="FsCheck" Version="2.14.2" />
+    <PackageReference Include="FsCheck.Xunit" Version="2.14.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj">
-      <Project>{B71464A5-9968-420F-9E26-A55A49B42E3D}</Project>
-      <Name>LogBridge.Tests.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LogBridge\LogBridge.csproj">
-      <Project>{591204E7-DEA6-47BD-8E89-7AAAFE660D8F}</Project>
-      <Name>LogBridge</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj" />
+    <ProjectReference Include="..\LogBridge\LogBridge.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

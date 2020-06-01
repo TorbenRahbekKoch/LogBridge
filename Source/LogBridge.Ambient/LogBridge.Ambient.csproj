@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SoftwarePassion.LogBridge.Ambient</AssemblyName>
+    <RootNamespace>SoftwarePassion.LogBridge.Ambient</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="_Log.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="_Log.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\LogBridge.Generator\Log.cs" Link="Log.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LogBridge\LogBridge.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

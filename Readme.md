@@ -3,6 +3,22 @@
 LogBridge
 ---------
 
+Proud to announce the .Net Core version of LogBridge - this has been an interesting journey.
+
+
+Supports:
+  - Implicit (ambient) logging
+  - Injectable logging
+  - Structured logging (like .net core logging) made easier 
+  - Metric logging ???? (next version)
+  - Multilevel correlation ids
+  - Asp.Net Core Configure scenarios
+  - AsyncLocal instead of ThreadLocal                                                        
+  - Configurable describer, now you can use e.g. Newtonsoft.Json                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+  - Easier to create your own LogWrappers, which is also necessary since none is delivered ;)
+  
+
+
 A no-nonsense logging wrapper aiming to give a consistent and versatile interface
 to various logging frameworks, such as Log4Net and Enterprise Library.
 

@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Includes.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Includes.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FsCheck.Xunit" Version="2.14.2" />
+    <PackageReference Include="SoftwarePassion.Common" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LogBridge.Ambient\LogBridge.Ambient.csproj" />
+    <ProjectReference Include="..\LogBridge.Tests.Shared\LogBridge.Tests.Shared.csproj" />
+    <ProjectReference Include="..\LogBridge\LogBridge.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="When_logging_with_ambient_logger.tt">
+      <LastGenOutput>When_logging_with_ambient_logger.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="When_logging_with_injectable_logger.tt">
+      <LastGenOutput>When_logging_with_injectable_logger.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Log.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Log.cs</LastGenOutput>
+    </None>
+    <None Update="LogBase.tt">
+      <Generator></Generator>
+    </None>
+    <None Update="Logger.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Logger.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="When_logging_with_ambient_logger.cs">
+      <DependentUpon>When_logging_with_ambient_logger.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="When_logging_with_injectable_logger.cs">
+      <DependentUpon>When_logging_with_injectable_logger.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Logger.cs">
+      <DependentUpon>Logger.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Log.cs">
+      <DependentUpon>Log.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+</Project>

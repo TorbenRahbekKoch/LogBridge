@@ -1,0 +1,368 @@
+﻿<#@ assembly name="System.Core" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+        /// <summary>
+        /// The null exception message - used when an overload with an exception 
+        /// parameter is called, but said parameter is null.
+        /// </summary>
+        public const string NullExceptionMessage = "[null exception]";
+
+		<#
+			var templateText = File.ReadAllText(Host.ResolvePath( @"LogParameters.txt"))
+				.Split(new string[] {Environment.NewLine},StringSplitOptions.None);
+
+			var parameterDescriptions = new Dictionary<string, Param>();
+
+			var index = 0;
+			while (true)
+			{
+			    var line = templateText[index];
+			    if (line == "//-----" || string.IsNullOrWhiteSpace(line))
+			        break;
+
+			    var items = line.Split(new[] {':'})
+					.Select(item => item.Trim())
+					.ToArray();
+			    var description = items[1];
+			    var lastSpace = items[0].LastIndexOf(' ');
+			    var type = items[0].Substring(0, lastSpace);
+			    var name = items[0].Substring(lastSpace + 1);
+
+			    var param = new Param {Name = name, ParamType = type, Description = description };
+				parameterDescriptions.Add(name, param);
+			    index++;
+			}
+
+			var methods = new List<Method>();
+			index++;
+			while (index < templateText.Length)
+			{
+				var methodType = RemoveLabel(templateText[index++]);
+			    var summary = RemoveLabel(templateText[index++]);
+				var parameters = RemoveLabel(templateText[index++])
+					.Split(new []{','})
+					.Select(p => p.Trim())
+					.ToList();
+			    var message = RemoveLabel(templateText[index++]);
+
+			    var method = new Method { MethodType = methodType, Summary = summary, Parameters = parameters, Message = message};
+				methods.Add(method);
+
+			    index++;
+			}
+
+			// Must match the levels in the Level enum.
+			var levels = new []{"Error", "Debug", "Information", "Fatal", "Warning"};
+			foreach (var level in levels)
+			{				
+				WriteLine(string.Empty);
+				WriteLine("        #region " + level);
+
+			    var correlationId = new List<string>() {"correlationId"};
+			    var location = new List<string>() {"location"};
+			    
+				var methodNumber = 0;
+				foreach (var method in methods)
+				{
+					if (writeTestMethods)
+					{
+						if (method.MethodType == "params")
+						{
+							WriteTestMethod(level, loggerValue, method, methodNumber++, location.Union(method.Parameters).ToList(), parameterDescriptions);
+							WriteTestMethod(level, loggerValue, method, methodNumber++, location.Union(correlationId).Union(method.Parameters).ToList(), parameterDescriptions);
+						}
+						else 
+						{
+							WriteTestMethod(level, loggerValue, method, methodNumber++, method.Parameters, parameterDescriptions);
+							WriteTestMethod(level, loggerValue, method, methodNumber++, correlationId.Union(method.Parameters).ToList(), parameterDescriptions);
+						}
+
+					}
+					else
+					{
+						if (method.MethodType == "params")
+						{
+							WriteMethod(staticValue, level, loggerValue, method, location.Union(method.Parameters).ToList(), parameterDescriptions);
+							WriteMethod(staticValue, level, loggerValue, method, location.Union(correlationId).Union(method.Parameters).ToList(), parameterDescriptions);
+						}
+						else 
+						{
+							WriteMethod(staticValue, level, loggerValue, method, method.Parameters, parameterDescriptions);
+							WriteMethod(staticValue, level, loggerValue, method, correlationId.Union(method.Parameters).ToList(), parameterDescriptions);
+						}
+					}
+				}
+				
+				WriteLine("        #endregion");
+				WriteLine(string.Empty);
+
+				if (! writeTestMethods)
+				{
+					WriteLine("        /// <summary>");
+					WriteLine("        /// Verifies whether the given log level is actually being logged.");
+					WriteLine("        /// </summary>");
+					Write("        public" + staticValue + "bool Is" + level + "LevelEnabled => ");
+					WriteLine(loggerValue + "IsLevelEnabled(Level." + level + ");");
+					WriteLine("");
+				}
+
+				WriteLine(string.Empty);
+			}
+
+			if (! writeTestMethods)
+			{
+				WriteLine("        [MethodImpl(MethodImplOptions.AggressiveInlining)]");
+				WriteLine("        private " + staticValue + " string ExceptionMessage(Exception exception)");
+				WriteLine("        {");
+				WriteLine("            if (exception == null)");
+				WriteLine("                return NullExceptionMessage;");
+				WriteLine("            return exception.Message;");
+				WriteLine("        }");
+			}
+		#>
+<#+
+	
+	void WriteTestMethod(string level, string loggerValue, Method method, int methodNumber, IList<string> parameters, IDictionary<string, Param> parameterDescriptions)
+	{
+
+		WriteLine("        [Property]");
+		Write("        public void Verify_" + level + $"_{methodNumber}(");
+		WriteTestMethodArguments(parameters, parameterDescriptions);
+		WriteLine(")");
+
+		WriteLine("        {");
+
+		var hasLocationParameter = parameters.Any(p => p == "location");
+		if (hasLocationParameter)
+			WriteLine("            var location = new Location { FileName = fileName, MethodName = methodName, LineNumber = lineNumber };");
+
+		Write("            var eventId = " + loggerValue + level);
+		if (method.MethodType == "params")
+			Write("Fmt");
+		Write("(");
+		WriteTestMethodLogParameters(method, parameters);
+		WriteLine(");");
+
+		var hasCorrelationId = parameters.Any(p => p == "correlationId");
+
+		//if (hasCorrelationId)
+		//	WriteLine("            var correlationId = Guid.NewGuid();");
+		Write("            var expected = CreateExpectedLogData(eventId, Level." + level + ", ");
+		
+		if (!hasCorrelationId) 
+			//Write("correlationId, ");
+		//else
+			Write("null, ");
+
+		WriteExpectedLogParameters(method, parameters);
+		if (method.MethodType == "noparams")
+			Write(", Here()");
+		//else
+		//	Write(", null");
+
+		WriteLine(");");
+		WriteLine("            VerifyLogData(expected);");
+		WriteLine("        }");
+		WriteLine("");
+	}
+
+	void WriteExpectedLogParameters(Method method, IList<string> parameters)
+	{
+		bool setComma = false;
+		foreach (var parameterName in parameters)
+		{
+			if (parameterName == "firstMessageParameter" || parameterName == "messageParameters" || parameterName == "location")
+				continue;
+
+			if (setComma)
+			{
+				Write(", ");
+			}
+			else
+			{
+			    setComma = true;
+			}
+			
+			if (parameterName == "formattedMessage" && method.Message.StartsWith("FormatMessage"))
+			{
+				Write("MessageFormatter." + method.Message);
+			}
+			else
+			{
+				Write(parameterName);
+			}
+		}
+
+		var hasLocationParameter = parameters.Any(p => p == "location");
+		if (hasLocationParameter)
+			Write(", location");
+	}
+
+	void WriteTestMethodLogParameters(Method method, IList<string> parameters)
+	{
+		bool setComma = false;
+		foreach (var parameterName in parameters)
+		{
+			//if (parameterName == "firstMessageParameter" || parameterName == "messageParameters")
+			//	continue;
+
+			if (setComma)
+			{
+				Write(", ");
+			}
+			else
+			{
+			    setComma = true;
+			}
+			
+			//if (parameterName == "location")
+			//{
+			//	Write("string fileName, string method, int lineNumber");
+			//}
+			//else
+			{
+				Write(parameterName);
+			}
+		}
+	}
+
+    void WriteMethod(string staticValue, string level, string loggerValue, Method method, IList<string> parameters, IDictionary<string, Param> parameterDescriptions)
+    {
+        const string returnName = "return";
+
+		WriteLine("        /// <summary>");
+		WriteLine("        /// " + method.Summary.Replace("LOGLEVEL", level));
+		WriteLine("        /// </summary>");
+		foreach (var parameterName in parameters)
+		{
+			var parameter = parameterDescriptions[parameterName];
+			WriteLine("        /// <param name=\"" + parameterName + "\">" + parameter.Description + "</param>");
+		}
+
+		var returnParameter = parameterDescriptions[returnName];
+		WriteLine("        /// <return>"+ returnParameter.Description + "</return>");
+
+		if (method.MethodType == "params")
+			Write("        public" + staticValue + "Guid " + level + "Fmt(");
+		else 
+		    Write("        public" + staticValue + "Guid " + level + "(");
+
+		WriteParameters(parameters, parameterDescriptions);
+
+        var location = parameters.FirstOrDefault(p => p == "location");
+		if (method.MethodType == "noparams" && location == null)
+		{
+			Write(", [CallerMemberName]string methodName=\"\", ");
+			Write("[CallerFilePath]string filePath=\"\", ");
+			Write("[CallerLineNumber]int lineNumber=0");
+		}
+
+		WriteLine(")");
+
+		WriteLine("        {");
+
+		var correlationId = parameters.FirstOrDefault(p => p == "correlationId");
+		var exception  = parameters.FirstOrDefault(p => p == "exception");
+		var extendedProperties = parameters.FirstOrDefault(p => p == "extendedProperties");
+		var message = parameters.FirstOrDefault(p => p == "message");
+
+		Write("            return " + loggerValue + "LogEntry(");
+		Write(correlationId != null ? "correlationId, " : "null, ");
+		Write(exception != null ? "exception, " : "null, ");
+		Write("Level." + level + ", ");
+		Write(extendedProperties != null ? "extendedProperties, " : "null, ");
+		if (method.Message.StartsWith("FormatMessage"))
+		    Write("MessageFormatter." + method.Message);
+        else
+		    Write(method.Message);
+
+		if (location != null && method.MethodType == "noparams")
+		{
+			Write(",SHOULD NOT HAPPEN!");
+		}
+		if (location == null && method.MethodType == "params")
+		{
+			Write(", null, null, -1");
+		}
+		if (location != null && method.MethodType == "params")
+		{
+			Write(", location.MethodName, location.FileName, location.LineNumber");
+		}
+		if (location == null && method.MethodType == "noparams")
+		{
+			Write(", methodName, filePath, lineNumber");
+		}
+
+		WriteLine(");");
+		WriteLine("        }");
+		WriteLine("");
+    }
+
+	void WriteTestMethodArguments(IList<string> parameters, IDictionary<string, Param> parameterDescriptions) 
+	{
+		bool setComma = false;
+		foreach (var parameterName in parameters)
+		{
+			var parameter = parameterDescriptions[parameterName];
+			if (setComma)
+			{
+				Write(", ");
+			}
+			else
+			{
+			    setComma = true;
+			}
+
+			if (parameterName == "location")
+			{
+				Write("string fileName, string methodName, int lineNumber");
+			}
+			else
+			{
+				Write(parameter.ParamType + " " + parameter.Name);
+			}
+		}   
+	}
+
+	void WriteParameters(IList<string> parameters, IDictionary<string, Param> parameterDescriptions) 
+	{
+		bool setComma = false;
+		foreach (var parameterName in parameters)
+		{
+			var parameter = parameterDescriptions[parameterName];
+			if (setComma)
+			{
+				Write(", ");
+			}
+			else
+			{
+			    setComma = true;
+			}
+
+			Write(parameter.ParamType + " " + parameter.Name);
+		}   
+	}
+
+    string RemoveLabel(string line)
+    {
+        var colonPos = line.IndexOf(':');
+        return line.Substring(colonPos + 1).Trim();
+    }
+
+	struct Param
+	{
+		public string Name { get; set; }
+		public string ParamType { get; set; }
+		public string Description { get; set; }
+	}
+
+    struct Method
+    {
+	    public string MethodType {get; set; }
+        public string Summary { get; set; }
+		public string Message { get; set; }
+		public List<string> Parameters { get; set; }
+    }
+#>

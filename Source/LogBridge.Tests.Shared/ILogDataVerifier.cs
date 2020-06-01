@@ -1,4 +1,6 @@
-﻿namespace SoftwarePassion.LogBridge.Tests.Shared
+﻿using SoftwarePassion.LogBridge.Extension;
+
+namespace SoftwarePassion.LogBridge.Tests.Shared
 {
     public interface ILogDataVerifier
     {

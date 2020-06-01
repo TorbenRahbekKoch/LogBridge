@@ -1,0 +1,33 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System;
+using FsCheck.Xunit;
+using SoftwarePassion.LogBridge.Ambient;
+using SoftwarePassion.LogBridge.Extension;
+using SoftwarePassion.LogBridge.Implementation;
+using SoftwarePassion.LogBridge.Ambient.Tests.Unit;
+using SoftwarePassion.LogBridge.Tests.Shared;
+
+<#
+	var staticValue = " static "; 
+	var configurationName = "Configuration";
+	var loggerValue = "Log.";
+	var messagePrefix = "Logger.";
+	var writeTestMethods = true;
+#>
+namespace SoftwarePassion.LogBridge.Ambient.Tests.Unit
+{
+	[Properties(Arbitrary = new Type[] {typeof(Generators)})]
+    public class When_logging_with_ambient_logger : LogTestBase
+    {
+	    public When_logging_with_ambient_logger() : base(LoggerType.Ambient)
+		{}
+
+<#@ include file="LogBase.tt" #>
+	}
+}		
