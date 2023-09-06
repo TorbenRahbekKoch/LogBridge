@@ -17,7 +17,6 @@ Installation
 
 Install in the main application (e.g. .exe or web application) with Nuget:
 
--  [Install-package SoftwarePassion.LogBridge.EnterpriseLibrary](https://www.nuget.org/packages/SoftwarePassion.LogBridge.EnterpriseLibrary/)
 -  [Install-package SoftwarePassion.LogBridge.Log4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.Log4Net/)
 -  [Install-package SoftwarePassion.LogBridge.UmbracoLog4Net](https://www.nuget.org/packages/SoftwarePassion.LogBridge.UmbracoLog4Net/)
 
@@ -33,7 +32,7 @@ Usage
 
 ### Logging levels
 
-There are five logging levels, which correspond to Log4Net and Enterprise Library as follows:
+There are five logging levels, which correspond to Log4Net as follows:
 
 LogBridge   | Log4Net | Enterprise Library (Severity Level) 
 -----------------------------------------------------------
@@ -183,7 +182,7 @@ configuration file:
 
   <pre>
   &lt;logBridge logWrapperType="SoftwarePassion.LogBridge.Log4Net.Log4NetWrapper"
-             logWrapperAssembly="LogBridge.Log4Net, Version=1.5.0.0, Culture=neutral, PublicKeyToken=d7ba0548b468e7b6"
+             logWrapperAssembly="LogBridge.Log4Net, Version=1.6.0.0, Culture=neutral, PublicKeyToken=d7ba0548b468e7b6"
              throwOnResolverFail="true"
              internalDiagnosticsEnabled="true"&gt;
     &lt;extendedProperties&gt;
@@ -271,11 +270,10 @@ load the assembly.
 
 To get over this problem you simply have to state in which
 assembly the log-wrapper is located. This is done using an *appSetting* called
-*SoftwarePassion.LogBridge.LogWrapperAssembly*. Out of the box only the three
-values are supported:
+*SoftwarePassion.LogBridge.LogWrapperAssembly*. Out of the box only this one 
+value is supported:
 
-    - LogBridge.Log4Net, Version=1.5.0.0, Culture=neutral, PublicKeyToken=d7ba0548b468e7b6
-    - LogBridge.UmbracoLog4Net, Version=1.5.0.0, Culture=neutral, PublicKeyToken=null
+    - LogBridge.Log4Net, Version=1.6.0.0, Culture=neutral, PublicKeyToken=d7ba0548b468e7b6
 
 The meaning of these should be self-evident. What this value does internally is
 to have LogBridge manually load the Assembly and thereby making it available
@@ -284,11 +282,13 @@ for searching for implementations of LogWrapper<>.
 You can also be more specific and set the *appSetting* **SoftwarePassion.LogBridge.LogWrapperType**
 to the *full name* of the type.
 
-*Why UmbracoLogForNet?*
+*Why Umbraco.Log4Net?*
 For some reason, lost in ancient history, Umbraco chose to use a un-signed version of log4net, or 
 creating their own. This means that the log4net.dll used in Umbraco is different from the official
-log4net.dll. This, it seems, has been rectified in version 7.7 of Umbraco, wherefore you should
-use LogBridge.Log4Net for this version and onwards.
+log4net.dll. This, it seems, has been rectified in version 7.7 of Umbraco, **wherefore you should
+use LogBridge.Log4Net for this version and onwards.** 
+
+The **Umbraco.Log4Net* packages is no longer (from version 1.6) published.
 
 ### Version 1.2 changes
 
@@ -306,7 +306,7 @@ in 1.2 (and forward):
 
 ```
 <logBridge logWrapperType="SoftwarePassion.LogBridge.Tests.Unit.TestLogWrapper"
-            logWrapperAssembly="LogBridge.Log4Net, Version=1.5.0.0, Culture=neutral, PublicKeyToken=d7ba0548b468e7b6"
+            logWrapperAssembly="LogBridge.Log4Net, Version=1.6s .0.0, Culture=neutral, PublicKeyToken=d7ba0548b468e7b6"
             throwOnResolverFail="true"
             internalDiagnosticsEnabled="true">
 <extendedProperties>

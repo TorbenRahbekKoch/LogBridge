@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SoftwarePassion.LogBridge.UmbracoLog4Net.Tests.Unit</RootNamespace>
     <AssemblyName>LogBridge.UmbracoLog4Net.Tests.Unit</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -33,11 +33,9 @@
   <ItemGroup>
     <Reference Include="FluentAssertions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentAssertions.4.0.0\lib\net45\FluentAssertions.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="FluentAssertions.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FluentAssertions.4.0.0\lib\net45\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\LogBridge.UmbracoLog4Net\lib\log4net.dll</HintPath>
@@ -55,11 +53,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="xunit.core, Version=2.0.0.2929, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\xunit.extensibility.core.2.0.0\lib\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

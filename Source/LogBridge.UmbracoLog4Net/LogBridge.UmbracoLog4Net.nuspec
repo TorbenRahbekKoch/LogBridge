@@ -4,11 +4,11 @@
     <id>$title$</id>
     <title>$id$</title>
 		<version>$version$</version>
-		<authors>Torben Rahbek Koch</authors>
-		<owners>Torben Rahbek Koch</owners>
-		<licenseUrl>https://github.com/TorbenRahbekKoch/LogBridge/blob/master/LICENSE</licenseUrl>
+		<authors>Torben Koch Pløen</authors>
+		<owners>Torben Koch Pløen</owners>
+		<license type="file">license.txt</license>
     <projectUrl>https://github.com/TorbenRahbekKoch/LogBridge</projectUrl>
-		<iconUrl>https://raw.githubusercontent.com/TorbenRahbekKoch/LogBridge/master/nuget/SoftwarePassion.LogBridge.png</iconUrl>
+		<icon>SoftwarePassion.LogBridge.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>$description$</summary>
 		<description>$description$</description>
@@ -20,20 +20,22 @@
       <dependency id="SoftwarePassion.LogBridge" version="$version$"/>
     </dependencies>
     <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net461" />
-      <frameworkAssembly assemblyName="System" targetFramework="net461" />
-      <frameworkAssembly assemblyName="System.Configuration" targetFramework="net461" />
-      <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="net461" />
-      <frameworkAssembly assemblyName="System.Transactions" targetFramework="net461" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="net461" />
+      <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net48" />
+      <frameworkAssembly assemblyName="System" targetFramework="net48" />
+      <frameworkAssembly assemblyName="System.Configuration" targetFramework="net48" />
+      <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="net48" />
+      <frameworkAssembly assemblyName="System.Transactions" targetFramework="net48" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="net48" />
     </frameworkAssemblies>
   </metadata>
 	<files>
-		<file src="..\..\Build\Release\LogBridge.UmbracoLog4Net.pdb" target="lib\net461\" />
-		<file src="lib\log4net.dll" target="lib\net461\" />
+		<file src="..\..\Build\Release\LogBridge.UmbracoLog4Net.pdb" target="lib\net48\" />
+		<file src="lib\log4net.dll" target="lib\net48\" />
     <file src="nuget\app.config.install.xdt" target="content"/>
     <file src="nuget\app.config.uninstall.xdt" target="content"/>
     <file src="..\..\Readme.md" target=""/>
     <file src="..\..\Changes.md" target=""/>
+		<file src="..\..\license.txt" target="license.txt"/>
+		<file src="..\..\nuget\SoftwarePassion.LogBridge.png" target="SoftwarePassion.LogBridge.png"/>
   </files>
 </package>

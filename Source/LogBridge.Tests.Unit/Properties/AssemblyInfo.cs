@@ -11,7 +11,7 @@ using Xunit;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Software Passion")]
 [assembly: AssemblyProduct("LogBridge.Tests.Unit")]
-[assembly: AssemblyCopyright("Copyright © Torben Rahbek Koch 2014")]
+[assembly: AssemblyCopyright("Copyright © Torben Koch Pløen 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

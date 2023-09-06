@@ -1,3 +1,9 @@
+## Version 1.6
+
+  - Updated vulnerable log4net to 2.0.15
+  - Generally updated projects to .NET 4.8 Frameworkss
+  - No longer publishing Umbraco.Log4Net package 
+
 ## Version 1.5
 
   - Removed special handling of the ApplicationName property. This can be considered a (minor) breaking change.
